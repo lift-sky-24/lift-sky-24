@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" fill="none">
+  <defs>
+    <linearGradient id="bgGlow" x1="210" y1="80" x2="860" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B8F4FF" stop-opacity=".72"/>
+      <stop offset=".48" stop-color="#B99BFF" stop-opacity=".48"/>
+      <stop offset="1" stop-color="#FFC6D9" stop-opacity=".62"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="445" y1="180" x2="790" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101B55"/>
+      <stop offset=".55" stop-color="#172A79"/>
+      <stop offset="1" stop-color="#3921A0"/>
+    </linearGradient>
+    <linearGradient id="screenShine" x1="470" y1="190" x2="760" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4C8CFF" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#A34BFF" stop-opacity=".08"/>
+    </linearGradient>
+    <linearGradient id="laptopBase" x1="390" y1="470" x2="835" y2="555" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8796C9"/>
+      <stop offset=".25" stop-color="#F8FAFF"/>
+      <stop offset=".62" stop-color="#B8C4E9"/>
+      <stop offset="1" stop-color="#6576B2"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#6B4BFF"/><stop offset="1" stop-color="#B43DEB"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#43D9F4"/><stop offset="1" stop-color="#587BFF"/>
+    </linearGradient>
+    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFB4D8"/><stop offset="1" stop-color="#A88BFF"/>
+    </linearGradient>
+    <linearGradient id="phone" x1="760" y1="250" x2="860" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#202B5E"/><stop offset="1" stop-color="#080E2E"/>
+    </linearGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="190%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="15"/>
+      <feOffset dy="16"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".2"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+    <filter id="cardShadow" x="-30%" y="-40%" width="170%" height="190%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dy="7"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".14"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="screenClip"><path d="M458 177Q459 166 471 165L774 145Q788 144 787 158L768 434Q767 447 754 448L438 435Z"/></clipPath>
+    <clipPath id="phoneClip"><rect x="773" y="239" width="101" height="262" rx="19"/></clipPath>
+  </defs>
+
+  <!-- analytics floating card -->
+  <g filter="url(#cardShadow)" transform="rotate(-4 326 370)">
+    <rect x="275" y="315" width="145" height="128" rx="15" fill="#FFFFFF" fill-opacity=".94" stroke="#E8E9FF"/>
+    <rect x="293" y="331" width="54" height="16" rx="8" fill="#EEE9FF"/>
+    <text x="320" y="342" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#7351E8" font-weight="700">Growth</text>
+    <path d="M295 408H400" stroke="#E9EAF5"/>
+    <g fill="url(#purple)">
+      <rect x="299" y="382" width="10" height="26" rx="3"/>
+      <rect x="318" y="369" width="10" height="39" rx="3"/>
+      <rect x="337" y="376" width="10" height="32" rx="3"/>
+      <rect x="356" y="357" width="10" height="51" rx="3"/>
+      <rect x="375" y="348" width="10" height="60" rx="3"/>
+    </g>
+    <path d="M296 365L319 358L338 362L359 344L382 337" stroke="#39C8E8" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+
+</svg>

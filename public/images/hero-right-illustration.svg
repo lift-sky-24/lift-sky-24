@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" fill="none">
+  <defs>
+    <linearGradient id="bgGlow" x1="210" y1="80" x2="860" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B8F4FF" stop-opacity=".72"/>
+      <stop offset=".48" stop-color="#B99BFF" stop-opacity=".48"/>
+      <stop offset="1" stop-color="#FFC6D9" stop-opacity=".62"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="445" y1="180" x2="790" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101B55"/>
+      <stop offset=".55" stop-color="#172A79"/>
+      <stop offset="1" stop-color="#3921A0"/>
+    </linearGradient>
+    <linearGradient id="screenShine" x1="470" y1="190" x2="760" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4C8CFF" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#A34BFF" stop-opacity=".08"/>
+    </linearGradient>
+    <linearGradient id="laptopBase" x1="390" y1="470" x2="835" y2="555" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8796C9"/>
+      <stop offset=".25" stop-color="#F8FAFF"/>
+      <stop offset=".62" stop-color="#B8C4E9"/>
+      <stop offset="1" stop-color="#6576B2"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#6B4BFF"/><stop offset="1" stop-color="#B43DEB"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#43D9F4"/><stop offset="1" stop-color="#587BFF"/>
+    </linearGradient>
+    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFB4D8"/><stop offset="1" stop-color="#A88BFF"/>
+    </linearGradient>
+    <linearGradient id="phone" x1="760" y1="250" x2="860" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#202B5E"/><stop offset="1" stop-color="#080E2E"/>
+    </linearGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="190%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="15"/>
+      <feOffset dy="16"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".2"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+    <filter id="cardShadow" x="-30%" y="-40%" width="170%" height="190%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dy="7"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".14"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="screenClip"><path d="M458 177Q459 166 471 165L774 145Q788 144 787 158L768 434Q767 447 754 448L438 435Z"/></clipPath>
+    <clipPath id="phoneClip"><rect x="773" y="239" width="101" height="262" rx="19"/></clipPath>
+  </defs>
+
+  <!-- ambient color field -->
+  <ellipse cx="610" cy="356" rx="350" ry="230" fill="url(#bgGlow)" opacity=".55" filter="url(#soft)"/>
+  <ellipse cx="744" cy="194" rx="205" ry="125" fill="#FFB8D5" opacity=".35" filter="url(#soft)"/>
+  <ellipse cx="432" cy="525" rx="185" ry="90" fill="#6BDFF5" opacity=".28" filter="url(#soft)"/>
+  <path d="M520 104C612 35 787 58 874 126C947 183 925 275 865 316C801 360 698 327 652 283C601 234 469 205 520 104Z" fill="#E8C5FF" opacity=".35"/>
+  <path d="M655 76C748 37 866 67 914 137C958 201 915 274 855 292C793 311 737 267 716 215C694 159 607 97 655 76Z" fill="#FFD0DB" opacity=".46"/>
+
+  <!-- decorative floating shapes -->
+  <g opacity=".9">
+    <rect x="257" y="276" width="42" height="42" rx="11" transform="rotate(-35 257 276)" fill="#A9F1F7" opacity=".75"/>
+    <rect x="895" y="381" width="25" height="25" rx="7" transform="rotate(24 895 381)" fill="#C8B5FF" opacity=".65"/>
+    <circle cx="355" cy="154" r="5" fill="#B8A1FF"/>
+    <circle cx="913" cy="315" r="4" fill="#FFB3D3"/>
+    <circle cx="323" cy="448" r="4" fill="#77DDF1"/>
+    <path d="M286 211l7-12 7 12-7 12-7-12Z" fill="#A8EAF7"/>
+  </g>
+
+  <!-- laptop shadow -->
+  <ellipse cx="632" cy="547" rx="265" ry="38" fill="#5D55B8" opacity=".16" filter="url(#soft)"/>
+
+  <!-- laptop screen body -->
+  <g filter="url(#shadow)">
+    <path d="M438 435L458 177Q459 166 471 165L774 145Q788 144 787 158L768 434Q767 447 754 448L438 435Z" fill="#101633" stroke="#AAB6E8" stroke-width="5"/>
+    <g clip-path="url(#screenClip)">
+      <rect x="435" y="143" width="360" height="310" fill="url(#screen)"/>
+      <rect x="435" y="143" width="360" height="310" fill="url(#screenShine)"/>
+      <path d="M614 135L810 135L638 455L470 455Z" fill="#3D65E9" opacity=".12"/>
+      <path d="M714 172L765 205L737 259L685 226Z" fill="#4D79FF" opacity=".16"/>
+      <path d="M695 264L744 235L780 270L730 300Z" fill="#22C7F2" opacity=".16"/>
+      <path d="M693 326L738 294L780 324L733 357Z" fill="#A35BFF" opacity=".2"/>
+      <path d="M745 216L775 235L750 278L720 258Z" fill="url(#cyan)" opacity=".8"/>
+      <path d="M698 290L733 268L765 288L731 311Z" fill="#5279FF" opacity=".8"/>
+      <path d="M731 354L766 332L790 350L755 375Z" fill="#F19BFF" opacity=".65"/>
+      <circle cx="618" cy="159" r="2.5" fill="#8294FF"/>
+      <text x="478" y="214" font-family="Arial, sans-serif" font-size="11" fill="#A9B9FF" font-weight="700">LIFTSKY24</text>
+      <text x="478" y="272" font-family="Arial, sans-serif" font-size="30" fill="#FFFFFF" font-weight="700">Build</text>
+      <text x="478" y="307" font-family="Arial, sans-serif" font-size="30" fill="#FFFFFF" font-weight="700">Innovate</text>
+      <text x="478" y="342" font-family="Arial, sans-serif" font-size="30" fill="#FFFFFF" font-weight="700">Grow</text>
+      <rect x="478" y="364" width="76" height="25" rx="12.5" fill="url(#purple)"/>
+      <text x="516" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white" font-weight="700">Explore More</text>
+      <rect x="563" y="364" width="54" height="25" rx="12.5" fill="#FFFFFF" fill-opacity=".1" stroke="#7C8CDE" stroke-opacity=".55"/>
+      <text x="590" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#DCE4FF">Services</text>
+    </g>
+    <circle cx="620" cy="157" r="3" fill="#7581B9"/>
+  </g>
+
+  <!-- laptop keyboard/base -->
+  <g filter="url(#shadow)">
+    <path d="M438 438L768 448L850 510Q858 518 841 523L475 555Q460 556 448 548L354 485Q345 478 359 474L438 438Z" fill="url(#laptopBase)" stroke="#A5B2DF" stroke-width="2"/>
+    <path d="M438 438L768 448L850 510L475 539L354 479Z" fill="#EAF0FF" opacity=".55"/>
+    <path d="M471 451L744 460L804 502L483 526L411 481Z" fill="#9AA9D8" opacity=".42"/>
+    <g stroke="#7889C1" stroke-opacity=".35" stroke-width="2">
+      <path d="M461 465L758 473M448 477L777 485M466 489L793 496M486 502L765 508"/>
+      <path d="M493 455L520 520M528 457L551 516M563 458L583 513M598 459L615 510M633 460L649 507M668 461L683 505M703 462L716 502"/>
+    </g>
+    <path d="M552 520L710 508L735 515L576 530Z" fill="#7184BD" opacity=".45"/>
+    <path d="M475 540L840 512L831 520L483 550Q472 551 463 545Z" fill="#7788BF" opacity=".5"/>
+  </g>
+
+  <!-- smartphone -->
+  <g filter="url(#shadow)" transform="rotate(5 824 370)">
+    <rect x="768" y="235" width="112" height="272" rx="22" fill="url(#phone)" stroke="#A9B8EA" stroke-width="3"/>
+    <rect x="776" y="247" width="96" height="247" rx="15" fill="#F8FAFF"/>
+    <rect x="808" y="241" width="32" height="5" rx="2.5" fill="#6674A8"/>
+    <g clip-path="url(#phoneClip)">
+      <rect x="780" y="253" width="90" height="236" fill="#FBFCFF"/>
+      <text x="789" y="272" font-family="Arial, sans-serif" font-size="7" fill="#53628E" font-weight="700">Dashboard</text>
+      <circle cx="850" cy="269" r="5" fill="#E8E6FF"/>
+      <rect x="786" y="283" width="80" height="56" rx="8" fill="#F1F0FF"/>
+      <text x="794" y="297" font-family="Arial, sans-serif" font-size="6" fill="#7D83A6">Monthly growth</text>
+      <path d="M794 326L804 317L815 320L827 307L838 312L854 299" stroke="#7B55F4" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M794 326L804 317L815 320L827 307L838 312L854 299L854 331L794 331Z" fill="#A58AFF" opacity=".13"/>
+      <rect x="786" y="348" width="80" height="59" rx="8" fill="#FFFFFF" stroke="#ECEBFA"/>
+      <circle cx="805" cy="371" r="11" fill="#EDE9FF"/>
+      <path d="M800 371L804 375L811 366" stroke="#7653EF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="821" y="362" width="35" height="5" rx="2.5" fill="#AAB2D0"/>
+      <rect x="821" y="372" width="27" height="4" rx="2" fill="#D5D9EA"/>
+      <rect x="786" y="416" width="80" height="59" rx="8" fill="#FFFFFF" stroke="#ECEBFA"/>
+      <circle cx="826" cy="445" r="17" fill="#F0EDFF"/>
+      <path d="M826 428A17 17 0 0 1 842 450L826 445Z" fill="#7957F2"/>
+      <path d="M826 445L826 428A17 17 0 0 0 811 451Z" fill="#4CCBEA"/>
+      <rect x="795" y="468" width="61" height="3" rx="1.5" fill="#E3E5F0"/>
+    </g>
+  </g>
+
+  <!-- analytics floating card -->
+  <g filter="url(#cardShadow)" transform="rotate(-4 326 370)">
+    <rect x="275" y="315" width="145" height="128" rx="15" fill="#FFFFFF" fill-opacity=".94" stroke="#E8E9FF"/>
+    <rect x="293" y="331" width="54" height="16" rx="8" fill="#EEE9FF"/>
+    <text x="320" y="342" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#7351E8" font-weight="700">Growth</text>
+    <path d="M295 408H400" stroke="#E9EAF5"/>
+    <g fill="url(#purple)">
+      <rect x="299" y="382" width="10" height="26" rx="3"/>
+      <rect x="318" y="369" width="10" height="39" rx="3"/>
+      <rect x="337" y="376" width="10" height="32" rx="3"/>
+      <rect x="356" y="357" width="10" height="51" rx="3"/>
+      <rect x="375" y="348" width="10" height="60" rx="3"/>
+    </g>
+    <path d="M296 365L319 358L338 362L359 344L382 337" stroke="#39C8E8" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- web development label -->
+  <g filter="url(#cardShadow)">
+    <rect x="420" y="91" width="164" height="54" rx="13" fill="#FFFFFF" fill-opacity=".96" stroke="#E9E9FF"/>
+    <rect x="433" y="104" width="29" height="29" rx="8" fill="#3479F6"/>
+    <path d="M441 113L437 118L441 123M454 113L458 118L454 123M449 111L446 125" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="472" y="123" font-family="Arial, sans-serif" font-size="12" fill="#26345F" font-weight="700">Web Development</text>
+  </g>
+
+  <!-- mobile apps label -->
+  <g filter="url(#cardShadow)">
+    <rect x="835" y="158" width="143" height="54" rx="13" fill="#FFFFFF" fill-opacity=".96" stroke="#E9E9FF"/>
+    <rect x="848" y="170" width="28" height="29" rx="7" fill="#F0E9FF"/>
+    <rect x="856" y="174" width="12" height="21" rx="3" fill="url(#purple)"/>
+    <circle cx="862" cy="192" r="1.2" fill="white"/>
+    <text x="885" y="190" font-family="Arial, sans-serif" font-size="12" fill="#26345F" font-weight="700">Mobile Apps</text>
+  </g>
+
+  <!-- AI solutions label -->
+  <g filter="url(#cardShadow)">
+    <rect x="842" y="365" width="139" height="55" rx="13" fill="#FFFFFF" fill-opacity=".97" stroke="#E9E9FF"/>
+    <circle cx="867" cy="392" r="14" fill="#E7F1FF"/>
+    <path d="M867 382L870 389L877 392L870 395L867 402L864 395L857 392L864 389Z" fill="#3F7CF5"/>
+    <text x="889" y="396" font-family="Arial, sans-serif" font-size="12" fill="#26345F" font-weight="700">AI Solutions</text>
+  </g>
+
+  <!-- tiny decorative glints -->
+  <path d="M389 242L394 253L405 258L394 263L389 274L384 263L373 258L384 253Z" fill="#B4ECF8" opacity=".8"/>
+  <path d="M914 455L918 463L926 467L918 471L914 479L910 471L902 467L910 463Z" fill="#D7C6FF"/>
+  <circle cx="300" cy="489" r="3" fill="#8DDDEB"/>
+</svg>

@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" fill="none">
+  <defs>
+    <linearGradient id="bgGlow" x1="210" y1="80" x2="860" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B8F4FF" stop-opacity=".72"/>
+      <stop offset=".48" stop-color="#B99BFF" stop-opacity=".48"/>
+      <stop offset="1" stop-color="#FFC6D9" stop-opacity=".62"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="445" y1="180" x2="790" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101B55"/>
+      <stop offset=".55" stop-color="#172A79"/>
+      <stop offset="1" stop-color="#3921A0"/>
+    </linearGradient>
+    <linearGradient id="screenShine" x1="470" y1="190" x2="760" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4C8CFF" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#A34BFF" stop-opacity=".08"/>
+    </linearGradient>
+    <linearGradient id="laptopBase" x1="390" y1="470" x2="835" y2="555" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8796C9"/>
+      <stop offset=".25" stop-color="#F8FAFF"/>
+      <stop offset=".62" stop-color="#B8C4E9"/>
+      <stop offset="1" stop-color="#6576B2"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#6B4BFF"/><stop offset="1" stop-color="#B43DEB"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#43D9F4"/><stop offset="1" stop-color="#587BFF"/>
+    </linearGradient>
+    <linearGradient id="pink" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFB4D8"/><stop offset="1" stop-color="#A88BFF"/>
+    </linearGradient>
+    <linearGradient id="phone" x1="760" y1="250" x2="860" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#202B5E"/><stop offset="1" stop-color="#080E2E"/>
+    </linearGradient>
+    <filter id="shadow" x="-40%" y="-40%" width="180%" height="190%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="15"/>
+      <feOffset dy="16"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".2"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+    <filter id="cardShadow" x="-30%" y="-40%" width="170%" height="190%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dy="7"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".14"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="screenClip"><path d="M458 177Q459 166 471 165L774 145Q788 144 787 158L768 434Q767 447 754 448L438 435Z"/></clipPath>
+    <clipPath id="phoneClip"><rect x="773" y="239" width="101" height="262" rx="19"/></clipPath>
+  </defs>
+
+  <!-- ambient color field -->
+  <ellipse cx="610" cy="356" rx="350" ry="230" fill="url(#bgGlow)" opacity=".55" filter="url(#soft)"/>
+  <ellipse cx="744" cy="194" rx="205" ry="125" fill="#FFB8D5" opacity=".35" filter="url(#soft)"/>
+  <ellipse cx="432" cy="525" rx="185" ry="90" fill="#6BDFF5" opacity=".28" filter="url(#soft)"/>
+  <path d="M520 104C612 35 787 58 874 126C947 183 925 275 865 316C801 360 698 327 652 283C601 234 469 205 520 104Z" fill="#E8C5FF" opacity=".35"/>
+  <path d="M655 76C748 37 866 67 914 137C958 201 915 274 855 292C793 311 737 267 716 215C694 159 607 97 655 76Z" fill="#FFD0DB" opacity=".46"/>
+
+  <!-- decorative floating shapes -->
+  <g opacity=".9">
+    <rect x="257" y="276" width="42" height="42" rx="11" transform="rotate(-35 257 276)" fill="#A9F1F7" opacity=".75"/>
+    <rect x="895" y="381" width="25" height="25" rx="7" transform="rotate(24 895 381)" fill="#C8B5FF" opacity=".65"/>
+    <circle cx="355" cy="154" r="5" fill="#B8A1FF"/>
+    <circle cx="913" cy="315" r="4" fill="#FFB3D3"/>
+    <circle cx="323" cy="448" r="4" fill="#77DDF1"/>
+    <path d="M286 211l7-12 7 12-7 12-7-12Z" fill="#A8EAF7"/>
+  </g>
+
+  <!-- laptop shadow -->
+  <ellipse cx="632" cy="547" rx="265" ry="38" fill="#5D55B8" opacity=".16" filter="url(#soft)"/>
+
+  <!-- laptop screen body -->
+  <g filter="url(#shadow)">
+    <path d="M438 435L458 177Q459 166 471 165L774 145Q788 144 787 158L768 434Q767 447 754 448L438 435Z" fill="#101633" stroke="#AAB6E8" stroke-width="5"/>
+    <g clip-path="url(#screenClip)">
+      <rect x="435" y="143" width="360" height="310" fill="url(#screen)"/>
+      <rect x="435" y="143" width="360" height="310" fill="url(#screenShine)"/>
+      <path d="M614 135L810 135L638 455L470 455Z" fill="#3D65E9" opacity=".12"/>
+      <path d="M714 172L765 205L737 259L685 226Z" fill="#4D79FF" opacity=".16"/>
+      <path d="M695 264L744 235L780 270L730 300Z" fill="#22C7F2" opacity=".16"/>
+      <path d="M693 326L738 294L780 324L733 357Z" fill="#A35BFF" opacity=".2"/>
+      <path d="M745 216L775 235L750 278L720 258Z" fill="url(#cyan)" opacity=".8"/>
+      <path d="M698 290L733 268L765 288L731 311Z" fill="#5279FF" opacity=".8"/>
+      <path d="M731 354L766 332L790 350L755 375Z" fill="#F19BFF" opacity=".65"/>
+      <circle cx="618" cy="159" r="2.5" fill="#8294FF"/>
+      <text x="478" y="214" font-family="Arial, sans-serif" font-size="11" fill="#A9B9FF" font-weight="700">LIFTSKY24</text>
+      <text x="478" y="272" font-family="Arial, sans-serif" font-size="30" fill="#FFFFFF" font-weight="700">Build</text>
+      <text x="478" y="307" font-family="Arial, sans-serif" font-size="30" fill="#FFFFFF" font-weight="700">Innovate</text>
+      <text x="478" y="342" font-family="Arial, sans-serif" font-size="30" fill="#FFFFFF" font-weight="700">Grow</text>
+      <rect x="478" y="364" width="76" height="25" rx="12.5" fill="url(#purple)"/>
+      <text x="516" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white" font-weight="700">Explore More</text>
+      <rect x="563" y="364" width="54" height="25" rx="12.5" fill="#FFFFFF" fill-opacity=".1" stroke="#7C8CDE" stroke-opacity=".55"/>
+      <text x="590" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#DCE4FF">Services</text>
+    </g>
+    <circle cx="620" cy="157" r="3" fill="#7581B9"/>
+  </g>
+
+  <!-- laptop keyboard/base -->
+  <g filter="url(#shadow)">
+    <path d="M438 438L768 448L850 510Q858 518 841 523L475 555Q460 556 448 548L354 485Q345 478 359 474L438 438Z" fill="url(#laptopBase)" stroke="#A5B2DF" stroke-width="2"/>
+    <path d="M438 438L768 448L850 510L475 539L354 479Z" fill="#EAF0FF" opacity=".55"/>
+    <path d="M471 451L744 460L804 502L483 526L411 481Z" fill="#9AA9D8" opacity=".42"/>
+    <g stroke="#7889C1" stroke-opacity=".35" stroke-width="2">
+      <path d="M461 465L758 473M448 477L777 485M466 489L793 496M486 502L765 508"/>
+      <path d="M493 455L520 520M528 457L551 516M563 458L583 513M598 459L615 510M633 460L649 507M668 461L683 505M703 462L716 502"/>
+    </g>
+    <path d="M552 520L710 508L735 515L576 530Z" fill="#7184BD" opacity=".45"/>
+    <path d="M475 540L840 512L831 520L483 550Q472 551 463 545Z" fill="#7788BF" opacity=".5"/>
+  </g>
+
+</svg>

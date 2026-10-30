@@ -1,0 +1,46 @@
+import Image from "next/image";
+import { Reveal, Button, Counter, ParallaxImage } from "./ui";
+
+export default function PageHero({ title, accent, sub, image = "/images/hero.svg", alt, ctas = [], badges = [], stats = [], eyebrow }) {
+  return (
+    <section className="relative overflow-hidden bg-hero-wash">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20">
+        <div>
+          {eyebrow && <p className="mb-3 text-sm font-semibold text-brand">{eyebrow}</p>}
+          <Reveal y={20}>
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-navy-900 sm:text-5xl">
+              {title}{" "}
+              {accent && <span className="bg-brand-gradient bg-clip-text text-transparent">{accent}</span>}
+            </h1>
+          </Reveal>
+          {sub && <Reveal delay={0.1}><p className="mt-4 max-w-lg leading-relaxed text-slate-600">{sub}</p></Reveal>}
+          {badges.length > 0 && (
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {badges.map((b) => <li key={b} className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-brand shadow-sm">{b}</li>)}
+            </ul>
+          )}
+          {ctas.length > 0 && (
+            <Reveal delay={0.2}>
+              <div className="mt-7 flex flex-wrap gap-3">
+                {ctas.map((c, i) => <Button key={c.label} href={c.href} variant={i === 0 ? "primary" : "outline"}>{c.label}</Button>)}
+              </div>
+            </Reveal>
+          )}
+          {stats.length > 0 && (
+            <dl className="mt-9 grid max-w-md grid-cols-3 gap-4">
+              {stats.map((s) => (
+                <div key={s.l}>
+                  <dd className="text-2xl font-bold text-navy-900 sm:text-3xl"><Counter to={s.n} suffix={s.s} /></dd>
+                  <dt className="text-xs text-slate-500">{s.l}</dt>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+        <ParallaxImage>
+          <Image src={image} alt={alt || `${title} ${accent || ""} illustration`} width={640} height={460} priority className="h-auto w-full rounded-3xl shadow-card" />
+        </ParallaxImage>
+      </div>
+    </section>
+  );
+}
