@@ -16,8 +16,8 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/85 backdrop-blur">
       <nav aria-label="Main" className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold text-navy-900" aria-label="LiftSky24 home">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-gradient text-white"><Rocket size={16} /></span>
-          LiftSky24
+        <img width={120} height={30} src="images/logo.png" />
+      
         </Link>
 
         <ul className="hidden items-center gap-7 lg:flex">

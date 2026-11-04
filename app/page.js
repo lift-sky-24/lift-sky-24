@@ -8,6 +8,8 @@ import { Button, Reveal } from "@/components/ui";
 import { services, why } from "@/lib/data";
 import { meta } from "@/lib/seo";
 import HeroBanner from "@/components/HeroBanner";
+import Services from "@/components/NewServices";
+import ServicesShowcase from "@/components/Servicesshowcase";
 
 export const metadata = {
   ...meta("Web, Mobile, UI/UX & AI Development Company", "LiftSky24 is a leading IT services company delivering web development, mobile apps, UI/UX design, cloud and AI solutions.", "/"),
@@ -17,7 +19,7 @@ export const metadata = {
 export default function Home() {
   return (
     <>
-    <HeroBanner/>
+      <HeroBanner />
       <PageHero title="We're More Than Just a" accent="Tech Company"
         sub="LiftSky24 is a leading IT services company delivering innovative web, mobile and AI solutions that help growing businesses scale with confidence."
         image="/images/team.svg" alt="LiftSky24 team collaborating on a project"
@@ -25,6 +27,8 @@ export default function Home() {
         stats={[{ n: 500, s: "+", l: "Happy Clients" }, { n: 120, s: "+", l: "Projects Completed" }, { n: 5, s: "+", l: "Years Experience" }]} />
 
       <Section title="Our Services" sub="We build digital solutions that drive real business results."><IconCards items={services} /></Section>
+      <Services />
+      <ServicesShowcase/>
 
       <Section title="Why Choose LiftSky24?" tone="soft">
         <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
@@ -43,6 +47,7 @@ export default function Home() {
         <ProjectGrid limit={4} />
         <div className="mt-6 text-right"><Link href="/portfolio" className="text-sm font-semibold text-brand hover:underline">View All Projects</Link></div>
       </Section>
+
 
       <Testimonials />
       <FAQ />

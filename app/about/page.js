@@ -4,12 +4,14 @@ import { Section, IconCards, MiniCards, CTABand } from "@/components/Sections";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui";
 import { missionVision, values, team } from "@/lib/data";
 import { meta } from "@/lib/seo";
+import AboutHero from "@/components/AboutHero";
 
 export const metadata = meta("About Us", "Meet the LiftSky24 team: developers, designers and IT professionals building digital solutions together.", "/about");
 
 export default function About() {
   return (
     <>
+    <AboutHero/>
       <PageHero title="About Us" accent="Building Digital Solutions, Together"
         sub="We are a passionate team of developers, designers and IT professionals dedicated to creating innovative products that deliver quality and customer success."
         image="/images/team.svg" alt="The LiftSky24 team at work"
