@@ -1,16 +1,16 @@
 "use client";
 /**
- * GlowOrbs — animated CSS gradient orbs that react to mouse movement.
- * Pure CSS + inline style via JS, no canvas = near-zero CPU cost.
- * Library: vanilla JS requestAnimationFrame (not GSAP, not Framer).
- * Usage: <GlowOrbs /> inside any position:relative container.
+ * GlowOrbs — animated CSS gradient orbs.
+ * Uses transform:translate (compositor-only) instead of left/top (layout).
+ * Blur capped at 80px to reduce GPU paint cost.
+ * Paused when scrolled off-screen via IntersectionObserver.
  */
 import { useEffect, useRef } from "react";
 
 const ORBS = [
-  { color: "rgba(101,87,255,0.18)",  size: 420, x: 75, y: 20,  speed: 0.018 },
-  { color: "rgba(255,79,163,0.14)",  size: 380, x: 15, y: 70,  speed: 0.022 },
-  { color: "rgba(255,99,56,0.10)",   size: 300, x: 50, y: 85,  speed: 0.015 },
+  { color: "rgba(101,87,255,0.15)", size: 360, x: 75, y: 20, speed: 0.018 },
+  { color: "rgba(255,79,163,0.12)", size: 300, x: 15, y: 70, speed: 0.022 },
+  { color: "rgba(255,99,56,0.08)",  size: 240, x: 50, y: 85, speed: 0.015 },
 ];
 
 export default function GlowOrbs({ intensity = 1 }) {
@@ -18,6 +18,7 @@ export default function GlowOrbs({ intensity = 1 }) {
   const posRef       = useRef(ORBS.map((o) => ({ x: o.x, y: o.y })));
   const mouseRef     = useRef({ x: 50, y: 50 });
   const rafRef       = useRef(null);
+  const runningRef   = useRef(false);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
@@ -25,21 +26,20 @@ export default function GlowOrbs({ intensity = 1 }) {
     const container = containerRef.current;
     if (!container) return;
 
-    // Create orb elements
-    const orbEls = ORBS.map((orb, i) => {
-      const el = document.createElement("div");
+    // Create orb elements using transform:translate (compositor-only — no layout)
+    const orbEls = ORBS.map((orb) => {
+      const el         = document.createElement("div");
+      const blur       = Math.min(orb.size * 0.25, 80); // cap blur at 80px
       el.style.cssText = `
         position:absolute;
         border-radius:50%;
         width:${orb.size}px;
         height:${orb.size}px;
+        top:0; left:0;
         background:${orb.color};
-        filter:blur(${orb.size * 0.45}px);
+        filter:blur(${blur}px);
         pointer-events:none;
         will-change:transform;
-        transform:translate(-50%,-50%);
-        left:${orb.x}%;
-        top:${orb.y}%;
       `;
       el.setAttribute("aria-hidden", "true");
       container.appendChild(el);
@@ -47,9 +47,9 @@ export default function GlowOrbs({ intensity = 1 }) {
     });
 
     const onMouseMove = (e) => {
-      const rect = container.getBoundingClientRect();
+      const rect     = container.getBoundingClientRect();
       mouseRef.current = {
-        x: ((e.clientX - rect.left) / rect.width) * 100,
+        x: ((e.clientX - rect.left) / rect.width)  * 100,
         y: ((e.clientY - rect.top)  / rect.height) * 100,
       };
     };
@@ -57,31 +57,36 @@ export default function GlowOrbs({ intensity = 1 }) {
 
     let t = 0;
     const tick = () => {
+      if (!runningRef.current) return;
       t += 0.008;
       ORBS.forEach((orb, i) => {
         const pos = posRef.current[i];
-        // Gentle float + slight mouse attraction
-        const mx = mouseRef.current.x;
-        const my = mouseRef.current.y;
-        const targetX = orb.x + Math.sin(t * orb.speed * 60 + i * 2) * 8 + (mx - orb.x) * 0.04 * intensity;
-        const targetY = orb.y + Math.cos(t * orb.speed * 60 + i * 1.5) * 6 + (my - orb.y) * 0.04 * intensity;
-        pos.x += (targetX - pos.x) * 0.03;
-        pos.y += (targetY - pos.y) * 0.03;
-        orbEls[i].style.left = `${pos.x}%`;
-        orbEls[i].style.top  = `${pos.y}%`;
+        const mx  = mouseRef.current.x;
+        const my  = mouseRef.current.y;
+        // Gentle float — very subtle mouse attraction (intensity controls it)
+        const targetX = orb.x + Math.sin(t * orb.speed * 60 + i * 2) * 6 + (mx - orb.x) * 0.02 * intensity;
+        const targetY = orb.y + Math.cos(t * orb.speed * 60 + i * 1.5) * 5 + (my - orb.y) * 0.02 * intensity;
+        pos.x += (targetX - pos.x) * 0.025;
+        pos.y += (targetY - pos.y) * 0.025;
+
+        // Use translate instead of left/top — compositor-only, no layout
+        const rect    = container.getBoundingClientRect();
+        const pxX     = (pos.x / 100) * rect.width  - orb.size / 2;
+        const pxY     = (pos.y / 100) * rect.height - orb.size / 2;
+        orbEls[i].style.transform = `translate(${pxX}px,${pxY}px)`;
       });
       rafRef.current = requestAnimationFrame(tick);
     };
-    rafRef.current = requestAnimationFrame(tick);
 
-    // Pause when off-screen
+    // Only run when visible
     const observer = new IntersectionObserver(([entry]) => {
+      runningRef.current = entry.isIntersecting;
       if (entry.isIntersecting) {
         rafRef.current = requestAnimationFrame(tick);
       } else {
         cancelAnimationFrame(rafRef.current);
       }
-    });
+    }, { threshold: 0.01 });
     observer.observe(container);
 
     return () => {
@@ -96,13 +101,7 @@ export default function GlowOrbs({ intensity = 1 }) {
     <div
       ref={containerRef}
       aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset:    0,
-        overflow: "hidden",
-        pointerEvents: "none",
-        zIndex:   0,
-      }}
+      style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}
     />
   );
 }

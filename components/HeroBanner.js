@@ -1,20 +1,14 @@
 /**
- * HeroBanner — split into:
- *   HeroBannerShell   (server component — all text, CTAs, stats in SSR HTML)
- *   HeroBannerClient  (client component — GSAP timeline + GlowOrbs + animations)
- *
- * This ensures the H1, trust items and stats are in the initial HTML for
- * SEO crawlers and users without JS, while animations layer on top.
+ * HeroBanner — server component shell.
+ * All text rendered in SSR HTML, always visible.
+ * HeroBannerClient adds animations on top after mount.
  */
-
-// ── SERVER PART (default export used by app/page.js) ─────────────────
-import dynamic from "next/dynamic";
 import Image   from "next/image";
 import Link    from "next/link";
+import dynamic from "next/dynamic";
 import { ArrowRight, CheckCircle, ArrowDown } from "lucide-react";
 import { BRAND, STATS } from "@/data/site-config";
 
-// Client animation layer — loads after paint (priority: false)
 const HeroBannerClient = dynamic(
   () => import("@/components/HeroBannerClient"),
   { ssr: false }
@@ -35,12 +29,12 @@ export default function HeroBanner() {
           "radial-gradient(ellipse at 80% 25%,#e2d9ffb8,transparent 34%),radial-gradient(ellipse at 48% 75%,#d5f5ff9c,transparent 35%)",
       }}
     >
-      {/* Client: glow orbs + GSAP parallax (purely decorative / enhancing) */}
+      {/* Client-only decorative layer — never blocks text */}
       <HeroBannerClient />
 
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:px-8 lg:py-20 relative z-10">
 
-        {/* ── Left: all text content — server-rendered ─────────────── */}
+        {/* Left: all text — SSR, always visible */}
         <div>
           {/* Eyebrow */}
           <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-white/70 px-4 py-1.5 text-xs font-bold tracking-wide text-brand uppercase">
@@ -48,25 +42,11 @@ export default function HeroBanner() {
             {BRAND.tagline}
           </span>
 
-          {/* H1 — plain SSR markup; GSAP animates .word-inner children on client */}
-          <h1
-            id="hero-heading"
-            className="mt-5 text-[clamp(1.9rem,3.8vw,3.2rem)] font-extrabold leading-[1.08] tracking-tight text-navy-900"
-          >
-            {/* Words wrapped so GSAP can target them; visible without JS */}
-            {"Websites, Apps & Digital Growth".split(" ").map((w, i) => (
-              <span key={i} className="reveal-text-mask" style={{ display: "inline-block", marginRight: "0.26em" }}>
-                <span className="word-inner" style={{ display: "inline-block" }}>{w}</span>
-              </span>
-            ))}
+          {/* H1 — plain text, NO mask, NO GSAP hide */}
+          <h1 className="mt-5 text-[clamp(1.9rem,3.8vw,3.2rem)] font-extrabold leading-[1.08] tracking-tight text-navy-900">
+            Websites, Apps &amp; Digital Growth
             <br />
-            <span className="gradient-text">
-              {"That Take Your Business Higher.".split(" ").map((w, i) => (
-                <span key={i} className="reveal-text-mask" style={{ display: "inline-block", marginRight: "0.26em" }}>
-                  <span className="word-inner" style={{ display: "inline-block" }}>{w}</span>
-                </span>
-              ))}
-            </span>
+            <span className="gradient-text">That Take Your Business Higher.</span>
           </h1>
 
           {/* Sub */}
@@ -74,7 +54,7 @@ export default function HeroBanner() {
             We build fast websites, mobile apps, custom software and run SEO, social media and digital marketing campaigns — everything a growing business needs, in one team.
           </p>
 
-          {/* Trust checks */}
+          {/* Trust */}
           <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5">
             {trust.map((t) => (
               <li key={t} className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
@@ -94,24 +74,31 @@ export default function HeroBanner() {
             </Link>
           </div>
 
-          {/* Stats strip — final values rendered server-side */}
+          {/* Stats — server renders 0; HeroBannerClient counts up to final value */}
           <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {STATS.map((s) => (
-              <div key={s.label} className="rounded-xl bg-white/60 border border-white/80 px-4 py-3">
+              <div
+                key={s.label}
+                className="rounded-xl bg-white/60 border border-white/80 px-4 py-3"
+              >
                 <dt className="text-xs text-slate-500">{s.label}</dt>
-                {/* Static fallback value — CountUp replaces on client */}
-                <dd className="mt-0.5 text-xl font-extrabold text-navy-900" data-stat-to={s.value} data-stat-suffix={s.suffix}>
-                  {s.value}{s.suffix}
+                {/* Start at 0 — GSAP counts up on scroll. Avoids final→0→final flash. */}
+                <dd
+                  className="mt-0.5 text-xl font-extrabold text-navy-900"
+                  data-stat-to={s.value}
+                  data-stat-suffix={s.suffix}
+                >
+                  0{s.suffix}
                 </dd>
               </div>
             ))}
           </dl>
         </div>
 
-        {/* ── Right: hero image ──────────────────────────────────── */}
+        {/* Right: hero image */}
         <div
-          className="relative mx-auto aspect-[1000/680] w-full max-w-[600px]"
           id="hero-img-wrap"
+          className="relative mx-auto aspect-[1000/680] w-full max-w-[600px]"
           style={{ willChange: "transform" }}
         >
           <Image

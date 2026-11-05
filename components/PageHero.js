@@ -1,10 +1,9 @@
 /**
  * PageHero — server component.
- * All content rendered in SSR HTML. GSAP word-reveal runs client-side
- * via a small inline script that targets .word-inner spans already in DOM.
- * ParallaxSection kept as dynamic(ssr:false) for image only — never hides text.
+ * Content is fully server-rendered — always visible.
+ * AOS handles the scroll reveal. No GSAP, no masks, no hidden text.
  */
-import Image   from "next/image";
+import Image  from "next/image";
 import dynamic from "next/dynamic";
 import { Reveal, Button, Counter } from "./ui";
 
@@ -12,29 +11,6 @@ const ParallaxSection = dynamic(
   () => import("@/components/animation/ParallaxSection"),
   { ssr: false }
 );
-
-// Splits a string into reveal-text-mask spans — renders in SSR HTML
-function WordSplit({ text = "", gradient = false }) {
-  if (!text) return null;
-  return (
-    <>
-      {text.split(" ").filter(Boolean).map((word, i) => (
-        <span
-          key={i}
-          className="reveal-text-mask"
-          style={{ display: "inline-block", marginRight: "0.26em" }}
-        >
-          <span
-            className={`word-inner${gradient ? " bg-brand-gradient bg-clip-text text-transparent" : ""}`}
-            style={{ display: "inline-block" }}
-          >
-            {word}
-          </span>
-        </span>
-      ))}
-    </>
-  );
-}
 
 export default function PageHero({
   title,
@@ -58,30 +34,40 @@ export default function PageHero({
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20">
         <div>
           {eyebrow && (
-            <p className="mb-3 text-sm font-semibold text-brand" data-aos="fade-right">
+            <p
+              className="mb-3 text-sm font-semibold text-brand"
+              data-aos="fade-right"
+            >
               {eyebrow}
             </p>
           )}
 
-          {/* H1 — word-split spans are in SSR HTML; GSAP animates .word-inner on client */}
-          <h1 className="page-hero-heading text-4xl font-extrabold leading-tight tracking-tight text-navy-900 sm:text-5xl">
-            <WordSplit text={title} />
+          {/* H1 — plain text, always visible, AOS fades it in */}
+          <h1
+            className="text-4xl font-extrabold leading-tight tracking-tight text-navy-900 sm:text-5xl"
+            data-aos="fade-up"
+            data-aos-delay="50"
+          >
+            {title}{" "}
             {accent && (
-              <>
-                {" "}
-                <WordSplit text={accent} gradient />
-              </>
+              <span className="bg-brand-gradient bg-clip-text text-transparent">
+                {accent}
+              </span>
             )}
           </h1>
 
           {sub && (
-            <Reveal delay={0.15}>
-              <p className="mt-4 max-w-lg leading-relaxed text-slate-600">{sub}</p>
-            </Reveal>
+            <p
+              className="mt-4 max-w-lg leading-relaxed text-slate-600"
+              data-aos="fade-up"
+              data-aos-delay="120"
+            >
+              {sub}
+            </p>
           )}
 
           {badges.length > 0 && (
-            <ul className="mt-4 flex flex-wrap gap-2" data-aos="fade-up" data-aos-delay="80">
+            <ul className="mt-4 flex flex-wrap gap-2" data-aos="fade-up" data-aos-delay="150">
               {badges.map((b) => (
                 <li key={b} className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-brand shadow-sm">
                   {b}
@@ -91,19 +77,21 @@ export default function PageHero({
           )}
 
           {ctas.length > 0 && (
-            <Reveal delay={0.25}>
-              <div className="mt-7 flex flex-wrap gap-3">
-                {ctas.map((c, i) => (
-                  <Button key={c.label} href={c.href} variant={i === 0 ? "primary" : "outline"}>
-                    {c.label}
-                  </Button>
-                ))}
-              </div>
-            </Reveal>
+            <div className="mt-7 flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="180">
+              {ctas.map((c, i) => (
+                <Button key={c.label} href={c.href} variant={i === 0 ? "primary" : "outline"}>
+                  {c.label}
+                </Button>
+              ))}
+            </div>
           )}
 
           {stats.length > 0 && (
-            <dl className="mt-9 grid max-w-md grid-cols-3 gap-4" data-aos="fade-up" data-aos-delay="160">
+            <dl
+              className="mt-9 grid max-w-md grid-cols-3 gap-4"
+              data-aos="fade-up"
+              data-aos-delay="220"
+            >
               {stats.map((s) => (
                 <div key={s.l}>
                   <dd className="text-2xl font-bold text-navy-900 sm:text-3xl">
@@ -116,7 +104,7 @@ export default function PageHero({
           )}
         </div>
 
-        {/* Image — parallax is progressive enhancement only, image always visible */}
+        {/* Image with optional parallax — always visible via <Image priority> */}
         <div data-aos="zoom-in" data-aos-delay="100">
           <ParallaxSection speed={0.06}>
             <Image
@@ -130,15 +118,6 @@ export default function PageHero({
           </ParallaxSection>
         </div>
       </div>
-
-      {/* Client script: GSAP word reveal on .page-hero-heading — fires after paint */}
-      <PageHeroAnimation />
     </section>
   );
-}
-
-// Tiny client component just for the GSAP trigger — no content
-import PageHeroAnimationClient from "./PageHeroAnimationClient";
-function PageHeroAnimation() {
-  return <PageHeroAnimationClient />;
 }

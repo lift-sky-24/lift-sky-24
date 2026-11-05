@@ -1,10 +1,6 @@
-"use client";
+﻿"use client";
 
-import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { Globe, Smartphone, Code2, Share2, Search, PenTool, Megaphone, Heart, ArrowUpRight } from "lucide-react";
-
-const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["600", "700", "800"] });
-const body = DM_Sans({ subsets: ["latin"], weight: ["400", "500"] });
 
 const services = [
   { id: "website", title: "Website Development", text: "Modern, responsive websites and web applications.", tags: ["Next.js", "React", "Responsive"], Icon: Globe, span: "sm:col-span-2 lg:col-span-2 lg:min-h-[300px]" },
@@ -105,10 +101,10 @@ export default function Services() {
   };
 
   return (
-    <section id="services" className={`${body.className} bg-[#fbfbff] py-12 text-[#0f1a4d] sm:py-20 lg:py-28`}>
+    <section id="services" className={`bg-[#fbfbff] py-12 text-[#0f1a4d] sm:py-20 lg:py-28`}>
       <div className="mx-auto w-[min(1200px,100%-40px)]">
         <header className="mb-8 sm:mb-14">
-          <h2 className={`${display.className} mb-3 text-[clamp(2.2rem,5.5vw,4rem)] font-extrabold leading-[1.02] tracking-[-0.03em]`}>
+          <h2 className={`mb-3 text-[clamp(2.2rem,5.5vw,4rem)] font-extrabold leading-[1.02] tracking-[-0.03em]`}>
             Our Services
           </h2>
           <p className="max-w-[46ch] text-base leading-relaxed text-[#566086] sm:text-xl">
@@ -140,7 +136,7 @@ export default function Services() {
               <Art id={id} />
 
               <div>
-                <h3 className={`${display.className} mb-1.5 text-xl font-bold tracking-tight`}>
+                <h3 className={`mb-1.5 text-xl font-bold tracking-tight`}>
                   {/* after:inset stretches the link over the whole card */}
                   <a href="#contact" className="outline-none after:absolute after:-inset-[400px]">{title}</a>
                 </h3>

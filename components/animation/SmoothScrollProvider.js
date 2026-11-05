@@ -1,101 +1,101 @@
 "use client";
 /**
  * SmoothScrollProvider
- * - Initialises Lenis smooth scroll on client
- * - Syncs Lenis with GSAP ticker + ScrollTrigger
- * - Refreshes AOS on resize
- * - Resets scroll on route change
- * - Full cleanup on unmount
- * Library: Lenis + GSAP (never Framer Motion)
+ * - Lenis smooth scroll on fine-pointer (mouse) desktop only
+ * - Syncs with GSAP ScrollTrigger
+ * - On route change: uses ONLY lenis.scrollTo (not window.scrollTo) to avoid jump
+ * - Proper async cleanup to prevent leaked ScrollTriggers
  */
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { MOTION } from "@/lib/motion-config";
 
 export default function SmoothScrollProvider({ children }) {
   const lenisRef   = useRef(null);
-  const rafRef     = useRef(null);
+  const cleanupRef = useRef(null);
   const pathname   = usePathname();
 
   useEffect(() => {
-    // Bail on touch/low-power devices — use native scroll
-    const isFinePointer = window.matchMedia("(pointer:fine)").matches;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    const isMouse   = window.matchMedia("(pointer:fine)").matches;
+    const isReduced = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
 
-    let lenis = null;
-    let gsap  = null;
-    let ScrollTrigger = null;
+    // Mobile/touch/reduced-motion → native scroll (no Lenis)
+    if (!isMouse || isReduced) return;
+
+    let cancelled = false;
 
     async function init() {
-      const [gsapMod, STMod, LenisMod] = await Promise.all([
-        import("gsap"),
-        import("gsap/ScrollTrigger"),
-        import("lenis"),
-      ]);
+      try {
+        const [{ gsap }, { ScrollTrigger }, { default: Lenis }] = await Promise.all([
+          import("gsap"),
+          import("gsap/ScrollTrigger"),
+          import("lenis"),
+        ]);
 
-      gsap         = gsapMod.gsap;
-      ScrollTrigger = STMod.ScrollTrigger;
-      const Lenis  = LenisMod.default;
+        if (cancelled) return; // component unmounted before init completed
 
-      gsap.registerPlugin(ScrollTrigger);
+        gsap.registerPlugin(ScrollTrigger);
 
-      // Lenis options — reduce smoothing on touch/reduced-motion
-      const lerp = prefersReduced ? 1 : (!isFinePointer ? 0.12 : MOTION.lenis.lerp);
+        const lenis = new Lenis({
+          lerp:            0.1,
+          smoothWheel:     true,
+          wheelMultiplier: 0.85,
+          infinite:        false,
+        });
 
-      lenis = new Lenis({
-        lerp,
-        smoothWheel:     MOTION.lenis.smoothWheel,
-        wheelMultiplier: MOTION.lenis.wheelMultiplier,
-        touchMultiplier: isFinePointer ? 1 : MOTION.lenis.touchMultiplier,
-        infinite:        false,
-      });
+        lenisRef.current = lenis;
+        lenis.on("scroll", ScrollTrigger.update);
 
-      lenisRef.current = lenis;
+        const tick = (time) => lenis.raf(time * 1000);
+        gsap.ticker.add(tick);
+        gsap.ticker.lagSmoothing(0);
 
-      // Sync with ScrollTrigger
-      lenis.on("scroll", ScrollTrigger.update);
+        const onResize = () => {
+          ScrollTrigger.refresh();
+          import("aos").then(({ default: AOS }) => AOS.refresh()).catch(() => {});
+        };
+        window.addEventListener("resize", onResize, { passive: true });
 
-      // GSAP ticker drives Lenis
-      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-      gsap.ticker.lagSmoothing(0);
-
-      // AOS refresh on resize
-      const onResize = () => {
-        ScrollTrigger.refresh();
-        import("aos").then(({ default: AOS }) => AOS.refresh());
-      };
-      window.addEventListener("resize", onResize, { passive: true });
-
-      return () => {
-        window.removeEventListener("resize", onResize);
-      };
+        // Store cleanup
+        cleanupRef.current = () => {
+          window.removeEventListener("resize", onResize);
+          gsap.ticker.remove(tick);
+          lenis.destroy();
+          lenisRef.current = null;
+        };
+      } catch (e) {
+        console.warn("[SmoothScroll] init failed:", e);
+      }
     }
 
-    const cleanupFn = { current: null };
-    init().then((fn) => { cleanupFn.current = fn; });
+    init();
 
     return () => {
-      if (cleanupFn.current) cleanupFn.current();
-      if (lenisRef.current) {
-        lenisRef.current.destroy();
-        lenisRef.current = null;
-      }
-      // Remove GSAP ticker entries
-      import("gsap").then(({ gsap: g }) => {
-        g.ticker.remove(() => {});
-      });
+      cancelled = true;
+      cleanupRef.current?.();
+      cleanupRef.current = null;
     };
-  }, []);
+  }, []); // runs once on mount
 
-  // Scroll to top and refresh ScrollTrigger on route change
+  // Route change: scroll to top using ONLY Lenis (not native window.scrollTo)
+  // Using Lenis prevents the jump caused by calling both
   useEffect(() => {
     if (lenisRef.current) {
+      // immediate=true skips Lenis lerp so it's instant like native scroll
       lenisRef.current.scrollTo(0, { immediate: true });
+    } else {
+      // Mobile (no Lenis) — native instant scroll
+      window.scrollTo(0, 0);
     }
-    import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
-      ScrollTrigger.refresh();
-    });
-    import("aos").then(({ default: AOS }) => AOS.refresh());
+    // Refresh ScrollTrigger after a short delay so new page content has rendered
+    const t = setTimeout(() => {
+      import("gsap/ScrollTrigger")
+        .then(({ ScrollTrigger }) => ScrollTrigger.refresh())
+        .catch(() => {});
+      import("aos")
+        .then(({ default: AOS }) => AOS.refresh())
+        .catch(() => {});
+    }, 100);
+    return () => clearTimeout(t);
   }, [pathname]);
 
   return children;

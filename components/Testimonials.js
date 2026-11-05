@@ -51,8 +51,8 @@ export default function Testimonials() {
           className="relative mt-10 cursor-grab active:cursor-grabbing rounded-3xl border border-slate-100 bg-white p-8 text-center shadow-card sm:p-12 overflow-hidden"
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.15}
-          style={{ x: dragX, touchAction: "none" }}
+          dragElastic={0.12}
+          style={{ x: dragX, touchAction: "pan-y", minHeight: 280 }}
           onDragStart={() => setDragging(true)}
           onDragEnd={(e, info) => { setDragging(false); onDragEnd(e, info); }}
           data-card=""

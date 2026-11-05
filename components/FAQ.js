@@ -20,7 +20,7 @@ export default function FAQ({ items, title = "Frequently Asked Questions", class
           return (
             <motion.div
               key={f.q}
-              className="overflow-hidden rounded-2xl border border-slate-100 bg-white"
+              className="overflow-hidden rounded-2xl border border-slate-100 bg-white relative"
               animate={{ borderColor: isOpen ? "rgba(101,87,255,.3)" : "rgba(226,232,240,1)" }}
               transition={{ duration: 0.25 }}
               data-aos="fade-up"

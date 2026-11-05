@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus_Jakarta_Sans, Caveat } from "next/font/google";
 import { HeartHandshake, PackageCheck, Award } from "lucide-react";
 
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
-const hand = Caveat({ subsets: ["latin"], weight: ["600"] });
+// Font classes — using Inter (already loaded in layout.js) + system cursive for handwritten note
+const jakartaClass = ""; // Inter is the site font, loaded globally
+const handStyle    = { fontFamily: "Caveat, cursive" }; // fallback if Caveat not loaded
 
 /* ---------- Edit these ---------- */
 const HERO_IMAGE = "/images/about.png"; // Collaborative_Teamwork_in_a_Modern_Office-1.png ko public/images/about.png naam se save karo
@@ -95,7 +95,7 @@ export default function AboutHero() {
   return (
     <section
       id="about"
-      className={`${jakarta.className} ah-root relative overflow-hidden bg-gradient-to-br from-white via-[#F8F6FF] to-[#EEE9FF] text-[#0F1A4D]`}
+      className={`ah-root relative overflow-hidden bg-gradient-to-br from-white via-[#F8F6FF] to-[#EEE9FF] text-[#0F1A4D]`}
     >
       <style>{css}</style>
 
@@ -184,7 +184,7 @@ export default function AboutHero() {
 
               {SHOW_NOTE && (
                 <div className="pointer-events-none absolute right-[4%] top-[3%]">
-                  <div className={`${hand.className} -rotate-[8deg] text-right text-[clamp(1rem,2vw,1.6rem)] leading-[1.05] text-indigo-600`}>
+                  <div className="-rotate-[8deg] text-right text-[clamp(1rem,2vw,1.6rem)] leading-[1.05] text-indigo-600" style={handStyle}>
                     {["Great People", "Build Great", "Products"].map((line, i) => (
                       <div key={line} className="ah-fade" style={{ "--d": `${1500 + i * 160}ms` }}>{line}</div>
                     ))}

@@ -13,10 +13,8 @@ import { why, processSteps } from "@/lib/data";
 import { BRAND } from "@/data/site-config";
 import { meta } from "@/lib/seo";
 
-// Lazy-loaded animation components (zero SSR cost)
 const MarqueeRow     = dynamic(() => import("@/components/animation/MarqueeRow"),     { ssr: false });
 const MagneticButton = dynamic(() => import("@/components/animation/MagneticButton"), { ssr: false });
-const ProcessTimeline = dynamic(() => import("@/components/animation/ProcessTimeline"), { ssr: false });
 
 export const metadata = {
   ...meta(
@@ -84,9 +82,9 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 5. Process — animated scroll timeline */}
+      {/* 5. Process */}
       <Section title="How We Work" sub="A clear, five-step process. No surprises.">
-        <ProcessTimeline />
+        <Steps items={processSteps} />
       </Section>
 
       {/* 6. Featured Projects */}

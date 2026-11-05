@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
-import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { Globe, Smartphone, Code2, Share2, Search, PenTool, Megaphone, ChevronDown, ArrowUpRight } from "lucide-react";
 
-const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["600", "700", "800"] });
-const body = DM_Sans({ subsets: ["latin"], weight: ["400", "500"] });
+// Use system font stack â€” matches the site's Inter font loaded in layout.js
+const displayClass = "";  // heading style applied via inline style below
+const bodyClass    = "";
 
 /*
   PALETTE (one brand accent, everything else is neutral)
@@ -82,13 +82,13 @@ export default function ServicesShowcase() {
   };
 
   return (
-    <section id="services" className={`${body.className} relative overflow-hidden bg-[#F5F6FC] py-14 text-[#0F1A4D] sm:py-20 lg:py-28`}>
+    <section id="services" className={`relative overflow-hidden bg-[#F5F6FC] py-14 text-[#0F1A4D] sm:py-20 lg:py-28`}>
       {/* soft light glow behind the stage */}
       <div aria-hidden className="pointer-events-none absolute -right-32 top-24 size-[480px] rounded-full bg-indigo-300/40 blur-[110px]" />
 
       <div className="relative mx-auto w-[min(1200px,100%-40px)]">
         <header className="mb-8 sm:mb-14">
-          <h2 className={`${display.className} mb-3 text-[clamp(2.2rem,5.5vw,4rem)] font-extrabold leading-[1.02] tracking-[-0.03em]`}>Our Services</h2>
+          <h2 className={`mb-3 text-[clamp(2.2rem,5.5vw,4rem)] font-extrabold leading-[1.02] tracking-[-0.03em]`}>Our Services</h2>
           <p className="max-w-[46ch] text-base leading-relaxed text-[#5B6489] sm:text-xl">We build digital solutions that drive real business results.</p>
         </header>
 
@@ -111,7 +111,7 @@ export default function ServicesShowcase() {
                     <span className={`grid size-10 shrink-0 place-items-center rounded-xl transition-colors duration-300 ${open ? "bg-indigo-600 text-white" : "bg-white text-indigo-600 ring-1 ring-[#E3E6F5]"}`}>
                       <Icon size={20} strokeWidth={1.8} />
                     </span>
-                    <span className={`${display.className} flex-1 text-lg font-bold tracking-tight sm:text-xl`}>{s.title}</span>
+                    <span className={`flex-1 text-lg font-bold tracking-tight sm:text-xl`}>{s.title}</span>
                     <ChevronDown size={20} className={`shrink-0 transition-all duration-300 lg:-rotate-90 ${open ? "rotate-180 text-indigo-600 lg:opacity-100" : "lg:opacity-0"}`} />
                   </button>
 
@@ -143,7 +143,7 @@ export default function ServicesShowcase() {
 
             {/* Glass info card, re-mounts per service so it animates in */}
             <div key={services[active].id} className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/25 bg-[#0F1A4D]/55 p-5 text-white backdrop-blur-xl motion-safe:animate-[rise_0.6s_cubic-bezier(0.2,0.8,0.2,1)_both]">
-              <h3 className={`${display.className} mb-1.5 text-2xl font-bold tracking-tight`}>{services[active].title}</h3>
+              <h3 className={`mb-1.5 text-2xl font-bold tracking-tight`}>{services[active].title}</h3>
               <p className="mb-3 max-w-[48ch] text-base text-white/85">{services[active].text}</p>
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <Tags tags={services[active].tags} onImage />
