@@ -1,122 +1,146 @@
-"use client";
-import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+/**
+ * HeroBanner — split into:
+ *   HeroBannerShell   (server component — all text, CTAs, stats in SSR HTML)
+ *   HeroBannerClient  (client component — GSAP timeline + GlowOrbs + animations)
+ *
+ * This ensures the H1, trust items and stats are in the initial HTML for
+ * SEO crawlers and users without JS, while animations layer on top.
+ */
 
-const avatars = [
-  { i: "A", c: "from-amber-400 to-orange-500" },
-  { i: "P", c: "from-pink-400 to-rose-500" },
-  { i: "R", c: "from-sky-400 to-indigo-500" },
-  { i: "N", c: "from-emerald-400 to-teal-500" },
+// ── SERVER PART (default export used by app/page.js) ─────────────────
+import dynamic from "next/dynamic";
+import Image   from "next/image";
+import Link    from "next/link";
+import { ArrowRight, CheckCircle, ArrowDown } from "lucide-react";
+import { BRAND, STATS } from "@/data/site-config";
+
+// Client animation layer — loads after paint (priority: false)
+const HeroBannerClient = dynamic(
+  () => import("@/components/HeroBannerClient"),
+  { ssr: false }
+);
+
+const trust = [
+  "No hidden fees",
+  "You own the source code",
+  "24h response time",
 ];
-
-/* Image ke edges ko section ke gradient mein fade karta hai (hard box line nahi dikhti) */
-const IMAGE_MASK = {
-  WebkitMaskImage:
-    "linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%)",
-  maskImage:
-    "linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%)",
-  WebkitMaskComposite: "source-in",
-  maskComposite: "intersect",
-};
 
 export default function HeroBanner() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-white via-[#F7F5FF] to-[#F3EEFF]">
-      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:px-8 lg:py-16">
-        {/* ---------------- Left: content ---------------- */}
+    <section
+      className="relative overflow-hidden"
+      style={{
+        background:
+          "radial-gradient(ellipse at 80% 25%,#e2d9ffb8,transparent 34%),radial-gradient(ellipse at 48% 75%,#d5f5ff9c,transparent 35%)",
+      }}
+    >
+      {/* Client: glow orbs + GSAP parallax (purely decorative / enhancing) */}
+      <HeroBannerClient />
+
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:px-8 lg:py-20 relative z-10">
+
+        {/* ── Left: all text content — server-rendered ─────────────── */}
         <div>
-          <motion.span
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" /> Modern IT Solutions for a Better Tomorrow
-          </motion.span>
+          {/* Eyebrow */}
+          <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-white/70 px-4 py-1.5 text-xs font-bold tracking-wide text-brand uppercase">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
+            {BRAND.tagline}
+          </span>
 
-          {/* Heading hamesha 2 lines mein */}
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            className="mt-5 text-[clamp(1.6rem,3.3vw,3rem)] font-extrabold leading-[1.12] tracking-tight text-navy-900"
+          {/* H1 — plain SSR markup; GSAP animates .word-inner children on client */}
+          <h1
+            id="hero-heading"
+            className="mt-5 text-[clamp(1.9rem,3.8vw,3.2rem)] font-extrabold leading-[1.08] tracking-tight text-navy-900"
           >
-            <span className="block whitespace-nowrap">Elevating Businesses</span>
-            <span className="block whitespace-nowrap">
-              Through{" "}
-              <span className="bg-gradient-to-r from-violet-600 to-blue-500 bg-clip-text text-transparent">Technology</span>
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.25 }}
-            className="mt-5 max-w-md leading-relaxed text-slate-600"
-          >
-            LiftSky24 is a leading IT services company, delivering innovative web solutions, mobile apps, and digital transformation services to help businesses grow in the digital world.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="mt-7 flex flex-wrap gap-3"
-          >
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-orange-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:-translate-y-0.5 hover:brightness-110 active:scale-95"
-            >
-              Start Your Project <ArrowRight size={16} />
-            </Link>
-            <Link
-              href="/services"
-              className="inline-flex items-center rounded-full border border-indigo-300 bg-white px-6 py-3 text-sm font-semibold text-indigo-700 transition hover:-translate-y-0.5 hover:bg-indigo-50 active:scale-95"
-            >
-              Our Services
-            </Link>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="mt-8 flex items-center gap-3"
-          >
-            <ul className="flex -space-x-2">
-              {avatars.map((a) => (
-                <li
-                  key={a.i}
-                  className={`grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-gradient-to-br ${a.c} text-xs font-bold text-white`}
-                  aria-hidden="true"
-                >
-                  {a.i}
-                </li>
+            {/* Words wrapped so GSAP can target them; visible without JS */}
+            {"Websites, Apps & Digital Growth".split(" ").map((w, i) => (
+              <span key={i} className="reveal-text-mask" style={{ display: "inline-block", marginRight: "0.26em" }}>
+                <span className="word-inner" style={{ display: "inline-block" }}>{w}</span>
+              </span>
+            ))}
+            <br />
+            <span className="gradient-text">
+              {"That Take Your Business Higher.".split(" ").map((w, i) => (
+                <span key={i} className="reveal-text-mask" style={{ display: "inline-block", marginRight: "0.26em" }}>
+                  <span className="word-inner" style={{ display: "inline-block" }}>{w}</span>
+                </span>
               ))}
-            </ul>
-            <p className="text-xs leading-snug text-slate-600">
-              Trusted by <strong className="text-navy-900">500+</strong> businesses
-              <br />
-              worldwide
-            </p>
-          </motion.div>
+            </span>
+          </h1>
+
+          {/* Sub */}
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600">
+            We build fast websites, mobile apps, custom software and run SEO, social media and digital marketing campaigns — everything a growing business needs, in one team.
+          </p>
+
+          {/* Trust checks */}
+          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5">
+            {trust.map((t) => (
+              <li key={t} className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+                <CheckCircle size={13} className="shrink-0 text-emerald-500" aria-hidden="true" />
+                {t}
+              </li>
+            ))}
+          </ul>
+
+          {/* CTAs */}
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link href="/contact" className="btn-dark-pill">
+              Get a Free Quote <ArrowRight size={15} aria-hidden="true" />
+            </Link>
+            <Link href="/services" className="btn-light-pill">
+              View Our Services
+            </Link>
+          </div>
+
+          {/* Stats strip — final values rendered server-side */}
+          <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {STATS.map((s) => (
+              <div key={s.label} className="rounded-xl bg-white/60 border border-white/80 px-4 py-3">
+                <dt className="text-xs text-slate-500">{s.label}</dt>
+                {/* Static fallback value — CountUp replaces on client */}
+                <dd className="mt-0.5 text-xl font-extrabold text-navy-900" data-stat-to={s.value} data-stat-suffix={s.suffix}>
+                  {s.value}{s.suffix}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        {/* ---------------- Right: image (no animation, background blended) ---------------- */}
-        <div className="relative mx-auto aspect-[1000/680] w-full max-w-[640px]">
+        {/* ── Right: hero image ──────────────────────────────────── */}
+        <div
+          className="relative mx-auto aspect-[1000/680] w-full max-w-[600px]"
+          id="hero-img-wrap"
+          style={{ willChange: "transform" }}
+        >
           <Image
             src="/images/home_hero.png"
-            alt="LiftSky24 IT solutions illustration"
+            alt="LiftSky24 — websites, apps and digital growth illustration"
             fill
             priority
-            unoptimized
             sizes="(min-width:1024px) 600px, 100vw"
-            draggable={false}
             className="select-none object-contain mix-blend-multiply"
-            style={IMAGE_MASK}
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right,transparent 0%,#000 8%,#000 92%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 6%,#000 94%,transparent 100%)",
+              maskImage:
+                "linear-gradient(to right,transparent 0%,#000 8%,#000 92%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 6%,#000 94%,transparent 100%)",
+              WebkitMaskComposite: "source-in",
+              maskComposite: "intersect",
+            }}
           />
         </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted"
+        style={{ opacity: 0.4 }}
+        aria-hidden="true"
+      >
+        <span className="text-[10px] font-semibold tracking-widest uppercase">Scroll</span>
+        <ArrowDown size={14} />
       </div>
     </section>
   );

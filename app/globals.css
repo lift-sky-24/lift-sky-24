@@ -2,10 +2,304 @@
 @tailwind components;
 @tailwind utilities;
 
-html { scroll-behavior: smooth; }
-body { @apply bg-white text-ink antialiased; }
-:focus-visible { outline: 2px solid #4F46E5; outline-offset: 3px; border-radius: 6px; }
+/* ── Design-system tokens (from digital-agency theme) ─────────────── */
+:root {
+  --ink:    #10111a;
+  --paper:  #f7f6f2;
+  --muted:  #686a76;
+  --purple: #6557ff;
+  --cyan:   #35d9ff;
+  --lime:   #c7ff5e;
+  --pink:   #ff4fa3;
+  --orange: #ff6338;
+  --line:   rgba(16,17,26,.13);
+  --dark:   #11121b;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────── */
+html  { scroll-behavior: smooth; }
+body  { margin: 0; background: var(--paper); color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased; }
+a     { color: inherit; text-decoration: none; }
+img   { max-width: 100%; display: block; }
+
+/* ── Focus ring ────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--purple);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ── Gradient text helper ──────────────────────────────────────────── */
+.gradient-text {
+  color: transparent;
+  background: linear-gradient(100deg, var(--orange), var(--pink), var(--purple), #178fbb);
+  background-size: 180% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shine 7s alternate infinite;
+}
+
+/* ── Reveal animation ──────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .7s, transform .7s cubic-bezier(.2,.8,.2,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.delay-1 { transition-delay: .1s; }
+.delay-2 { transition-delay: .2s; }
+.delay-3 { transition-delay: .3s; }
+
+/* ── Float animation for hero collage ─────────────────────────────── */
+@keyframes float  { 0%,100%{ translate: 0 0 } 50%{ translate: 0 -8px } }
+@keyframes aurora { from{ transform:translate(0,0) scale(1) } to{ transform:translate(-20px,20px) scale(1.08) } }
+@keyframes shine  { from{ background-position:0% center } to{ background-position:100% center } }
+
+/* ── Reduced motion ────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ── Shared hover utilities for server components ──────────────────── */
+.btn-dark-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 19px; border-radius: 99px; font-size: 13px; font-weight: 800;
+  background: linear-gradient(110deg,#171821,#30264a); color: #fff;
+  border: 1px solid transparent; transition: background .25s, transform .25s, box-shadow .25s;
+  text-decoration: none;
+}
+.btn-dark-pill:hover { background: linear-gradient(110deg,var(--purple),var(--pink)); transform: translateY(-3px); box-shadow: 0 12px 25px rgba(16,17,26,.11); }
+
+.btn-light-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 19px; border-radius: 99px; font-size: 13px; font-weight: 800;
+  background: rgba(255,255,255,.6); border: 1px solid rgba(16,17,26,.13); color: var(--ink);
+  transition: border-color .2s, color .2s, transform .25s; text-decoration: none;
+}
+.btn-light-pill:hover { border-color: var(--purple); color: var(--purple); transform: translateY(-2px); }
+
+.btn-cta-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 15px 28px; border-radius: 99px; font-size: 14px; font-weight: 800;
+  background: linear-gradient(100deg,var(--orange),var(--pink)); color: #fff;
+  transition: transform .25s, box-shadow .25s; text-decoration: none;
+}
+.btn-cta-pill:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(255,79,163,.3); }
+
+.btn-outline-light {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 19px; border-radius: 99px; font-size: 13px; font-weight: 800;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: #fff;
+  transition: background .2s; text-decoration: none;
+}
+.btn-outline-light:hover { background: rgba(255,255,255,.22); }
+
+.service-card {
+  border: 1px solid #e5e4eb; border-radius: 21px; padding: 23px; min-height: 210px;
+  position: relative; overflow: hidden; display: block; text-decoration: none; color: var(--ink);
+  transition: transform .32s, box-shadow .32s, border-color .32s;
+}
+.service-card:hover { transform: translateY(-8px); box-shadow: 0 22px 45px rgba(49,36,92,.1); border-color: #b7aaff; }
+
+.project-card {
+  border-radius: 23px; overflow: hidden; background: #fff;
+  border: 1px solid #e4e2e9; transition: transform .35s, box-shadow .35s;
+}
+.project-card:hover { transform: translateY(-7px); box-shadow: 0 24px 50px rgba(39,32,71,.1); }
+
+.blog-card {
+  border-radius: 21px; overflow: hidden; background: #fff;
+  border: 1px solid #e4e2e9; transition: transform .35s, box-shadow .35s;
+}
+.blog-card:hover { transform: translateY(-7px); box-shadow: 0 24px 50px rgba(39,32,71,.1); }
+
+.ind-card {
+  border: 1px solid #e5e4eb; border-radius: 21px; padding: 23px;
+  transition: transform .32s, box-shadow .32s, border-color .32s;
+}
+.ind-card:hover { transform: translateY(-8px); border-color: #b7aaff; }
+
+.price-card {
+  border-radius: 24px; padding: 32px; transition: transform .3s, box-shadow .3s;
+}
+.price-card:hover { transform: translateY(-6px); box-shadow: 0 22px 45px rgba(101,87,255,.15); }
+
+.screen-inner { transform: rotate(-3deg); transition: transform .4s; }
+.project-card:hover .screen-inner { transform: rotate(0) scale(1.03); }
+
+.art-tile { transition: transform .3s; }
+.art-tile:hover { transform: translateY(-6px) rotate(-1deg); }
+
+/* ── Footer responsive grid ────────────────────────────────────────── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 30px;
+}
+@media(max-width:900px) {
+  .footer-grid { grid-template-columns: repeat(2,1fr); }
+  .footer-grid > div:first-child { grid-column: span 2; }
+}
+@media(max-width:500px) {
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-grid > div:first-child { grid-column: span 1; }
+}
+
+/* ── Footer link hover ─────────────────────────────────────────────── */
+.footer-link {
+  display: block;
+  margin: 8px 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #b4b5c1;
+  transition: color .2s;
+  text-decoration: none;
+}
+.footer-link:hover { color: var(--pink); }
+
+/* ── Missing keyframes used in NewServices / ServicesShowcase ──────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Header scroll shadow (toggled via JS class) ───────────────────── */
+.header-scrolled { box-shadow: 0 2px 20px rgba(16,17,26,.09); }
+
+/* ── WhatsApp FAB ──────────────────────────────────────────────────── */
+.whatsapp-fab {
+  position: fixed; bottom: 24px; right: 24px; z-index: 60;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #25d366; display: grid; place-items: center;
+  box-shadow: 0 6px 24px rgba(37,211,102,.45);
+  transition: transform .2s, box-shadow .2s;
+}
+.whatsapp-fab:hover { transform: scale(1.08); box-shadow: 0 10px 32px rgba(37,211,102,.55); }
+
+/* ── Breadcrumbs ───────────────────────────────────────────────────── */
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.breadcrumb a { color: var(--muted); transition: color .2s; }
+.breadcrumb a:hover { color: var(--purple); }
+.breadcrumb-sep { opacity: .4; }
+
+/* ── Empty state ───────────────────────────────────────────────────── */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 80px 24px; text-align: center; gap: 16px; }
+.empty-state-icon { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg,#ede9ff,#fce7f3);
+  display: grid; place-items: center; }
+
+/* ── Accordion (FAQ) answer visibility fix ─────────────────────────── */
+[data-faq-answer] { overflow: hidden; }
+
+/* ── AOS animations override — ensure content visible without JS ──── */
+[data-aos] { opacity: 1 !important; transform: none !important; }
+[data-aos][data-aos][data-aos-duration] { transition-duration: var(--aos-duration, 650ms) !important; }
+html:not([data-scroll-initialized]) [data-aos] { opacity: 1 !important; transform: none !important; }
+
+/* ── Magnetic button base ──────────────────────────────────────────── */
+.magnetic-btn { position: relative; display: inline-flex; }
+.magnetic-btn .shine-overlay {
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.25) 50%, transparent 60%);
+  background-size: 200% 100%; background-position: 200% 0;
+  pointer-events: none; border-radius: inherit;
+}
+.magnetic-btn:hover .shine-overlay {
+  transition: background-position .6s ease;
+  background-position: -200% 0;
+}
+
+/* ── TiltCard base ─────────────────────────────────────────────────── */
+[data-tilt] { transform-style: preserve-3d; }
+[data-tilt] > * { transform: translateZ(0); }
+
+/* ── RevealText — mask container ──────────────────────────────────── */
+.reveal-text-mask { overflow: hidden; display: block; }
+.reveal-text-mask .word-inner { display: inline-block; will-change: transform; }
+
+/* ── Spotlight card ────────────────────────────────────────────────── */
+.spotlight-card { position: relative; overflow: hidden; }
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(101,87,255,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  left: var(--cx, 50%);
+  top:  var(--cy, 50%);
+  opacity: 0;
+  transition: opacity .3s;
+  z-index: 1;
+}
+.spotlight-card:hover::before { opacity: 1; }
+
+/* ── Process timeline line ──────────────────────────────────────────── */
+.process-line {
+  position: absolute; left: 50%; top: 0;
+  width: 2px; background: rgba(101,87,255,0.2);
+  transform-origin: top center;
+}
+.process-line-fill {
+  position: absolute; left: 50%; top: 0;
+  width: 2px; background: linear-gradient(180deg,#6557ff,#ff4fa3);
+  transform-origin: top center; transform: scaleY(0);
+}
+
+/* ── Marquee row ────────────────────────────────────────────────────── */
+.marquee-track { display: flex; gap: 1.5rem; will-change: transform; white-space: nowrap; }
+@keyframes marquee-scroll { to { transform: translateX(-50%); } }
+.marquee-track.running { animation: marquee-scroll var(--marquee-dur, 30s) linear infinite; }
+.marquee-track.paused  { animation-play-state: paused; }
+
+/* ── Reading progress bar (blog) ────────────────────────────────────── */
+.reading-progress {
+  position: fixed; top: 3px; left: 0; height: 3px;
+  background: linear-gradient(90deg,#ff6338,#ff4fa3);
+  transform-origin: left; transform: scaleX(0);
+  z-index: 199; pointer-events: none;
+}
+
+/* ── Animated gradient border — removed (used box-shadow on PricingTable instead) ── */
+
+/* ── Neighbor dim effect ────────────────────────────────────────────── */
+.card-grid:has(.card-item:hover) .card-item:not(:hover) {
+  opacity: 0.72;
+  transform: scale(0.985);
+  transition: opacity .3s, transform .3s;
+}
+.card-grid .card-item { transition: opacity .3s, transform .3s; }
+
+/* ── Ripple effect ──────────────────────────────────────────────────── */
+@keyframes ripple-out { to { transform: scale(3.5); opacity: 0; } }
+.ripple {
+  position: absolute; border-radius: 50%;
+  width: 40px; height: 40px; margin: -20px;
+  background: rgba(255,255,255,.35);
+  animation: ripple-out .55s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ── Mobile: disable heavy 3D effects ──────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  [data-tilt]               { transform: none !important; }
+  .spotlight-card::before   { display: none !important; }
+  .shine-overlay            { display: none !important; }
+}
+
+/* ── Ensure AOS content visible without JS / before init ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  [data-aos] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .gradient-text { animation: none !important; }
+  .marquee-track { animation: none !important; }
+  .whatsapp-fab  { transition: none !important; }
 }

@@ -73,7 +73,7 @@ function Art({ id }) {
             <b className={`h-2 w-[60%] rounded ${soft}`} />
           </div>
           <span className="w-fit rounded-full bg-indigo-600 px-2.5 py-1 text-xs font-semibold text-white transition-transform duration-500 group-hover:-translate-y-1.5">
-            #1 on Google
+            SEO-ready
           </span>
         </div>
       );
