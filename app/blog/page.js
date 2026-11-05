@@ -4,9 +4,10 @@ import { Section }  from "@/components/Sections";
 import { Stagger, StaggerItem, Reveal } from "@/components/ui";
 import { meta }     from "@/lib/seo";
 import { BRAND, BLOG_POSTS } from "@/data/site-config";
+import { blogPageHero, blogArticlesSection } from "@/data/pages/blog";
 
 export const metadata = meta(
-  "Blog &amp; Resources",
+  "Blog & Resources",
   `Practical guides on website development, SEO, social media and digital marketing from the ${BRAND.name} team in Jaipur.`,
   "/blog"
 );
@@ -15,20 +16,19 @@ export default function Blog() {
   return (
     <>
       <PageHero
-        title="Blog &amp; Resources"
-        accent="Practical Digital Insights"
-        eyebrow="From the LiftSky24 team"
-        sub="Plain-language guides on websites, SEO, apps, social media and digital marketing — written for business owners, not developers."
-        image="/images/hero.svg"
-        alt="LiftSky24 blog and resources"
+        title={blogPageHero.title}
+        accent={blogPageHero.accent}
+        eyebrow={blogPageHero.eyebrow}
+        sub={blogPageHero.sub}
+        image={blogPageHero.image}
+        alt={blogPageHero.alt}
       />
 
-      <Section title="Latest Articles">
-        <Stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <Section title={blogArticlesSection.title}>
+        <Stagger className={`grid gap-6 ${blogArticlesSection.cols}`}>
           {BLOG_POSTS.map((post) => (
             <StaggerItem key={post.slug}>
-              <Link href={`/blog/${post.slug}`}
-                className="blog-card group block h-full">
+              <Link href={`/blog/${post.slug}`} className="blog-card group block h-full">
                 <div className="h-44 bg-brand-light flex items-center justify-center overflow-hidden">
                   <span className="text-xs font-bold uppercase tracking-widest text-brand/60">{post.category}</span>
                 </div>

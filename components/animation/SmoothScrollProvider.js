@@ -3,7 +3,8 @@
  * SmoothScrollProvider
  * - Lenis smooth scroll on fine-pointer (mouse) desktop only
  * - Syncs with GSAP ScrollTrigger
- * - On route change: uses ONLY lenis.scrollTo (not window.scrollTo) to avoid jump
+ * - On route change: scroll to top only — does NOT refresh AOS
+ *   (AOS is init-once; refreshing it would re-animate all elements = flicker)
  * - Proper async cleanup to prevent leaked ScrollTriggers
  */
 import { useEffect, useRef } from "react";
@@ -14,11 +15,11 @@ export default function SmoothScrollProvider({ children }) {
   const cleanupRef = useRef(null);
   const pathname   = usePathname();
 
+  // ── Init Lenis + GSAP sync once on mount ────────────────────────
   useEffect(() => {
     const isMouse   = window.matchMedia("(pointer:fine)").matches;
     const isReduced = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
 
-    // Mobile/touch/reduced-motion → native scroll (no Lenis)
     if (!isMouse || isReduced) return;
 
     let cancelled = false;
@@ -31,7 +32,7 @@ export default function SmoothScrollProvider({ children }) {
           import("lenis"),
         ]);
 
-        if (cancelled) return; // component unmounted before init completed
+        if (cancelled) return;
 
         gsap.registerPlugin(ScrollTrigger);
 
@@ -49,13 +50,10 @@ export default function SmoothScrollProvider({ children }) {
         gsap.ticker.add(tick);
         gsap.ticker.lagSmoothing(0);
 
-        const onResize = () => {
-          ScrollTrigger.refresh();
-          import("aos").then(({ default: AOS }) => AOS.refresh()).catch(() => {});
-        };
+        // Refresh ScrollTrigger on window resize only
+        const onResize = () => { ScrollTrigger.refresh(); };
         window.addEventListener("resize", onResize, { passive: true });
 
-        // Store cleanup
         cleanupRef.current = () => {
           window.removeEventListener("resize", onResize);
           gsap.ticker.remove(tick);
@@ -74,28 +72,17 @@ export default function SmoothScrollProvider({ children }) {
       cleanupRef.current?.();
       cleanupRef.current = null;
     };
-  }, []); // runs once on mount
+  }, []);
 
-  // Route change: scroll to top using ONLY Lenis (not native window.scrollTo)
-  // Using Lenis prevents the jump caused by calling both
+  // ── Route change: scroll to top only ───────────────────────────
+  // Do NOT call AOS.refresh() here — it re-animates all [data-aos] elements
+  // Do NOT call ScrollTrigger.refresh() here — it restarts GSAP animations
   useEffect(() => {
     if (lenisRef.current) {
-      // immediate=true skips Lenis lerp so it's instant like native scroll
       lenisRef.current.scrollTo(0, { immediate: true });
     } else {
-      // Mobile (no Lenis) — native instant scroll
       window.scrollTo(0, 0);
     }
-    // Refresh ScrollTrigger after a short delay so new page content has rendered
-    const t = setTimeout(() => {
-      import("gsap/ScrollTrigger")
-        .then(({ ScrollTrigger }) => ScrollTrigger.refresh())
-        .catch(() => {});
-      import("aos")
-        .then(({ default: AOS }) => AOS.refresh())
-        .catch(() => {});
-    }, 100);
-    return () => clearTimeout(t);
   }, [pathname]);
 
   return children;

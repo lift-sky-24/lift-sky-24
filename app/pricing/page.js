@@ -4,6 +4,7 @@ import PricingTable  from "@/components/PricingTable";
 import FAQ           from "@/components/FAQ";
 import { meta }      from "@/lib/seo";
 import { BRAND }     from "@/data/site-config";
+import { pricingPageHero, pricingPlansSection, pricingFaqSection, pricingCTA } from "@/data/pages/pricing";
 
 export const metadata = meta(
   "Pricing",
@@ -15,22 +16,18 @@ export default function Pricing() {
   return (
     <>
       <PageHero
-        title="Simple, Transparent"
-        accent="Pricing"
-        eyebrow="No hidden fees"
-        sub="Every project starts with a clear scope and a fixed quote. Choose a starting package or talk to us about a custom scope — we'll give you an honest breakdown before any work begins."
-        image="/images/pricing.svg"
-        alt="LiftSky24 pricing plans illustration"
+        title={pricingPageHero.title}
+        accent={pricingPageHero.accent}
+        eyebrow={pricingPageHero.eyebrow}
+        sub={pricingPageHero.sub}
+        image={pricingPageHero.image}
+        alt={pricingPageHero.alt}
       />
-      <Section title="Choose Your Plan" center sub="Starting prices — final cost depends on your scope. All quotes are free.">
+      <Section title={pricingPlansSection.title} center={pricingPlansSection.center} sub={pricingPlansSection.sub}>
         <PricingTable />
       </Section>
-      <FAQ title="Pricing &amp; Payment FAQs" />
-      <CTABand
-        title="Need a Custom Quote?"
-        sub="Tell us what you're building — we'll scope it for free and send a detailed breakdown."
-        button="Get a Free Quote"
-      />
+      <FAQ title={pricingFaqSection.title} />
+      <CTABand title={pricingCTA.title} sub={pricingCTA.sub} button={pricingCTA.button} href={pricingCTA.href} />
     </>
   );
 }

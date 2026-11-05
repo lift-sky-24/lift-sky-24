@@ -10,10 +10,9 @@ export default function Header() {
   const [scrolled,setScrolled]= useState(false);
   const [hidden,  setHidden]  = useState(false);
   const [openSub, setOpenSub] = useState(null);
-  const lastY  = useRef(0);
-  const path   = usePathname();
+  const lastY = useRef(0);
+  const path  = usePathname();
 
-  // Close menu on route change (useEffect, not useState)
   useEffect(() => { setOpen(false); setOpenSub(null); }, [path]);
 
   const { scrollY } = useScroll();
@@ -30,15 +29,13 @@ export default function Header() {
   });
 
   const isActive = (h) => h === "/" ? path === "/" : path.startsWith(h);
-
-  // Classes from globals.css — no inline <style>
   const headerCls = `header-wrap${scrolled ? " scrolled" : ""}${hidden ? " hidden" : ""}`;
 
   return (
     <header className={headerCls} role="banner">
       <div className="header-inner">
 
-        {/* Logo — larger */}
+        {/* Logo */}
         <Link href="/" aria-label="LiftSky24 — Home" style={{ display: "flex", alignItems: "center" }}>
           <img
             src="/images/LiftSky24Logo.png"
@@ -49,24 +46,29 @@ export default function Header() {
           />
         </Link>
 
-        {/* Desktop nav — classes from globals.css */}
+        {/* Desktop nav */}
         <nav className="h-nav" aria-label="Main navigation">
           {NAV.map((l) =>
             l.children ? (
+              // Services: Link navigates to /services on click; dropdown appears on hover
               <div key={l.label} className="h-dropdown" role="none">
-                <button
-                  className={`h-drop-trigger${isActive(l.href) ? " active" : ""}`}
-                  aria-haspopup="true"
+                <Link
+                  href={l.href}
+                  className={`h-link h-drop-link${isActive(l.href) ? " active" : ""}`}
+                  aria-current={isActive(l.href) ? "page" : undefined}
                 >
-                  {l.label} <span aria-hidden="true" style={{ fontSize: 10, opacity: 0.55 }}>▾</span>
-                </button>
-                <div className="h-drop-menu" role="menu">
-                  {l.children.map((c, i) => (
+                  {l.label}
+                  <span aria-hidden="true" style={{ fontSize: 10, opacity: 0.5, marginLeft: 3 }}>▾</span>
+                </Link>
+                {/* Dropdown — CSS hover via .h-dropdown:hover .h-drop-menu */}
+                <div className="h-drop-menu" role="menu" aria-label={`${l.label} submenu`}>
+                  {/* Skip "All Services" duplicate — parent link already goes to /services */}
+                  {l.children.filter((c) => c.label !== "All Services").map((c) => (
                     <Link
                       key={c.href}
                       href={c.href}
                       role="menuitem"
-                      className={`h-drop-item${i === 0 ? " all" : ""}`}
+                      className="h-drop-item"
                     >
                       {c.label}
                     </Link>
@@ -132,22 +134,39 @@ export default function Header() {
                 >
                   {l.children ? (
                     <>
-                      <button
-                        className={`m-link${isActive(l.href) ? " active" : ""}`}
-                        style={{ width: "100%", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", textAlign: "left" }}
-                        onClick={() => setOpenSub(openSub === l.label ? null : l.label)}
-                        aria-expanded={openSub === l.label}
-                      >
-                        {l.label}
-                        <motion.span
-                          aria-hidden="true"
-                          animate={{ rotate: openSub === l.label ? 180 : 0 }}
-                          transition={{ duration: 0.2 }}
-                          style={{ fontSize: 12, opacity: 0.5, display: "inline-block" }}
+                      {/* Services: top row has both the link and the toggle arrow */}
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Link
+                          href={l.href}
+                          className={`m-link${isActive(l.href) ? " active" : ""}`}
+                          style={{ flex: 1, borderBottom: "none", paddingRight: 0 }}
+                          onClick={() => setOpen(false)}
+                          aria-current={isActive(l.href) ? "page" : undefined}
                         >
-                          ▾
-                        </motion.span>
-                      </button>
+                          {l.label}
+                        </Link>
+                        {/* Separate toggle button — does NOT navigate */}
+                        <button
+                          onClick={() => setOpenSub(openSub === l.label ? null : l.label)}
+                          aria-expanded={openSub === l.label}
+                          aria-label={`${openSub === l.label ? "Collapse" : "Expand"} ${l.label} submenu`}
+                          style={{
+                            background: "none", border: "none", cursor: "pointer",
+                            padding: "12px 8px", color: "var(--muted)", lineHeight: 1,
+                            borderBottom: "1px solid rgba(16,17,26,.08)",
+                          }}
+                        >
+                          <motion.span
+                            aria-hidden="true"
+                            animate={{ rotate: openSub === l.label ? 180 : 0 }}
+                            transition={{ duration: 0.2 }}
+                            style={{ fontSize: 13, display: "inline-block" }}
+                          >
+                            ▾
+                          </motion.span>
+                        </button>
+                      </div>
+
                       <AnimatePresence>
                         {openSub === l.label && (
                           <motion.div
@@ -158,8 +177,16 @@ export default function Header() {
                             style={{ overflow: "hidden" }}
                           >
                             <div className="m-sub">
+                              {/* Show "All Services" link in mobile sub-menu */}
                               {l.children.map((c) => (
-                                <Link key={c.href} href={c.href} className="m-sub-link">{c.label}</Link>
+                                <Link
+                                  key={c.href}
+                                  href={c.href}
+                                  className="m-sub-link"
+                                  onClick={() => setOpen(false)}
+                                >
+                                  {c.label}
+                                </Link>
                               ))}
                             </div>
                           </motion.div>

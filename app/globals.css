@@ -416,3 +416,16 @@ html:not([data-aos-init]) [data-aos] { opacity: 1 !important; transform: none !i
   .h-nav,.h-cta { display: none !important; }
   .h-toggle { display: inline-flex !important; }
 }
+
+/* ── Header: Services link that is both clickable AND has dropdown ── */
+.h-drop-link {
+  display: inline-flex; align-items: center; gap: 2px;
+}
+.h-drop-link::after {
+  content: ""; position: absolute; bottom: 2px; left: 10px; right: 10px;
+  height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg,#6557ff,#ff4fa3);
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+}
+.h-drop-link:hover::after,.h-drop-link.active::after { transform: scaleX(1); transform-origin: left; }

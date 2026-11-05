@@ -3,6 +3,7 @@ import { Section, CTABand } from "@/components/Sections";
 import ProjectGrid  from "@/components/ProjectGrid";
 import { meta }     from "@/lib/seo";
 import { BRAND }    from "@/data/site-config";
+import { portfolioPageHero, portfolioGridSection, portfolioCTA } from "@/data/pages/portfolio";
 
 export const metadata = meta(
   "Portfolio",
@@ -14,21 +15,18 @@ export default function Portfolio() {
   return (
     <>
       <PageHero
-        title="Our Portfolio"
-        accent="Ideas to Impact"
-        eyebrow="Selected Work"
-        sub="We document our work carefully. Case studies are coming — in the meantime, get in touch to see examples relevant to your industry."
-        image="/images/hero.svg"
-        alt="LiftSky24 portfolio illustration"
-        ctas={[{ label: "Start Your Project", href: "/contact" }]}
+        title={portfolioPageHero.title}
+        accent={portfolioPageHero.accent}
+        eyebrow={portfolioPageHero.eyebrow}
+        sub={portfolioPageHero.sub}
+        image={portfolioPageHero.image}
+        alt={portfolioPageHero.alt}
+        ctas={portfolioPageHero.ctas}
       />
-      <Section title="Selected Work" sub="Real projects. Real results. More coming soon.">
+      <Section title={portfolioGridSection.title} sub={portfolioGridSection.sub}>
         <ProjectGrid filters />
       </Section>
-      <CTABand
-        title="Have a Project in Mind?"
-        sub="We'd love to hear about it. Let's build something great together."
-      />
+      <CTABand title={portfolioCTA.title} sub={portfolioCTA.sub} button={portfolioCTA.button} href={portfolioCTA.href} />
     </>
   );
 }

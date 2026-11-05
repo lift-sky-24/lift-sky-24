@@ -17,6 +17,10 @@ export const metadata = {
   title,
   description,
   alternates: { canonical: "/" },
+  icons: {
+    icon:    "/favicon.ico",
+    shortcut:"/favicon.ico",
+  },
   openGraph: { title, description, url: "/", siteName: BRAND.name, type: "website", images: [{ url: BRAND.ogImage, width: 1200, height: 630 }] },
   twitter:   { card: "summary_large_image", title, description, images: [BRAND.ogImage] },
 };

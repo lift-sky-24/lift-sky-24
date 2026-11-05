@@ -34,9 +34,9 @@ export const CONTACT = {
 
 // ── Social links (set to "" to hide the icon) ──────────────────────
 export const SOCIAL = {
-  instagram: "https://www.instagram.com/liftsky24",
-  linkedin:  "https://www.linkedin.com/company/liftsky24",
-  facebook:  "https://www.facebook.com/liftsky24",
+  instagram: "https://www.instagram.com/liftsky24/",
+  linkedin:  "https://www.linkedin.com/company/144081440/",
+  facebook:  "https://www.facebook.com/share/1CC9BDAubF/",
   youtube:   "",   // TODO: add when channel is ready
   twitter:   "",   // TODO: add when account is ready
 };
@@ -340,6 +340,17 @@ export const IMAGES = {
   phones:   "/images/phones.svg",
   design:   "/images/design.svg",
   pricing:  "/images/pricing.svg",
+  // ── Page hero images (Unsplash — replace with brand images when ready) ──
+  pages: {
+    services:   "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=640&q=80",
+    portfolio:  "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=640&q=80",
+    blog:       "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=640&q=80",
+    pricing:    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=640&q=80",
+    contact:    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=640&q=80",
+    industries: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=640&q=80",
+    about:      "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=640&q=80",
+    homeAbout:  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=640&q=80",
+  },
   /** TODO: add real service images — one per service */
   services: {
     "website-development":    "/images/hero.svg",
