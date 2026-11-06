@@ -34,15 +34,10 @@ function FooterLink({ href, children }) {
     <Link
       href={href}
       style={{
-        display: "block",
-        padding: "5px 0",
-        fontSize: 13,
-        color: "#b4b5c1",
-        textDecoration: "none",
-        transition: "color .2s",
-        lineHeight: 1.6,
-        position: "relative",
-        zIndex: 2,
+        display: "block", padding: "5px 0", fontSize: 13,
+        color: "#b4b5c1", textDecoration: "none",
+        transition: "color .2s", lineHeight: 1.6,
+        position: "relative", zIndex: 2,
       }}
       onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
       onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
@@ -52,32 +47,22 @@ function FooterLink({ href, children }) {
   );
 }
 
-/* Bounce animation variants — each copy at different delay */
-const bounceVariants = {
-  initial: { y: 0 },
-  animate: (delay) => ({
-    y: [0, -10, 0],
-    transition: {
-      delay,
-      duration: 2.2,
-      ease: "easeInOut",
-      repeat: Infinity,
-      repeatDelay: 1.5,
-    },
-  }),
-};
-
-/* Brand name text style — orange outline, transparent fill */
-const brandTextStyle = {
-  fontSize: "clamp(1.8rem,3.2vw,3rem)",
+/* Shared style for the background LiftSky24 text in each column */
+const watermarkStyle = {
+  position: "absolute",
+  top: 0, left: 0, right: 0,
+  fontSize: "clamp(2rem,3.5vw,2.8rem)",
   fontWeight: 900,
   letterSpacing: "-0.04em",
   color: "transparent",
-  WebkitTextStroke: "1.5px rgba(255,107,1,0.35)",
+  WebkitTextStroke: "1.5px rgba(255,107,1,0.32)",
   userSelect: "none",
   whiteSpace: "nowrap",
   lineHeight: 1,
-  display: "block",
+  zIndex: 0,
+  pointerEvents: "none",
+  transform: "rotate(-6deg) translateX(-4%)",
+  transformOrigin: "left top",
 };
 
 export default function Footer() {
@@ -92,78 +77,18 @@ export default function Footer() {
     setEmail("");
   };
 
-  const addressLine1 = CONTACT.address.line1.replace(/Flat No\.\s*/i, "").replace(/Flat no\.\s*/i, "");
+  const addressLine1 = CONTACT.address.line1
+    .replace(/Flat No\.\s*/i, "")
+    .replace(/Flat no\.\s*/i, "");
 
   return (
     <footer style={{ background: "#10111a", color: "#fff", overflow: "hidden" }}>
       <div style={{ borderTop: "1px solid rgba(255,255,255,.05)" }}>
         <div style={{ width: "min(1200px,calc(100% - 40px))", margin: "auto", padding: "52px 0 0" }}>
 
-          {/*
-            ── 3× "LiftSky24" row — spans cols 2-4 above links ──────
-            Each copy is full, complete, no clipping, bounce animated.
-            Sits in a dedicated row ABOVE the footer-grid columns.
-            Uses CSS grid to align each brand text to its column.
-          */}
-          <div
-            aria-hidden="true"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1.4fr 1fr 1fr 1fr", /* matches .footer-grid */
-              gap: 30,
-              marginBottom: 8,
-            }}
-          >
-            {/* Col 1: empty — aligns with brand column */}
-            <div />
-
-            {/* Col 2: Quick Links brand text */}
-            <div style={{ display: "flex", alignItems: "flex-end", paddingBottom: 6, overflow: "visible" }}>
-              <motion.span
-                style={brandTextStyle}
-                custom={0}
-                variants={bounceVariants}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: false, amount: 0.5 }}
-              >
-                {BRAND.name}
-              </motion.span>
-            </div>
-
-            {/* Col 3: Services brand text */}
-            <div style={{ display: "flex", alignItems: "flex-end", paddingBottom: 6, overflow: "visible" }}>
-              <motion.span
-                style={brandTextStyle}
-                custom={0.4}
-                variants={bounceVariants}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: false, amount: 0.5 }}
-              >
-                {BRAND.name}
-              </motion.span>
-            </div>
-
-            {/* Col 4: Contact brand text */}
-            <div style={{ display: "flex", alignItems: "flex-end", paddingBottom: 6, overflow: "visible" }}>
-              <motion.span
-                style={brandTextStyle}
-                custom={0.8}
-                variants={bounceVariants}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: false, amount: 0.5 }}
-              >
-                {BRAND.name}
-              </motion.span>
-            </div>
-          </div>
-
-          {/* ── Footer 4-col grid ──────────────────────────────────── */}
           <div className="footer-grid">
 
-            {/* Col 1: Brand */}
+            {/* ── Col 1: Brand ─────────────────────────────────────── */}
             <div>
               <Link href="/" aria-label="LiftSky24 home" style={{ display: "inline-flex", marginBottom: 18 }}>
                 <motion.div
@@ -201,75 +126,107 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Col 2: Quick Links */}
-            <div>
-              <h4 style={h4Style}>Quick Links</h4>
-              {quickLinks.map((x) => (
-                <FooterLink key={x.label} href={x.href}>{x.label}</FooterLink>
-              ))}
+            {/* ── Col 2: Quick Links — LiftSky24 in background ─────── */}
+            <div style={{ position: "relative" }}>
+              {/* LiftSky24 watermark — tilt + bounce, behind links */}
+              <motion.span
+                aria-hidden="true"
+                style={watermarkStyle}
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatDelay: 1.8, delay: 0 }}
+              >
+                {BRAND.name}
+              </motion.span>
+              {/* Links on top */}
+              <div style={{ position: "relative", zIndex: 2, paddingTop: "2.4rem" }}>
+                <h4 style={h4Style}>Quick Links</h4>
+                {quickLinks.map((x) => (
+                  <FooterLink key={x.label} href={x.href}>{x.label}</FooterLink>
+                ))}
+              </div>
             </div>
 
-            {/* Col 3: Services */}
-            <div>
-              <h4 style={h4Style}>Services</h4>
-              {SERVICES.map((s) => (
-                <FooterLink key={s.slug} href={s.href}>{s.name}</FooterLink>
-              ))}
+            {/* ── Col 3: Services — LiftSky24 in background ───────── */}
+            <div style={{ position: "relative" }}>
+              <motion.span
+                aria-hidden="true"
+                style={watermarkStyle}
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatDelay: 1.8, delay: 0.4 }}
+              >
+                {BRAND.name}
+              </motion.span>
+              <div style={{ position: "relative", zIndex: 2, paddingTop: "2.4rem" }}>
+                <h4 style={h4Style}>Services</h4>
+                {SERVICES.map((s) => (
+                  <FooterLink key={s.slug} href={s.href}>{s.name}</FooterLink>
+                ))}
+              </div>
             </div>
 
-            {/* Col 4: Contact + newsletter */}
-            <div>
-              <h4 style={h4Style}>Contact</h4>
-              <p style={{ ...colStyle, fontSize: 12, marginBottom: 10 }}>
-                {addressLine1},<br />
-                {CONTACT.address.line2},<br />
-                {CONTACT.address.city} – {CONTACT.address.pin}
-              </p>
-              <a
-                href={`mailto:${CONTACT.email}`}
-                style={{ ...colStyle, fontSize: 13, display: "block", margin: "4px 0", transition: "color .2s" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
+            {/* ── Col 4: Contact — LiftSky24 in background ─────────── */}
+            <div style={{ position: "relative" }}>
+              <motion.span
+                aria-hidden="true"
+                style={watermarkStyle}
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatDelay: 1.8, delay: 0.8 }}
               >
-                {CONTACT.email}
-              </a>
-              <a
-                href={CONTACT.phoneTel}
-                style={{ ...colStyle, fontSize: 13, display: "block", margin: "4px 0 12px", transition: "color .2s" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
-              >
-                {CONTACT.phone}
-              </a>
-              <p style={{ ...colStyle, fontSize: 11, marginBottom: 16 }}>{CONTACT.hours}</p>
-
-              <p style={{ fontSize: 10, fontWeight: 900, textTransform: "uppercase", letterSpacing: ".1em", color: "#fff", marginBottom: 8 }}>Newsletter</p>
-              <form onSubmit={subscribe} noValidate style={{ display: "flex", gap: 6 }}>
-                <label htmlFor="footer-newsletter" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)" }}>
-                  Email address
-                </label>
-                <input
-                  id="footer-newsletter"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  style={{ flex: 1, minWidth: 0, background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 99, padding: "8px 14px", fontSize: 12, color: "#fff", outline: "none" }}
-                />
-                <motion.button
-                  type="submit"
-                  style={{ background: "linear-gradient(110deg,#FF6B01,#ff4fa3)", color: "#fff", border: "none", borderRadius: 99, padding: "8px 14px", fontSize: 12, fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.96 }}
-                >
-                  Subscribe
-                </motion.button>
-              </form>
-              {msg.text && (
-                <p role="status" aria-live="polite" style={{ fontSize: 11, marginTop: 6, color: msg.ok ? "#6ee7b7" : "#fca5a5" }}>
-                  {msg.text}
+                {BRAND.name}
+              </motion.span>
+              <div style={{ position: "relative", zIndex: 2, paddingTop: "2.4rem" }}>
+                <h4 style={h4Style}>Contact</h4>
+                <p style={{ ...colStyle, fontSize: 12, marginBottom: 10 }}>
+                  {addressLine1},<br />
+                  {CONTACT.address.line2},<br />
+                  {CONTACT.address.city} – {CONTACT.address.pin}
                 </p>
-              )}
+                <a
+                  href={`mailto:${CONTACT.email}`}
+                  style={{ ...colStyle, fontSize: 13, display: "block", margin: "4px 0", transition: "color .2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
+                >
+                  {CONTACT.email}
+                </a>
+                <a
+                  href={CONTACT.phoneTel}
+                  style={{ ...colStyle, fontSize: 13, display: "block", margin: "4px 0 12px", transition: "color .2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
+                >
+                  {CONTACT.phone}
+                </a>
+                <p style={{ ...colStyle, fontSize: 11, marginBottom: 16 }}>{CONTACT.hours}</p>
+
+                <p style={{ fontSize: 10, fontWeight: 900, textTransform: "uppercase", letterSpacing: ".1em", color: "#fff", marginBottom: 8 }}>Newsletter</p>
+                <form onSubmit={subscribe} noValidate style={{ display: "flex", gap: 6 }}>
+                  <label htmlFor="footer-newsletter" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)" }}>
+                    Email address
+                  </label>
+                  <input
+                    id="footer-newsletter"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    style={{ flex: 1, minWidth: 0, background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 99, padding: "8px 14px", fontSize: 12, color: "#fff", outline: "none" }}
+                  />
+                  <motion.button
+                    type="submit"
+                    style={{ background: "linear-gradient(110deg,#FF6B01,#ff4fa3)", color: "#fff", border: "none", borderRadius: 99, padding: "8px 14px", fontSize: 12, fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.96 }}
+                  >
+                    Subscribe
+                  </motion.button>
+                </form>
+                {msg.text && (
+                  <p role="status" aria-live="polite" style={{ fontSize: 11, marginTop: 6, color: msg.ok ? "#6ee7b7" : "#fca5a5" }}>
+                    {msg.text}
+                  </p>
+                )}
+              </div>
             </div>
 
           </div>{/* /footer-grid */}
