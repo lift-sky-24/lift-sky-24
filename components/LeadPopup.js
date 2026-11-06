@@ -133,6 +133,16 @@ export default function LeadPopup() {
             aria-hidden="true"
           />
 
+          {/* Centering wrapper — fixed full-screen flex, pointer-events only on the modal */}
+          <div
+            style={{
+              position: "fixed", inset: 0,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              zIndex: 9999,
+              pointerEvents: "none",
+              padding: "16px",
+            }}
+          >
           {/* Modal */}
           <motion.div
             key="popup"
@@ -144,16 +154,14 @@ export default function LeadPopup() {
             exit={{ opacity: 0, scale: 0.92, y: 24 }}
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
             style={{
-              position:  "fixed",
-              top:       "50%",
-              left:      "50%",
-              transform: "translate(-50%,-50%)",
-              zIndex:    9999,
-              width:     "min(92vw, 440px)",
-              background: "#fff",
+              position:     "relative",
+              pointerEvents:"all",
+              width:        "min(92vw, 440px)",
+              maxHeight:    "90vh",
+              overflowY:    "auto",
+              background:   "#fff",
               borderRadius: 28,
-              boxShadow: "0 32px 80px rgba(10,10,20,.22)",
-              overflow:  "hidden",
+              boxShadow:    "0 32px 80px rgba(10,10,20,.28)",
             }}
           >
             {/* Orange top accent */}
@@ -263,6 +271,7 @@ export default function LeadPopup() {
               )}
             </div>
           </motion.div>
+          </div>  {/* /centering wrapper */}
         </>
       )}
     </AnimatePresence>

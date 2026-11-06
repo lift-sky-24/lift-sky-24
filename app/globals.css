@@ -280,6 +280,40 @@ html:not([data-aos-init]) [data-aos] { opacity: 1 !important; transform: none !i
 }
 .card-grid .card-item { transition: opacity .3s, transform .3s; }
 
+/* ── IconCard hover: left orange strip + right-top inner glow ─────── */
+
+/* Left strip — slides in from left on hover */
+.card-item::before {
+  content: '';
+  position: absolute;
+  top: 12%;
+  left: 0;
+  width: 3px;
+  height: 76%;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #FF8A1F, #FC6E04, #E04F00);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-item:hover::before { transform: scaleY(1); }
+
+/* Right-top inner glow — radial shadow from top-right corner inward */
+.card-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 180px;
+  height: 140px;
+  border-radius: 0 16px 0 100%;
+  background: radial-gradient(ellipse at 100% 0%, rgba(252,110,4,0.18) 0%, rgba(255,138,31,0.08) 40%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.card-item:hover::after { opacity: 1; }
+
 /* ── Ripple effect ──────────────────────────────────────────────────── */
 @keyframes ripple-out { to { transform: scale(3.5); opacity: 0; } }
 .ripple {

@@ -41,7 +41,7 @@ export function IconCards({ items, cols = "lg:grid-cols-3" }) {
             {s.d && <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.d}</p>}
           </>
         );
-        const cardCls = "card-item group block h-full rounded-2xl border border-slate-100 bg-white p-6 shadow-sm hover:-translate-y-1 hover:shadow-card transition-all duration-300";
+        const cardCls = "card-item group relative overflow-hidden block h-full rounded-2xl border border-slate-100 bg-white p-6 shadow-sm hover:-translate-y-1 hover:shadow-card hover:border-transparent transition-all duration-300";
         return (
           <StaggerItem key={s.t}>
             {s.href
