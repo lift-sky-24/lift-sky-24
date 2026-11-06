@@ -18,8 +18,11 @@ export const metadata = {
   description,
   alternates: { canonical: "/" },
   icons: {
-    icon:    "/favicon.ico",
-    shortcut:"/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
   },
   openGraph: { title, description, url: "/", siteName: BRAND.name, type: "website", images: [{ url: BRAND.ogImage, width: 1200, height: 630 }] },
   twitter:   { card: "summary_large_image", title, description, images: [BRAND.ogImage] },
@@ -57,6 +60,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        {/* Favicon — explicit tag for maximum browser compatibility */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />

@@ -1,38 +1,58 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { NAV } from "@/data/site-config";
 
+/**
+ * Header — scroll behavior uses direct DOM classList manipulation
+ * instead of React state so there are ZERO React re-renders on scroll.
+ * This eliminates header flicker completely.
+ */
 export default function Header() {
   const [open,    setOpen]    = useState(false);
-  const [scrolled,setScrolled]= useState(false);
-  const [hidden,  setHidden]  = useState(false);
   const [openSub, setOpenSub] = useState(null);
-  const lastY = useRef(0);
-  const path  = usePathname();
+  const headerRef = useRef(null);
+  const lastY     = useRef(0);
+  const path      = usePathname();
 
   useEffect(() => { setOpen(false); setOpenSub(null); }, [path]);
 
-  const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, "change", (y) => {
-    setScrolled(y > 10);
-    const diff = y - lastY.current;
-    if (y > 80) {
-      if (diff > 6)  setHidden(true);
-      if (diff < -4) setHidden(false);
-    } else {
-      setHidden(false);
-    }
-    lastY.current = y;
-  });
+  // Scroll handler — manipulates classList DIRECTLY, no setState, no re-render
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const onScroll = () => {
+      const y    = window.scrollY;
+      const diff = y - lastY.current;
+      lastY.current = y;
+
+      // Add/remove "scrolled" class
+      if (y > 10) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+
+      // Add/remove "hidden" class (hide on scroll down, show on scroll up)
+      if (y > 80) {
+        if (diff > 6)  header.classList.add("hidden");
+        if (diff < -4) header.classList.remove("hidden");
+      } else {
+        header.classList.remove("hidden");
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const isActive = (h) => h === "/" ? path === "/" : path.startsWith(h);
-  const headerCls = `header-wrap${scrolled ? " scrolled" : ""}${hidden ? " hidden" : ""}`;
 
   return (
-    <header className={headerCls} role="banner">
+    <header ref={headerRef} className="header-wrap" role="banner">
       <div className="header-inner">
 
         {/* Logo */}
@@ -50,7 +70,6 @@ export default function Header() {
         <nav className="h-nav" aria-label="Main navigation">
           {NAV.map((l) =>
             l.children ? (
-              // Services: Link navigates to /services on click; dropdown appears on hover
               <div key={l.label} className="h-dropdown" role="none">
                 <Link
                   href={l.href}
@@ -60,16 +79,9 @@ export default function Header() {
                   {l.label}
                   <span aria-hidden="true" style={{ fontSize: 10, opacity: 0.5, marginLeft: 3 }}>▾</span>
                 </Link>
-                {/* Dropdown — CSS hover via .h-dropdown:hover .h-drop-menu */}
                 <div className="h-drop-menu" role="menu" aria-label={`${l.label} submenu`}>
-                  {/* Skip "All Services" duplicate — parent link already goes to /services */}
                   {l.children.filter((c) => c.label !== "All Services").map((c) => (
-                    <Link
-                      key={c.href}
-                      href={c.href}
-                      role="menuitem"
-                      className="h-drop-item"
-                    >
+                    <Link key={c.href} href={c.href} role="menuitem" className="h-drop-item">
                       {c.label}
                     </Link>
                   ))}
@@ -105,7 +117,7 @@ export default function Header() {
             {open ? (
               <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>✕</motion.span>
             ) : (
-              <motion.span key="m" initial={{ rotate: 90, opacity: 0 }}  animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>☰</motion.span>
+              <motion.span key="m" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>☰</motion.span>
             )}
           </AnimatePresence>
         </button>
@@ -134,7 +146,6 @@ export default function Header() {
                 >
                   {l.children ? (
                     <>
-                      {/* Services: top row has both the link and the toggle arrow */}
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <Link
                           href={l.href}
@@ -145,7 +156,6 @@ export default function Header() {
                         >
                           {l.label}
                         </Link>
-                        {/* Separate toggle button — does NOT navigate */}
                         <button
                           onClick={() => setOpenSub(openSub === l.label ? null : l.label)}
                           aria-expanded={openSub === l.label}
@@ -166,7 +176,6 @@ export default function Header() {
                           </motion.span>
                         </button>
                       </div>
-
                       <AnimatePresence>
                         {openSub === l.label && (
                           <motion.div
@@ -177,14 +186,8 @@ export default function Header() {
                             style={{ overflow: "hidden" }}
                           >
                             <div className="m-sub">
-                              {/* Show "All Services" link in mobile sub-menu */}
                               {l.children.map((c) => (
-                                <Link
-                                  key={c.href}
-                                  href={c.href}
-                                  className="m-sub-link"
-                                  onClick={() => setOpen(false)}
-                                >
+                                <Link key={c.href} href={c.href} className="m-sub-link" onClick={() => setOpen(false)}>
                                   {c.label}
                                 </Link>
                               ))}
