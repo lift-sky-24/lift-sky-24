@@ -8,11 +8,9 @@ import dynamic from "next/dynamic";
 
 const TiltCard = dynamic(() => import("@/components/animation/TiltCard"), { ssr: false });
 
-// TODO: set real prices in data/site-config.js → PRICING array
-
 export default function PricingTable() {
   return (
-    <Stagger className="card-grid grid gap-6 sm:grid-cols-2 lg:grid-cols-3" style={{ overflow: "visible", paddingTop: "18px" }}>
+    <Stagger className="card-grid grid gap-6 sm:grid-cols-2 lg:grid-cols-4" style={{ overflow: "visible", paddingTop: "18px" }}>
       {PRICING.map((plan, idx) => (
         <StaggerItem key={plan.name}>
           <TiltCard maxDeg={4} scaleOnHover={1.02} className="h-full" style={{ overflow: "visible" }}>
