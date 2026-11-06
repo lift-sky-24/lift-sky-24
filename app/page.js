@@ -2,7 +2,8 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import HeroBanner   from "@/components/HeroBanner";
 import PageHero     from "@/components/PageHero";
-import { Section, MiniCards, CTABand, Steps } from "@/components/Sections";
+import { Section, MiniCards, CTABand } from "@/components/Sections";
+import ProcessRoadmap from "@/components/ProcessRoadmap";
 import ServicesShowcase from "@/components/Servicesshowcase";
 import ProjectGrid  from "@/components/ProjectGrid";
 import Testimonials from "@/components/Testimonials";
@@ -84,9 +85,9 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 5. Process — data from data/site-config.js → PROCESS (via lib/data processSteps) */}
+      {/* 5. Process — road-path showcase */}
       <Section title={homeProcess.title} sub={homeProcess.sub}>
-        <Steps items={processSteps} />
+        <ProcessRoadmap items={processSteps} />
       </Section>
 
       {/* 6. Featured Projects — data from data/site-config.js → PORTFOLIO */}

@@ -1,5 +1,6 @@
 import PageHero    from "@/components/PageHero";
-import { Section, IconCards, Steps, CTABand } from "@/components/Sections";
+import { Section, IconCards, CTABand } from "@/components/Sections";
+import ProcessRoadmap from "@/components/ProcessRoadmap";
 import { services, processSteps } from "@/lib/data";
 import { meta } from "@/lib/seo";
 import { BRAND, LOCAL_SEO } from "@/data/site-config";
@@ -27,7 +28,7 @@ export default function Services() {
         <IconCards items={services} cols={servicesGridSection.cols} />
       </Section>
       <Section title={servicesProcessSection.title} tone={servicesProcessSection.tone} sub={servicesProcessSection.sub}>
-        <Steps items={processSteps} />
+        <ProcessRoadmap items={processSteps} />
       </Section>
       <CTABand title={servicesCTA.title} sub={servicesCTA.sub} button={servicesCTA.button} href={servicesCTA.href} />
     </>

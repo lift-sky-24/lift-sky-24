@@ -72,15 +72,14 @@ export function MiniCards({ items, cols = "md:grid-cols-4" }) {
   );
 }
 
-/* ── Steps ────────────────────────────────────────────────────────── */
+/* ── Steps (kept for ServiceDetailPage per-service process) ──────── */
 export function Steps({ items }) {
   return (
     <Stagger as="ol" className={`card-grid grid gap-5 sm:grid-cols-2 ${items.length === 5 ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}>
       {items.map((s, i) => (
         <StaggerItem key={s.t}>
           <div className="card-item h-full rounded-2xl border border-slate-100 bg-white p-6 hover:-translate-y-1 hover:shadow-card transition-all duration-300">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-brand-gradient text-sm font-bold text-white">{i + 1}</span>
-            <h3 className="mt-4 font-semibold text-navy-900">{s.t}</h3>
+            <h3 className="font-semibold text-navy-900">{s.t}</h3>
             <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.d}</p>
           </div>
         </StaggerItem>
