@@ -309,15 +309,23 @@ html:not([data-aos-init]) [data-aos] { opacity: 1 !important; transform: none !i
 .header-wrap {
   position: sticky; top: 0; z-index: 50;
   background: rgba(247,246,242,0.97);
-  backdrop-filter: blur(8px); /* reduced from 18px — less GPU repaint cost */
+  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(16,17,26,.10);
-  transition: box-shadow .3s, transform .35s cubic-bezier(.4,0,.2,1);
-  /* contain:layout — prevents header scroll from affecting document layout */
-  contain: layout;
+  /* Only animate box-shadow — transform transition removed to stop mobile flicker */
+  transition: box-shadow .25s;
+  /* will-change on transform only when hiding — set via JS */
 }
-.header-wrap.scrolled { box-shadow: 0 2px 20px rgba(16,17,26,.09); }
-.header-wrap.hidden   { transform: translateY(-100%); }
+.header-wrap.scrolled { box-shadow: 0 2px 16px rgba(16,17,26,.08); }
+/* Hide-on-scroll only on desktop — mobile uses native momentum scroll */
+@media (pointer: fine) {
+  .header-wrap.hidden { transform: translateY(-100%); transition: box-shadow .25s, transform .3s cubic-bezier(.4,0,.2,1); }
+}
+/* On mobile: never hide header, no backdrop repaint cost */
+@media (pointer: coarse) {
+  .header-wrap.hidden { transform: none !important; }
+  .header-wrap { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: rgba(247,246,242,0.99); }
+}
 .header-inner {
   width: min(1200px, calc(100% - 40px));
   margin: auto; height: 70px;

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,39 +14,56 @@ export default function Header() {
   const [open,    setOpen]    = useState(false);
   const [openSub, setOpenSub] = useState(null);
   const headerRef = useRef(null);
-  const lastY     = useRef(0);
   const path      = usePathname();
 
   useEffect(() => { setOpen(false); setOpenSub(null); }, [path]);
 
   // Scroll handler — manipulates classList DIRECTLY, no setState, no re-render
+  // Uses rAF throttling to limit to one update per frame
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
 
-    const onScroll = () => {
-      const y    = window.scrollY;
-      const diff = y - lastY.current;
-      lastY.current = y;
+    // Detect touch device — skip hide-on-scroll on mobile (causes flicker)
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
 
-      // Add/remove "scrolled" class
+    let rafId  = null;
+    let lastScrollY = 0;
+
+    const update = () => {
+      const y    = window.scrollY;
+      const diff = y - lastScrollY;
+      lastScrollY = y;
+      rafId = null;
+
+      // Scrolled shadow
       if (y > 10) {
         header.classList.add("scrolled");
       } else {
         header.classList.remove("scrolled");
       }
 
-      // Add/remove "hidden" class (hide on scroll down, show on scroll up)
-      if (y > 80) {
-        if (diff > 6)  header.classList.add("hidden");
-        if (diff < -4) header.classList.remove("hidden");
-      } else {
-        header.classList.remove("hidden");
+      // Hide on scroll down / show on scroll up — desktop only
+      if (!isTouch) {
+        if (y > 80) {
+          if (diff > 6)  header.classList.add("hidden");
+          if (diff < -4) header.classList.remove("hidden");
+        } else {
+          header.classList.remove("hidden");
+        }
       }
     };
 
+    const onScroll = () => {
+      // Throttle to one rAF per scroll event batch
+      if (!rafId) rafId = requestAnimationFrame(update);
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const isActive = (h) => h === "/" ? path === "/" : path.startsWith(h);
