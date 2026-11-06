@@ -176,6 +176,7 @@ LiftSky24/
 ├── components/                     # All React components
 │   ├── Header.js                   # Sticky navbar with scroll shadow, dropdown, mobile drawer
 │   ├── Footer.js                   # Dark footer, 4-col grid, newsletter, social icons
+│   ├── FooterWatermark.js          # Single centred decorative "LiftSky24" watermark behind footer
 │   ├── WhatsAppFAB.js              # Fixed WhatsApp button (bottom-right)
 │   ├── HeroBanner.js               # Home-page hero with stats, CTAs, blob decoration
 │   ├── PageHero.js                 # Reusable inner-page hero (used on all non-home pages)
@@ -580,16 +581,44 @@ bg-brand-gradient bg-clip-text text-transparent
 
 - **Type:** `"use client"` (newsletter state)
 - **Background:** `#10111a`
-- **Padding:** `56px 0 0`
+- **Position:** `relative` (required so `FooterWatermark` absolute inset-0 clips to footer bounds)
+- **Overflow:** `hidden` (safety net — prevents any horizontal scroll from the large watermark text)
+- **Padding:** `52px 0 0`
 - **Layout:** `.footer-grid` — 4 columns at `1.4fr 1fr 1fr 1fr`, 2 cols at ≤900px (first col spans 2), 1 col at ≤500px
+- **Content wrapper z-index:** `10` — sits above `FooterWatermark` (z-0)
 - **Column 1 — Brand:** Logo in white rounded box (bg #fff, radius 10px, padding 6px 12px, img height 34px), tagline "Rise Higher. Go Further.", short description, social icons (Instagram, LinkedIn, Facebook visible; YouTube and Twitter hidden because SOCIAL[key] is "")
 - **Column 2 — Quick Links:** Home, About, Services, Portfolio, Blog, Pricing, Contact
 - **Column 3 — Services:** All 7 services with links from SERVICES array
-- **Column 4 — Contact + Newsletter:** Address (Flat No. 91/109, Sector 9, Mandir Marg, Patel Marg, Mansarovar, Jaipur – 302020), email link, phone link, hours "Mon – Sat, 10 AM – 7 PM IST", newsletter form
+- **Column 4 — Contact + Newsletter:** Address, email link, phone link, hours "Mon – Sat, 10 AM – 7 PM IST", newsletter form
 - **Newsletter form:** Email input + "Subscribe" button. Client-side validation: regex `/^\S+@\S+\.\S+$/`. Success: "Subscribed! We'll be in touch." Error: "Enter a valid email address." No API call — frontend only.
-- **Social icons:** 34×34px circles. Hidden if `SOCIAL[key]` is empty string. Hover: gradient `linear-gradient(135deg,#6557ff,#ff4fa3)`.
+- **Social icons:** 34×34px circles. Hidden if `SOCIAL[key]` is empty string. Hover: gradient `linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)` (brand orange — no pink).
+- **Subscribe button:** `linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)`, navy `#0C1323` text (matches logo dark navy).
+- **Footer link hover color:** `#FC6E04` (logo orange — updated from old `#FF6B01`).
 - **Bottom bar:** "© {year} LiftSky24. All rights reserved." | Privacy Policy → `/privacy-policy` | Terms & Conditions → `/terms`
 - **Tagline shown in footer:** "Rise Higher. Go Further."
+
+### FooterWatermark (`components/FooterWatermark.js`)
+
+- **Type:** `"use client"` — uses Framer Motion and `useReducedMotion()`
+- **Purpose:** Single large decorative "LiftSky24" text centered behind the entire footer (replaces 3 small per-column watermarks)
+- **Accessibility:** `aria-hidden="true"`, `pointer-events-none`, `select-none`, `tabIndex` not set — completely invisible to screen readers
+- **Structure:** Outer `div` with `pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden select-none` → `motion.span` inside
+- **Text source:** `BRAND.name` from `@/data/site-config` ("LiftSky24")
+- **Font:** Inter Black (weight 900) — the only heading-weight font currently loaded
+- **Tilt:** `WATERMARK_TILT = 0` — constant at top of file, easy to change
+- **Colour:** Text fill: `text-transparent` with soft vertical orange fade via `bg-gradient-to-b from-[rgba(252,110,4,0.10)] to-transparent bg-clip-text`. Outline: `-webkit-text-stroke` — `1px rgba(252,110,4,0.30)` mobile / `1.5px rgba(252,110,4,0.28)` tablet+. No pink.
+- **Responsive sizing (Tailwind arbitrary values with `length:` hint):**
+
+  | Breakpoint | Classes | Target width |
+  |---|---|---|
+  | Mobile `<640px` | `text-[length:28vw]`, two stacked lines: "Lift" / "Sky24" | ≈ 82% vw |
+  | Tablet `640–1023px` | `sm:text-[length:17vw]`, one line | ≈ 86% vw at 768px |
+  | Desktop `1024px+` | `lg:text-[length:min(15vw,19rem)]`, one line | ≈ 76–78% at 1280–1440px; capped at 19rem ≥ 1920px |
+
+- **Mobile layout:** Two `<span className="block">` children inside the `motion.span` — "Lift" and "Sky24" — hidden on `sm+`. Single-line span is `hidden sm:block`.
+- **Entrance animation:** `opacity: 0→1`, `scale: 0.96→1`, `duration: 0.9s`, `ease: [0.16,1,0.3,1]`, `whileInView`, `viewport: {once:true, margin:"-80px"}`. With `prefers-reduced-motion`: static, no animation.
+- **Float animation:** `y: [0, -12, 0]`, `duration: 6s`, `easeInOut`, `repeat: Infinity`. Disabled with `useReducedMotion()`.
+- **Does not affect footer height** — absolutely positioned, zero impact on layout.
 
 ### WhatsApp FAB (`components/WhatsAppFAB.js`)
 
@@ -1535,6 +1564,59 @@ All changes made to the original demo site in this Kiro session:
 - Deleted dead components: `Services.js`, `Hero.js`, `About.js`, `Portfolio.js`, `Process.js`, `Technologies.js`, `CTA.js`
 - All had `SectionHeading` import bug (not exported from ui.js)
 - Created `data/images.js` as centralised image registry
+
+### Phase 9 — Stability: Scroll Flicker, Favicon, Header
+- **PageTransition:** Removed `key={pathname}` — was remounting entire page tree on every navigation, causing all animations to replay and CLS spikes.
+- **SmoothScrollProvider:** Removed `AOS.refresh()` and `ScrollTrigger.refresh()` from route-change effect — was re-triggering all scroll animations on navigation.
+- **ParallaxSection in PageHero:** Completely removed — `useScroll()` on every inner page caused scroll-position jumps (flicker).
+- **Sections.js TiltCard:** Removed `dynamic(..., {ssr:false})` wrapper — was causing CLS (empty grid cells before hydration). Replaced with CSS hover transitions.
+- **GlowOrbs:** Changed `left`/`top` animation to `transform:translate` (compositor-only — no layout thrashing).
+- **Header:** Replaced Framer `useScroll` + `useMotionValueEvent` with direct DOM `classList` + `requestAnimationFrame` throttle — zero React re-renders on scroll.
+- **Mobile header:** Disabled `backdrop-filter`, `transform` transition and hide-on-scroll on `pointer:coarse` devices via CSS `@media` rule.
+- **Favicon:** Moved from `public/favicon.ico` (was causing 500 conflict) to `app/favicon.ico` (Next.js App Router auto-detection). Deleted `app/icon.svg` which was overriding the original ICO.
+
+### Phase 10 — Visual Redesign (Reference: digital_agency_homepage_extreme)
+- **Section backgrounds:** Applied reference section colour scheme (paper/light/dark alternation with orange accent strips).
+- **Marquee:** Black background, constant speed (no scroll velocity coupling), orange `✦` separators.
+- **Footer LiftSky24 watermark:** `position:absolute`, centered behind Quick Links / Services / Contact columns using `top:50%, translateY(-50%), rotate(-6deg)`. Framer `y:[0,-10,0]` bounce animation with staggered delays (0 / 0.4 / 0.8 s).
+- **Testimonials:** Redesigned as 2-cards-per-slide with clean white cards, orange top-accent line, italic quote, result tag, author avatar circle. `AnimatePresence` slide animation, progress bar.
+- **Industries:** Expanded to 9 categories, 50+ industries. Data in `data/pages/industries.js`.
+
+### Phase 11 — Hero Background (Reference Design)- **Goal:** Apply reference-design animated background to home-page `HeroBanner.js` only (not `PageHero`).
+- **Approach:** Pure Tailwind utilities — no inline styles, no new CSS files. Classes added as ONE literal string (not array.join) to prevent Tailwind purge.
+- **Tokens added to `tailwind.config.js`:**
+
+  | Token | Type | Value |
+  |---|---|---|
+  | `hero-bg-wash` | `backgroundImage` | Dual radial gradient — lavender ellipse (76% 25%) + icy-blue ellipse (45% 75%) |
+  | `hero-bg-aurora` | `backgroundImage` | Conic gradient 6-stop colour wheel (orange → pink → violet → cyan → lime → orange) |
+  | `hero-bg-glow` | `backgroundImage` | Conic gradient (same wheel, phase-shifted) |
+  | `hero-bg-dots` | `backgroundImage` | `radial-gradient(#10101930 .7px, transparent .7px)` — repeating dot pattern |
+  | `hero-bg-aurora` | `keyframes` | `translate(-25px, 20px) scale(1.07)` drift |
+  | `hero-bg-spin` | `keyframes` | `rotate(360deg)` |
+  | `hero-bg-aurora` | `animation` | `12s ease-in-out infinite alternate` |
+  | `hero-bg-spin` | `animation` | `20s linear infinite` |
+
+- **Three visual layers (all decorative, `pointer-events:none`, `-z-10`):**
+  1. **Wash** — `bg-hero-bg-wash` on section itself — soft lavender + icy-blue radial glow, always visible.
+  2. **Aurora blob** — `before:` pseudo — 600×600px rounded circle, `bg-hero-bg-aurora`, `blur-[70px]`, `opacity-25`, `animate-hero-bg-aurora` (slow drift). Smaller (360px) on mobile `max-[620px]`.
+  3. **Dot grid** — `after:` pseudo — covers full section, `bg-hero-bg-dots`, `bg-[length:8px_8px]`, `opacity-25`, masked right with `[mask-image:linear-gradient(90deg,#000,transparent_80%)]`.
+  4. **Glow ring** — child `<div>` behind hero image — `bg-hero-bg-glow`, `blur-[45px]`, `opacity-[.35]`, `animate-hero-bg-spin` (slow spin). Respects `motion-reduce`.
+
+- **Purge bug fixed:** Previous implementation used `[...classes].join(' ')` which Tailwind's content scanner cannot statically analyse → classes stripped from bundle. Fixed by writing the entire className as a single template literal.
+- **CSS verification (post-build):** All 12 tokens confirmed present in compiled `layout.css`:
+  `hero-bg-wash` ✓ · `hero-bg-aurora` ✓ · `hero-bg-glow` ✓ · `hero-bg-dots` ✓ · `hero-bg-spin` ✓ · `blur(70px)` ✓ · `8px 8px` ✓ · `mask-image` ✓ · `@keyframes hero-bg-aurora` ✓ · `@keyframes hero-bg-spin` ✓ · `animate-hero-bg-aurora` ✓ · `animate-hero-bg-spin` ✓
+
+### Phase 12 — Footer Watermark Redesign (Single Centred Mark)
+- **Removed:** Three per-column `motion.span` watermarks with `watermarkStyle` (one behind Quick Links, one behind Services, one behind Contact). Also removed the `position:relative` wrapper divs and `zIndex:2` inner divs that existed only to support the old watermarks.
+- **Created:** `components/FooterWatermark.js` — new `"use client"` component. Renders one large "LiftSky24" absolutely positioned and centered over the entire footer. Uses `useReducedMotion()` from Framer Motion.
+- **Wiring:** `footer` root gets `position:relative` (was missing). `FooterWatermark` is first child at `z-0`. Content wrapper div gets `position:relative; zIndex:10` so all footer text / links / icons render on top.
+- **Responsive sizing:** Mobile two-line ("Lift" / "Sky24") at `text-[length:28vw]`, tablet one-line at `sm:text-[length:17vw]`, desktop one-line at `lg:text-[length:min(15vw,19rem)]` (capped at 1920px+).
+- **Colour:** Outlined orange only (`-webkit-text-stroke`), no pink. Mobile: `1px rgba(252,110,4,0.30)`. Tablet/desktop: `1.5px rgba(252,110,4,0.28)`. Soft top-to-transparent fill via `bg-gradient-to-b … bg-clip-text`.
+- **Animation:** Entrance `opacity 0→1` + `scale 0.96→1` (0.9s, `[0.16,1,0.3,1]`, `whileInView once`), then gentle float `y:[0,-12,0]` 6 s loop. Both disabled with `prefers-reduced-motion`.
+- **Optional cleanup applied:** Social hover gradient and Subscribe button updated from old `#FF6B01→#ff4fa3` (pink) to brand orange `linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)`. Subscribe button text changed to navy `#0C1323`. Footer link hover color updated from `#FF6B01` to `#FC6E04`. No other content changed.
+- **Files changed:** `components/Footer.js`, `components/FooterWatermark.js` (new), `docs/LIFTSKY24_PROJECT_DOCUMENTATION.md`
+- **Build result:** ✓ 0 errors, 27/27 pages generated. All watermark CSS classes verified in compiled output.
 
 ---
 

@@ -2,6 +2,13 @@
  * HeroBanner — server component shell.
  * All text rendered in SSR HTML, always visible.
  * HeroBannerClient adds animations on top after mount.
+ *
+ * NOTE: All className values are in ONE literal string (not array.join)
+ * so Tailwind's content scanner can detect every class for purge safety.
+ *   1. bg-hero-bg-wash   — dual radial lavender/icy-blue glow
+ *   2. before:           — aurora conic-gradient blob (600px, blur 70px, 25% opacity, animated)
+ *   3. after:            — 8×8px dot grid (25% opacity, fades right via mask)
+ * All three are purely decorative: no pointer-events, no layout shift.
  */
 import Image   from "next/image";
 import Link    from "next/link";
@@ -23,18 +30,14 @@ const trust = [
 export default function HeroBanner() {
   return (
     <section
-      className="relative overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(ellipse at 80% 25%,#e2d9ffb8,transparent 34%),radial-gradient(ellipse at 48% 75%,#FFE0C060,transparent 35%)",
-      }}
+      className="relative isolate overflow-hidden bg-hero-bg-wash before:content-[''] before:absolute before:-z-10 before:right-[-70px] before:top-[-20px] before:h-[600px] before:w-[600px] before:rounded-full before:bg-hero-bg-aurora before:blur-[70px] before:opacity-25 before:animate-hero-bg-aurora after:content-[''] after:absolute after:inset-0 after:-z-10 after:pointer-events-none after:opacity-25 after:bg-hero-bg-dots after:bg-[length:8px_8px] after:[mask-image:linear-gradient(90deg,#000,transparent_80%)] max-[620px]:before:h-[360px] max-[620px]:before:w-[360px] max-[620px]:before:right-[-60px] max-[620px]:before:top-0 max-[620px]:before:blur-[50px] motion-reduce:before:animate-none"
     >
       {/* Client-only decorative layer — never blocks text */}
       <HeroBannerClient />
 
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:px-8 lg:py-20 relative z-10">
 
-        {/* Left: all text — SSR, always visible */}
+        {/* ── Left: all text — SSR, always visible ────────────────── */}
         <div>
           {/* Eyebrow */}
           <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-white/70 px-4 py-1.5 text-xs font-bold tracking-wide text-brand uppercase">
@@ -42,7 +45,7 @@ export default function HeroBanner() {
             {BRAND.tagline}
           </span>
 
-          {/* H1 — plain text, NO mask, NO GSAP hide */}
+          {/* H1 */}
           <h1 className="mt-5 text-[clamp(1.9rem,3.8vw,3.2rem)] font-extrabold leading-[1.08] tracking-tight text-navy-900">
             Websites, Apps &amp; Digital Growth
             <br />
@@ -54,7 +57,7 @@ export default function HeroBanner() {
             We build fast websites, mobile apps, custom software and run SEO, social media and digital marketing campaigns — everything a growing business needs, in one team.
           </p>
 
-          {/* Trust */}
+          {/* Trust checks */}
           <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5">
             {trust.map((t) => (
               <li key={t} className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
@@ -74,7 +77,7 @@ export default function HeroBanner() {
             </Link>
           </div>
 
-          {/* Stats — server renders 0; HeroBannerClient counts up to final value */}
+          {/* Stats */}
           <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {STATS.map((s) => (
               <div
@@ -82,7 +85,6 @@ export default function HeroBanner() {
                 className="rounded-xl bg-white/60 border border-white/80 px-4 py-3"
               >
                 <dt className="text-xs text-slate-500">{s.label}</dt>
-                {/* Start at 0 — GSAP counts up on scroll. Avoids final→0→final flash. */}
                 <dd
                   className="mt-0.5 text-xl font-extrabold text-navy-900"
                   data-stat-to={s.value}
@@ -95,12 +97,22 @@ export default function HeroBanner() {
           </dl>
         </div>
 
-        {/* Right: hero image */}
+        {/* ── Right: hero image ────────────────────────────────────── */}
+        {/*
+          STEP 3: isolate added so the -z-10 glow child does not fall
+          behind the section background. Glow div is first child.
+        */}
         <div
           id="hero-img-wrap"
-          className="relative mx-auto aspect-[1000/680] w-full max-w-[600px]"
+          className="relative isolate mx-auto aspect-[1000/680] w-full max-w-[600px]"
           style={{ willChange: "transform" }}
         >
+          {/* Glow behind the visual (STEP 3) */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-[3%] top-[12%] bottom-[6%] -z-10 rounded-[48%] bg-hero-bg-glow blur-[45px] opacity-[.35] animate-hero-bg-spin motion-reduce:animate-none"
+          />
+
           <Image
             src="/images/home_hero.png"
             alt="LiftSky24 — websites, apps and digital growth illustration"
