@@ -1,16 +1,11 @@
 /**
  * PageHero — server component.
- * Content is fully server-rendered — always visible.
- * AOS handles the scroll reveal. No GSAP, no masks, no hidden text.
+ * Content fully server-rendered — always visible, no flash, no CLS.
+ * ParallaxSection REMOVED: it was causing scroll flicker on all inner pages
+ * because useScroll() fires on every scroll event and recalculates transforms.
  */
 import Image  from "next/image";
-import dynamic from "next/dynamic";
 import { Reveal, Button, Counter } from "./ui";
-
-const ParallaxSection = dynamic(
-  () => import("@/components/animation/ParallaxSection"),
-  { ssr: false }
-);
 
 export default function PageHero({
   title,
@@ -23,6 +18,9 @@ export default function PageHero({
   stats   = [],
   eyebrow,
 }) {
+  // Detect if image is an external URL (Unsplash etc.) or local
+  const isExternal = image.startsWith("http");
+
   return (
     <section
       className="relative overflow-hidden"
@@ -34,19 +32,13 @@ export default function PageHero({
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20">
         <div>
           {eyebrow && (
-            <p
-              className="mb-3 text-sm font-semibold text-brand"
-              data-aos="fade-right"
-            >
+            <p className="mb-3 text-sm font-semibold text-brand">
               {eyebrow}
             </p>
           )}
 
-          {/* H1 — plain text, always visible, AOS fades it in */}
           <h1
             className="text-4xl font-extrabold leading-tight tracking-tight text-navy-900 sm:text-5xl"
-            data-aos="fade-up"
-            data-aos-delay="50"
           >
             {title}{" "}
             {accent && (
@@ -57,17 +49,13 @@ export default function PageHero({
           </h1>
 
           {sub && (
-            <p
-              className="mt-4 max-w-lg leading-relaxed text-slate-600"
-              data-aos="fade-up"
-              data-aos-delay="120"
-            >
+            <p className="mt-4 max-w-lg leading-relaxed text-slate-600">
               {sub}
             </p>
           )}
 
           {badges.length > 0 && (
-            <ul className="mt-4 flex flex-wrap gap-2" data-aos="fade-up" data-aos-delay="150">
+            <ul className="mt-4 flex flex-wrap gap-2">
               {badges.map((b) => (
                 <li key={b} className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-brand shadow-sm">
                   {b}
@@ -77,21 +65,19 @@ export default function PageHero({
           )}
 
           {ctas.length > 0 && (
-            <div className="mt-7 flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="180">
-              {ctas.map((c, i) => (
-                <Button key={c.label} href={c.href} variant={i === 0 ? "primary" : "outline"}>
-                  {c.label}
-                </Button>
-              ))}
-            </div>
+            <Reveal delay={0.1}>
+              <div className="mt-7 flex flex-wrap gap-3">
+                {ctas.map((c, i) => (
+                  <Button key={c.label} href={c.href} variant={i === 0 ? "primary" : "outline"}>
+                    {c.label}
+                  </Button>
+                ))}
+              </div>
+            </Reveal>
           )}
 
           {stats.length > 0 && (
-            <dl
-              className="mt-9 grid max-w-md grid-cols-3 gap-4"
-              data-aos="fade-up"
-              data-aos-delay="220"
-            >
+            <dl className="mt-9 grid max-w-md grid-cols-3 gap-4">
               {stats.map((s) => (
                 <div key={s.l}>
                   <dd className="text-2xl font-bold text-navy-900 sm:text-3xl">
@@ -104,9 +90,18 @@ export default function PageHero({
           )}
         </div>
 
-        {/* Image with optional parallax — always visible via <Image priority> */}
-        <div data-aos="zoom-in" data-aos-delay="100">
-          <ParallaxSection speed={0.06}>
+        {/* Hero image — no parallax wrapper, no motion, no scroll listener */}
+        <div className="relative">
+          {isExternal ? (
+            <Image
+              src={image}
+              alt={alt || `${title} illustration`}
+              width={640}
+              height={460}
+              priority
+              className="h-auto w-full rounded-3xl shadow-card object-cover"
+            />
+          ) : (
             <Image
               src={image}
               alt={alt || `${title} illustration`}
@@ -115,7 +110,7 @@ export default function PageHero({
               priority
               className="h-auto w-full rounded-3xl shadow-card"
             />
-          </ParallaxSection>
+          )}
         </div>
       </div>
     </section>
