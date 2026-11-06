@@ -31,16 +31,16 @@ const ICON_MAP = {
   UtensilsCrossed, Cpu, Factory, Palette, Landmark,
 };
 
-// Accent color map for category badges
+// Accent color map — all mapped to orange/black brand system
 const ACCENT_CLASSES = {
-  "#6557ff": "bg-[#6557ff]",
+  "#6557ff": "bg-[#FC6E04]",
   "#059669": "bg-[#059669]",
   "#d97706": "bg-[#d97706]",
   "#e11d48": "bg-[#e11d48]",
-  "#ea580c": "bg-[#ea580c]",
-  "#7c3aed": "bg-[#7c3aed]",
+  "#ea580c": "bg-[#FC6E04]",
+  "#7c3aed": "bg-[#101114]",
   "#475569": "bg-[#475569]",
-  "#c026d3": "bg-[#c026d3]",
+  "#c026d3": "bg-[#E04F00]",
   "#16a34a": "bg-[#16a34a]",
 };
 
@@ -164,7 +164,7 @@ export default function Industries() {
         <Reveal>
           <div
             className="rounded-3xl p-8 text-white sm:p-10"
-            style={{ background: "radial-gradient(ellipse at 78% 10%,#39256d,transparent 34%),radial-gradient(ellipse at 0 90%,#17394b,transparent 32%),#11121b" }}
+            style={{ background: "linear-gradient(135deg,#101114 0%,#1B1714 55%,#2A160D 100%)" }}
           >
             <h2 className="text-2xl font-bold sm:text-3xl">{whyIndustryFocused.heading}</h2>
             <p className="mt-3 max-w-xl text-white/70 text-sm leading-relaxed">{whyIndustryFocused.body}</p>
@@ -189,7 +189,7 @@ export default function Industries() {
                   href={s.href}
                   className="group flex items-start gap-4 rounded-2xl border border-slate-100 bg-white p-5 hover:-translate-y-1 hover:shadow-card transition-all duration-300"
                 >
-                  <span className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl bg-brand-light text-brand group-hover:bg-brand-gradient group-hover:text-white transition-all duration-300">
+                  <span className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-xl bg-brand-light text-brand group-hover:bg-brand-gradient group-hover:text-[#101114] transition-all duration-300">
                     {s.icon && <s.icon size={20} />}
                   </span>
                   <div className="min-w-0">

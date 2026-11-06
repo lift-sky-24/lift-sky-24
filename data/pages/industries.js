@@ -24,8 +24,8 @@ export const INDUSTRY_CATEGORIES = [
   {
     id:    "business",
     label: "Business & Professional",
-    color: "from-blue-50 to-indigo-50",
-    accent:"#6557ff",
+    color: "from-[#FFF7F0] to-[#FFF0E4]",
+    accent:"#FC6E04",
     icon:  "Briefcase",
     featured: true,
     featuredDesc: "From solo consultants to large firms — we help professional service businesses build credibility online.",
@@ -78,8 +78,8 @@ export const INDUSTRY_CATEGORIES = [
   {
     id:    "retail",
     label: "Retail & E-Commerce",
-    color: "from-pink-50 to-rose-50",
-    accent:"#e11d48",
+    color: "from-[#FFF7F0] to-[#FFF0E4]",
+    accent:"#E04F00",
     icon:  "ShoppingBag",
     featured: false,
     industries: [
@@ -112,8 +112,8 @@ export const INDUSTRY_CATEGORIES = [
   {
     id:    "technology",
     label: "Technology & Digital",
-    color: "from-violet-50 to-purple-50",
-    accent:"#7c3aed",
+    color: "from-[#F8F7F4] to-[#FFF0E4]",
+    accent:"#101114",
     icon:  "Cpu",
     featured: false,
     industries: [
@@ -144,8 +144,8 @@ export const INDUSTRY_CATEGORIES = [
   {
     id:    "media-creative",
     label: "Media, Creative & Lifestyle",
-    color: "from-fuchsia-50 to-pink-50",
-    accent:"#c026d3",
+    color: "from-[#FFF7F0] to-[#FFF0E4]",
+    accent:"#E04F00",
     icon:  "Palette",
     featured: false,
     industries: [

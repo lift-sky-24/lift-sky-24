@@ -20,18 +20,18 @@ export default function FAQ({ items, title = "Frequently Asked Questions", class
           return (
             <motion.div
               key={f.q}
-              className="overflow-hidden rounded-2xl border border-slate-100 bg-white relative"
-              animate={{ borderColor: isOpen ? "rgba(101,87,255,.3)" : "rgba(226,232,240,1)" }}
+              className="overflow-hidden rounded-2xl border bg-white relative"
+              animate={{ borderColor: isOpen ? "rgba(252,110,4,.4)" : "rgba(234,229,223,1)" }}
               transition={{ duration: 0.25 }}
               data-aos="fade-up"
               data-aos-delay={i * 50}
             >
-              {/* Hover highlight bar */}
+              {/* Orange left accent bar */}
               <motion.div
                 aria-hidden
                 style={{
                   position: "absolute", left: 0, top: 0, bottom: 0, width: 3,
-                  background: "linear-gradient(180deg,#6557ff,#ff4fa3)",
+                  background: "linear-gradient(180deg,#FF8A1F,#FC6E04,#E04F00)",
                   borderRadius: "2px 0 0 2px",
                   transformOrigin: "top",
                 }}
@@ -48,19 +48,26 @@ export default function FAQ({ items, title = "Frequently Asked Questions", class
                   className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-semibold text-navy-900"
                 >
                   <motion.span
-                    animate={{ color: isOpen ? "#6557ff" : "#10111a" }}
+                    animate={{ color: isOpen ? "#FC6E04" : "#171717" }}
                     transition={{ duration: 0.2 }}
                   >
                     {f.q}
                   </motion.span>
 
-                  {/* Plus → Minus morph */}
+                  {/* Plus → Minus morph, orange */}
                   <motion.span
                     aria-hidden="true"
                     className="shrink-0 grid h-6 w-6 place-items-center rounded-full"
-                    animate={{ background: isOpen ? "#6557ff" : "transparent", rotate: isOpen ? 45 : 0 }}
+                    animate={{
+                      background: isOpen ? "#FC6E04" : "transparent",
+                      rotate: isOpen ? 45 : 0,
+                    }}
                     transition={{ duration: 0.25 }}
-                    style={{ border: "1.5px solid", borderColor: isOpen ? "#6557ff" : "#e2e8f0", color: isOpen ? "#fff" : "#6557ff" }}
+                    style={{
+                      border: "1.5px solid",
+                      borderColor: isOpen ? "#FC6E04" : "#EAE5DF",
+                      color: isOpen ? "#fff" : "#FC6E04",
+                    }}
                   >
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
                       <rect x="5" y="0" width="2" height="12" rx="1" />

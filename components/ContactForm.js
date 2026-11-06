@@ -155,7 +155,7 @@ export default function ContactForm() {
       <motion.button
         type="submit"
         disabled={status === "sending"}
-        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-brand-gradient px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110 active:scale-[.98] disabled:opacity-70 disabled:cursor-not-allowed"
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-brand-gradient px-6 py-3 text-sm font-semibold text-[#101114] transition hover:brightness-110 active:scale-[.98] disabled:opacity-70 disabled:cursor-not-allowed"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >

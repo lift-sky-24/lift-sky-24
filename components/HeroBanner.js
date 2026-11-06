@@ -28,7 +28,7 @@ export default function HeroBanner() {
         {/* ── Left: all text — SSR, always visible ────────────────── */}
         <div>
           {/* Eyebrow */}
-          <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-white/70 px-4 py-1.5 text-xs font-bold tracking-wide text-brand uppercase">
+          <span className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-white/80 px-4 py-1.5 text-xs font-bold tracking-wide text-brand uppercase">
             <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
             {BRAND.tagline}
           </span>

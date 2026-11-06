@@ -6,7 +6,7 @@ import { Reveal, Button, Stagger, StaggerItem } from "./ui";
 export function Section({ title, sub, children, tone = "white", id, center = false }) {
   const bgMap = {
     white: "",
-    soft:  "bg-gradient-to-b from-white to-[#f7f4ff]",
+    soft:  "bg-gradient-to-b from-white to-[#FFF7F0]",
   };
 
   return (
@@ -34,7 +34,7 @@ export function IconCards({ items, cols = "lg:grid-cols-3" }) {
       {items.map((s) => {
         const body = (
           <>
-            <span className="grid h-12 w-12 place-items-center rounded-xl bg-brand-light text-brand transition-all duration-300 group-hover:bg-brand-gradient group-hover:text-white group-hover:scale-110 group-hover:rotate-[-6deg]">
+            <span className="grid h-12 w-12 place-items-center rounded-xl bg-brand-light text-brand transition-all duration-300 group-hover:bg-brand-gradient group-hover:text-[#101114] group-hover:scale-110 group-hover:rotate-[-6deg]">
               {s.icon && <s.icon size={22} />}
             </span>
             <h3 className="mt-4 font-semibold text-navy-900 transition-colors duration-200 group-hover:text-brand">{s.t}</h3>
@@ -90,9 +90,9 @@ export function Steps({ items }) {
 
 /* ── TechGrid ─────────────────────────────────────────────────────── */
 const hues = [
-  "bg-indigo-100 text-indigo-700", "bg-violet-100 text-violet-700",
-  "bg-fuchsia-100 text-fuchsia-700", "bg-sky-100 text-sky-700",
-  "bg-emerald-100 text-emerald-700", "bg-amber-100 text-amber-700",
+  "bg-[#FFF0E4] text-[#E04F00]", "bg-[#FFF0E4] text-[#FC6E04]",
+  "bg-[#FFF0E4] text-[#FF8A1F]", "bg-[#FFF0E4] text-[#E04F00]",
+  "bg-emerald-50 text-emerald-700", "bg-amber-50 text-amber-700",
 ];
 export function TechGrid({ items }) {
   return (
@@ -116,7 +116,7 @@ export function CTABand({ title, sub, button = "Get a Free Quote", href = "/cont
       <Reveal>
         <div
           className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 overflow-hidden rounded-3xl p-8 text-white sm:p-10 md:flex-row md:items-center"
-          style={{ background: "radial-gradient(ellipse at 78% 10%,#39256d,transparent 34%),radial-gradient(ellipse at 0 90%,#17394b,transparent 32%),#11121b" }}
+          style={{ background: "linear-gradient(135deg,#101114 0%,#1B1714 55%,#2A160D 100%)" }}
         >
           <div className="relative z-10">
             <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>

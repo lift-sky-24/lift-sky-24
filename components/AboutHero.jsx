@@ -17,7 +17,7 @@ const stats = [
   { to: 5, label: "Years Experience", Icon: Award },
 ];
 const values = ["Built on Innovation", "Driven by Quality", "Focused on Your Success"];
-const GRADIENT = "linear-gradient(90deg,#4F46E5,#8B5CF6,#D16BF0,#8B5CF6,#4F46E5)";
+const GRADIENT = "linear-gradient(90deg,#FF8A1F,#FC6E04,#E04F00,#FC6E04,#FF8A1F)";
 
 /* Image ke 4 edges ko section background mein fade karne wala mask.
    Left side 12% fade (white/blue shapes), bottom mein white strip hide hoti hai. */
@@ -95,17 +95,18 @@ export default function AboutHero() {
   return (
     <section
       id="about"
-      className={`ah-root relative overflow-hidden bg-gradient-to-br from-white via-[#F8F6FF] to-[#EEE9FF] text-[#0F1A4D]`}
+      className={`ah-root relative overflow-hidden text-[#171717]`}
+      style={{ background: "linear-gradient(135deg,#FFFFFF 0%,#FFF7F0 50%,#FFF0E4 100%)" }}
     >
       <style>{css}</style>
 
       <div className="relative mx-auto grid max-w-[1320px] items-center gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-4 lg:py-20">
         {/* ---------------- Left: content ---------------- */}
         <div className="relative z-10 max-w-xl">
-          <span className="ah-fade inline-flex items-center gap-2 rounded-full bg-[#E9E5FF] px-4 py-1.5 text-sm font-semibold text-indigo-700">
+          <span className="ah-fade inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold" style={{ background: "#FFF0E4", color: "#E04F00" }}>
             <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-indigo-500 opacity-60" />
-              <span className="relative inline-flex size-2 rounded-full bg-indigo-600" />
+              <span className="absolute inline-flex size-full animate-ping rounded-full opacity-60" style={{ background: "#FC6E04" }} />
+              <span className="relative inline-flex size-2 rounded-full" style={{ background: "#FC6E04" }} />
             </span>
             About Us
           </span>
@@ -139,25 +140,28 @@ export default function AboutHero() {
                 className="ah-fade group flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3"
                 style={{ "--d": `${800 + i * 110}ms` }}
               >
-                <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#ECE9FF] text-indigo-600 transition-all duration-300 group-hover:-translate-y-1 group-hover:rotate-6 group-hover:bg-indigo-600 group-hover:text-white">
+                <span className="grid size-11 shrink-0 place-items-center rounded-xl transition-all duration-300 group-hover:-translate-y-1 group-hover:rotate-6"
+                  style={{ background: "#FFF0E4", color: "#FC6E04" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background="#FC6E04"; e.currentTarget.style.color="#101114"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background="#FFF0E4"; e.currentTarget.style.color="#FC6E04"; }}>
                   <Icon size={20} strokeWidth={1.8} />
                 </span>
                 <div>
                   <div className="text-xl font-extrabold leading-none sm:text-2xl">
                     <Count to={to} />
                   </div>
-                  <div className="mt-1 text-xs text-[#5560A0] sm:text-[0.8rem]">{label}</div>
+                  <div className="mt-1 text-xs sm:text-[0.8rem]" style={{ color: "#6B6B70" }}>{label}</div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="ah-line mt-8 h-px w-full max-w-md bg-gradient-to-r from-indigo-200 to-transparent" style={{ "--d": "1100ms" }} />
+          <div className="ah-line mt-8 h-px w-full max-w-md" style={{ "--d": "1100ms", background: "linear-gradient(90deg,#FFD4B3,transparent)", transformOrigin: "left" }} />
 
-          <ul className="ah-fade mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-[#3B4780]" style={{ "--d": "1250ms" }}>
+          <ul className="ah-fade mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium" style={{ "--d": "1250ms", color: "#6B6B70" }}>
             {values.map((v, i) => (
               <li key={v} className="flex items-center gap-4">
-                {i > 0 && <span aria-hidden className="size-1 rounded-full bg-indigo-400" />}
+                {i > 0 && <span aria-hidden className="size-1 rounded-full" style={{ background: "#FC6E04" }} />}
                 {v}
               </li>
             ))}
@@ -166,9 +170,9 @@ export default function AboutHero() {
 
         {/* ---------------- Right: image ---------------- */}
         <div className="relative lg:-mr-8 xl:-mr-16">
-          {/* soft colour orbs, image ke peeche */}
-          <div aria-hidden className="ah-drift pointer-events-none absolute -left-10 top-6 size-64 rounded-full bg-violet-300/40 blur-3xl" />
-          <div aria-hidden className="ah-drift pointer-events-none absolute -bottom-10 right-0 size-72 rounded-full bg-sky-300/40 blur-3xl [animation-delay:-4s]" />
+          {/* orange orbs behind image */}
+          <div aria-hidden className="ah-drift pointer-events-none absolute -left-10 top-6 size-64 rounded-full blur-3xl" style={{ background: "rgba(252,110,4,0.15)" }} />
+          <div aria-hidden className="ah-drift pointer-events-none absolute -bottom-10 right-0 size-72 rounded-full blur-3xl [animation-delay:-4s]" style={{ background: "rgba(255,138,31,0.12)" }} />
 
           <div className="ah-reveal relative">
             <div className="relative">
@@ -184,12 +188,12 @@ export default function AboutHero() {
 
               {SHOW_NOTE && (
                 <div className="pointer-events-none absolute right-[4%] top-[3%]">
-                  <div className="-rotate-[8deg] text-right text-[clamp(1rem,2vw,1.6rem)] leading-[1.05] text-indigo-600" style={handStyle}>
+                  <div className="-rotate-[8deg] text-right text-[clamp(1rem,2vw,1.6rem)] leading-[1.05]" style={{ color: "#FC6E04", ...handStyle }}>
                     {["Great People", "Build Great", "Products"].map((line, i) => (
                       <div key={line} className="ah-fade" style={{ "--d": `${1500 + i * 160}ms` }}>{line}</div>
                     ))}
                   </div>
-                  <svg viewBox="0 0 80 80" className="ml-auto mt-1 w-12 text-indigo-600 sm:w-14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                  <svg viewBox="0 0 80 80" className="ml-auto mt-1 w-12 sm:w-14" fill="none" stroke="#FC6E04" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
                     <path className="ah-draw" pathLength="1" style={{ "--d": "2000ms" }} d="M60 6 C 78 30, 52 62, 16 66" />
                     <path className="ah-draw" pathLength="1" style={{ "--d": "2900ms" }} d="M16 66 L30 55 M16 66 L28 77" />
                   </svg>

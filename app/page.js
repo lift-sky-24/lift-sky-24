@@ -69,7 +69,7 @@ export default function Home() {
           <Reveal>
             <div
               className="flex h-full flex-col justify-center rounded-2xl p-7 text-white relative overflow-hidden"
-              style={{ background: "linear-gradient(135deg,#6557ff,#ff4fa3)" }}
+              style={{ background: "linear-gradient(135deg,#101114 0%,#1B1714 60%,#2A160D 100%)" }}
             >
               <div aria-hidden style={{ position:"absolute",inset:0,background:"linear-gradient(105deg,transparent 40%,rgba(255,255,255,.08) 50%,transparent 60%)",backgroundSize:"200% 100%",animation:"marquee-scroll 3s linear infinite" }} />
               <p className="text-xl font-bold leading-tight relative z-10" style={{ whiteSpace:"pre-line" }}>{whyCtaCard.title}</p>

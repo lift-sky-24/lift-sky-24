@@ -24,7 +24,7 @@ export default function NotFound() {
           key={i}
           aria-hidden
           className="absolute text-2xl select-none pointer-events-none"
-          style={{ opacity: 0.15, color: "#6557ff" }}
+          style={{ opacity: 0.15, color: "#FC6E04" }}
           animate={{ y: [f.y, f.y - 14, f.y], rotate: [0, 12, 0] }}
           transition={{ duration: 3.5 + i * 0.4, repeat: Infinity, delay: f.delay, ease: "easeInOut" }}
           initial={{ x: f.x, y: f.y }}

@@ -80,9 +80,9 @@ function RoadDot({ color = "#FC6E04" }) {
 /* ─── Single step card ─────────────────────────────────────────────── */
 const CARD_COLORS = [
   { accent: "#FC6E04", bg: "rgba(252,110,4,0.06)",  border: "rgba(252,110,4,0.20)" },
-  { accent: "#6557ff", bg: "rgba(101,87,255,0.06)", border: "rgba(101,87,255,0.20)" },
+  { accent: "#E04F00", bg: "rgba(224,79,0,0.06)",   border: "rgba(224,79,0,0.18)" },
   { accent: "#FC6E04", bg: "rgba(252,110,4,0.06)",  border: "rgba(252,110,4,0.20)" },
-  { accent: "#6557ff", bg: "rgba(101,87,255,0.06)", border: "rgba(101,87,255,0.20)" },
+  { accent: "#E04F00", bg: "rgba(224,79,0,0.06)",   border: "rgba(224,79,0,0.18)" },
   { accent: "#FC6E04", bg: "rgba(252,110,4,0.06)",  border: "rgba(252,110,4,0.20)" },
 ];
 
@@ -207,7 +207,7 @@ function RoadPath({ reduced }) {
         <linearGradient id="roadGrad" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%"   stopColor="#FF8A1F" />
           <stop offset="50%"  stopColor="#FC6E04" />
-          <stop offset="100%" stopColor="#6557ff" />
+          <stop offset="100%" stopColor="#E04F00" />
         </linearGradient>
       </defs>
     </svg>
@@ -236,7 +236,7 @@ export default function ProcessRoadmap({ items = [] }) {
               </div>
               {/* Dot on the road */}
               <div className="process-road-dot-row">
-                <RoadDot color={i % 2 === 0 ? "#FC6E04" : "#6557ff"} />
+                <RoadDot color={i % 2 === 0 ? "#FC6E04" : "#E04F00"} />
               </div>
             </div>
           ))}
@@ -255,9 +255,9 @@ export default function ProcessRoadmap({ items = [] }) {
             {/* Vertical connector (not last) */}
             {i < items.length - 1 && (
               <div className="process-road-vline" aria-hidden="true">
-                <div className="process-road-vline-dot" style={{ background: i % 2 === 0 ? "#FC6E04" : "#6557ff" }} />
+                <div className="process-road-vline-dot" style={{ background: i % 2 === 0 ? "#FC6E04" : "#E04F00" }} />
                 <div className="process-road-vline-track" />
-                <div className="process-road-vline-dot" style={{ background: (i + 1) % 2 === 0 ? "#FC6E04" : "#6557ff" }} />
+                <div className="process-road-vline-dot" style={{ background: (i + 1) % 2 === 0 ? "#FC6E04" : "#E04F00" }} />
               </div>
             )}
             <StepCard step={step} index={i} reduced={reduced} />

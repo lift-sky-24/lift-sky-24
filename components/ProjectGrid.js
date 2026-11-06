@@ -41,7 +41,7 @@ export default function ProjectGrid({ filters = false, limit, cols = "lg:grid-co
           <motion.span
             key={i}
             aria-hidden
-            style={{ position: "absolute", color: "#6557ff", opacity: 0.3 }}
+            style={{ position: "absolute", color: "#FC6E04", opacity: 0.3 }}
             animate={{ y: [y, y - 10, y], opacity: [0.3, 0.7, 0.3] }}
             transition={{ duration: 2 + i * 0.4, repeat: Infinity, delay: i * 0.3 }}
           >
@@ -71,7 +71,7 @@ export default function ProjectGrid({ filters = false, limit, cols = "lg:grid-co
               role="tab"
               aria-selected={active === c}
               onClick={() => setActive(c)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${active === c ? "bg-brand-gradient text-white" : "bg-brand-light text-brand hover:bg-indigo-100"}`}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${active === c ? "bg-brand-gradient text-[#101114]" : "bg-brand-light text-brand hover:bg-[#FFD4B3]"}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

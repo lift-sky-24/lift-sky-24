@@ -4,9 +4,9 @@
 import { useEffect, useRef } from "react";
 
 const ORBS = [
-  { color: "rgba(101,87,255,0.15)", size: 360, x: 75, y: 20, speed: 0.018 },
-  { color: "rgba(255,79,163,0.12)", size: 300, x: 15, y: 70, speed: 0.022 },
-  { color: "rgba(255,99,56,0.08)",  size: 240, x: 50, y: 85, speed: 0.015 },
+  { color: "rgba(252,110,4,0.12)",  size: 360, x: 75, y: 20, speed: 0.018 },
+  { color: "rgba(255,138,31,0.10)", size: 300, x: 15, y: 70, speed: 0.022 },
+  { color: "rgba(224,79,0,0.08)",   size: 240, x: 50, y: 85, speed: 0.015 },
 ];
 
 export default function GlowOrbs({ intensity = 1 }) {

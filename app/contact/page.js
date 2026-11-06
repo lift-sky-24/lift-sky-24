@@ -94,7 +94,7 @@ export default function Contact() {
                     <a
                       href="#"
                       aria-label={s.n}
-                      className="grid h-10 w-10 place-items-center rounded-full bg-brand-light text-brand transition hover:bg-brand-gradient hover:text-white"
+                      className="grid h-10 w-10 place-items-center rounded-full bg-brand-light text-brand transition hover:bg-brand-gradient hover:text-[#101114]"
                     >
                       <s.i size={16} />
                     </a>

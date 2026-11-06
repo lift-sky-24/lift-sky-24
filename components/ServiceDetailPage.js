@@ -69,7 +69,7 @@ export default function ServiceDetailPage({ slug }) {
             {detail.deliverables.map((d, i) => (
               <li
                 key={d}
-                className="rounded-full border border-brand/20 bg-brand-light px-4 py-2 text-sm font-medium text-brand"
+                className="rounded-full border border-brand/30 bg-brand-light px-4 py-2 text-sm font-medium text-brand"
                 data-aos="zoom-in"
                 data-aos-delay={i * 50}
               >

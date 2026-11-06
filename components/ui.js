@@ -99,9 +99,9 @@ export const StaggerItem = ({ children, className = "" }) => (
 export function Button({ href = "/contact", children, variant = "primary", className = "" }) {
   const base = "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-200 hover:-translate-y-0.5 active:scale-95";
   const styles = {
-    primary: "bg-brand-gradient text-white shadow-card hover:brightness-110",
-    outline: "border border-brand/30 bg-white text-brand hover:bg-brand-light",
-    light:   "bg-white text-navy-900 hover:bg-brand-light",
+    primary: "bg-brand-gradient text-[#101114] shadow-card hover:brightness-110",
+    outline: "border border-brand bg-white text-brand hover:bg-brand-light",
+    light:   "bg-white text-[#171717] hover:bg-brand-light",
   };
   return (
     <Link href={href} className={`${base} ${styles[variant]} ${className}`}>

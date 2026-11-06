@@ -19,7 +19,7 @@ export default function BlogList() {
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="Blog categories">
           {blogCats.map((c) => (
             <button key={c} role="tab" aria-selected={cat === c} onClick={() => { setCat(c); setPage(1); }}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${cat === c ? "bg-brand-gradient text-white" : "bg-brand-light text-brand hover:bg-indigo-100"}`}>{c}</button>
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${cat === c ? "bg-brand-gradient text-[#101114]" : "bg-brand-light text-brand hover:bg-[#FFD4B3]"}`}>{c}</button>
           ))}
         </div>
         <label className="relative block md:w-64">
@@ -50,7 +50,7 @@ export default function BlogList() {
         <nav aria-label="Pagination" className="mt-10 flex items-center justify-center gap-2">
           <button aria-label="Previous page" disabled={page === 1} onClick={() => setPage(page - 1)} className="rounded-full border border-slate-200 p-2 disabled:opacity-40"><ChevronLeft size={16} /></button>
           {Array.from({ length: pages }, (_, i) => (
-            <button key={i} aria-current={page === i + 1} onClick={() => setPage(i + 1)} className={`h-9 w-9 rounded-full text-sm font-medium ${page === i + 1 ? "bg-brand-gradient text-white" : "hover:bg-brand-light"}`}>{i + 1}</button>
+            <button key={i} aria-current={page === i + 1} onClick={() => setPage(i + 1)} className={`h-9 w-9 rounded-full text-sm font-medium ${page === i + 1 ? "bg-brand-gradient text-[#101114]" : "hover:bg-brand-light"}`}>{i + 1}</button>
           ))}
           <button aria-label="Next page" disabled={page === pages} onClick={() => setPage(page + 1)} className="rounded-full border border-slate-200 p-2 disabled:opacity-40"><ChevronRight size={16} /></button>
         </nav>
