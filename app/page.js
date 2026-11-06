@@ -42,8 +42,8 @@ export default function Home() {
       {/* 1. Hero */}
       <HeroBanner />
 
-      {/* Tech stack marquee */}
-      <div className="border-y border-slate-100 bg-white/60 py-4 overflow-hidden">
+      {/* Tech stack marquee — black bg, orange separators */}
+      <div className="overflow-hidden">
         <MarqueeRow items={marqueeItems.tech} duration={35} />
       </div>
 
@@ -99,8 +99,8 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* Services marquee reverse */}
-      <div className="border-y border-slate-100 bg-white/60 py-4 overflow-hidden">
+      {/* Services marquee reverse — black bg */}
+      <div className="overflow-hidden">
         <MarqueeRow items={marqueeItems.services} duration={28} reverse />
       </div>
 

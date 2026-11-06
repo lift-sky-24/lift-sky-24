@@ -26,7 +26,7 @@ export default function HeroBanner() {
       className="relative overflow-hidden"
       style={{
         background:
-          "radial-gradient(ellipse at 80% 25%,#e2d9ffb8,transparent 34%),radial-gradient(ellipse at 48% 75%,#d5f5ff9c,transparent 35%)",
+          "radial-gradient(ellipse at 80% 25%,#e2d9ffb8,transparent 34%),radial-gradient(ellipse at 48% 75%,#FFE0C060,transparent 35%)",
       }}
     >
       {/* Client-only decorative layer — never blocks text */}

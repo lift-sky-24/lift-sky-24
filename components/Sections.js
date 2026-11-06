@@ -10,8 +10,18 @@ import { Reveal, Button, Stagger, StaggerItem } from "./ui";
 
 /* ── Section wrapper ──────────────────────────────────────────────── */
 export function Section({ title, sub, children, tone = "white", id, center = false }) {
+  // Background map matching reference file section styles
+  const bgMap = {
+    white:   "",
+    soft:    "bg-gradient-to-b from-white to-[#f7f4ff]",   // reference: services gradient
+    process: "",  // handled via className override
+  };
+
   return (
-    <section id={id} className={`scroll-mt-20 py-14 lg:py-18 ${tone === "soft" ? "bg-slate-50/70" : ""}`}>
+    <section
+      id={id}
+      className={`scroll-mt-20 py-14 lg:py-18 ${tone === "soft" ? bgMap.soft : ""}`}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {title && (
           <Reveal className={`mb-9 max-w-2xl ${center ? "mx-auto text-center" : ""}`}>
