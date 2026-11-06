@@ -1,9 +1,8 @@
 "use client";
-import { useRef } from "react";
 
-export default function MarqueeRow({ items = [], duration = 32, reverse = false, className = "" }) {
-  const trackRef = useRef(null);
-  const doubled  = [...items, ...items];
+export default function MarqueeRow({ items = [], duration = 28, reverse = false, className = "" }) {
+  // Doubled so the seamless loop never shows a gap
+  const doubled = [...items, ...items];
 
   return (
     <div
@@ -12,36 +11,21 @@ export default function MarqueeRow({ items = [], duration = 32, reverse = false,
       aria-hidden="true"
     >
       <div
-        ref={trackRef}
         className="marquee-track running"
         style={{
-          "--marquee-dur":  `${duration}s`,
+          "--marquee-dur": `${duration}s`,
           animationDirection: reverse ? "reverse" : "normal",
-          padding: "16px 0",
+          padding: "14px 0",
         }}
-        onMouseEnter={() => trackRef.current?.classList.replace("running", "paused")}
-        onMouseLeave={() => trackRef.current?.classList.replace("paused",  "running")}
       >
         {doubled.map((item, i) => (
           <span
             key={i}
             className="inline-flex items-center gap-4"
-            style={{ userSelect: "none" }}
+            style={{ userSelect: "none", flexShrink: 0 }}
           >
-            <span style={{
-              color: "#FF6B01",
-              fontSize: 18,
-              lineHeight: 1,
-              display: "inline-block",
-              verticalAlign: "middle",
-            }}>✦</span>
-            <span style={{
-              fontSize: 11,
-              fontWeight: 900,
-              letterSpacing: "1.5px",
-              textTransform: "uppercase",
-              color: "#fff",
-            }}>
+            <span style={{ color: "#FC6E04", fontSize: 16, lineHeight: 1, display: "inline-block" }}>✦</span>
+            <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: "1.5px", textTransform: "uppercase", color: "#fff" }}>
               {item}
             </span>
           </span>

@@ -329,9 +329,9 @@ html:not([data-aos-init]) [data-aos] { opacity:1 !important; transform:none !imp
   transform-origin:top center; transform:scaleY(0);
 }
 
-/* Marquee */
-.marquee-track { display:flex; gap:1.5rem; will-change:transform; white-space:nowrap; }
-.marquee-track.running { animation:marquee-scroll var(--marquee-dur,30s) linear infinite; }
+/* Marquee — gap must stay at 2rem so the -50% translateX aligns perfectly */
+.marquee-track { display:flex; gap:2rem; will-change:transform; white-space:nowrap; }
+.marquee-track.running { animation:marquee-scroll var(--marquee-dur,28s) linear infinite; }
 .marquee-track.paused  { animation-play-state:paused; }
 
 /* Reading progress bar */

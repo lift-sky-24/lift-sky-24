@@ -1,189 +1,277 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { Globe, Smartphone, Code2, Share2, Search, PenTool, Megaphone, ChevronDown, ArrowUpRight } from "lucide-react";
-
-const IMG = "/images/services/demo.png";
+import Link from "next/link";
+import { Globe, Smartphone, Code2, Share2, Search, PenTool, Megaphone, ArrowUpRight, ChevronRight } from "lucide-react";
 
 const services = [
-  { id: "website", title: "Website Development",            text: "Modern, responsive websites and web applications.",              tags: ["Next.js", "React", "Responsive"], Icon: Globe,     image: IMG },
-  { id: "app",     title: "App Development",               text: "iOS and Android apps built for performance.",                     tags: ["iOS", "Android"],                 Icon: Smartphone, image: IMG },
-  { id: "software",title: "Software Development",          text: "Custom software that automates and scales your business.",        tags: ["Custom", "APIs"],                  Icon: Code2,     image: IMG },
-  { id: "social",  title: "Social Media Management",       text: "Consistent content and community care across your platforms.",    tags: ["Content", "Reels"],                Icon: Share2,    image: IMG },
-  { id: "seo",     title: "Search Engine Optimization (SEO)",text: "Rank higher on Google and get found by the right customers.",  tags: ["On-page", "Keywords"],             Icon: Search,    image: IMG },
-  { id: "graphic", title: "Graphic Design",                text: "Logos, creatives and brand visuals that stand out.",              tags: ["Logos", "Posters"],                Icon: PenTool,   image: IMG },
-  { id: "marketing",title:"Digital Marketing",             text: "Grow your brand with data-driven campaigns.",                    tags: ["Ads", "Funnels"],                  Icon: Megaphone, image: IMG },
+  {
+    id:      "website",
+    title:   "Website Development",
+    text:    "Modern, responsive websites and web apps built for speed, SEO and conversions.",
+    tags:    ["Next.js", "React", "Responsive"],
+    Icon:    Globe,
+    image:   "/images/services/demo.png",
+    href:    "/services/website-development",
+  },
+  {
+    id:      "app",
+    title:   "App Development",
+    text:    "iOS and Android apps built for performance — cross-platform or native.",
+    tags:    ["iOS", "Android", "React Native"],
+    Icon:    Smartphone,
+    image:   "/images/services/demo.png",
+    href:    "/services/app-development",
+  },
+  {
+    id:      "software",
+    title:   "Software Development",
+    text:    "Custom software that automates your workflows and scales with your business.",
+    tags:    ["Custom", "APIs", "SaaS"],
+    Icon:    Code2,
+    image:   "/images/services/demo.png",
+    href:    "/services/software-development",
+  },
+  {
+    id:      "social",
+    title:   "Social Media Management",
+    text:    "Consistent, on-brand content and community management across every platform.",
+    tags:    ["Content", "Reels", "Campaigns"],
+    Icon:    Share2,
+    image:   "/images/services/demo.png",
+    href:    "/services/social-media-management",
+  },
+  {
+    id:      "seo",
+    title:   "Search Engine Optimization",
+    text:    "Rank higher on Google and get found by the right customers at the right time.",
+    tags:    ["On-page", "Keywords", "Technical"],
+    Icon:    Search,
+    image:   "/images/services/demo.png",
+    href:    "/services/seo",
+  },
+  {
+    id:      "graphic",
+    title:   "Graphic Design",
+    text:    "Logos, brand identities and creative visuals that make your business unforgettable.",
+    tags:    ["Logos", "Branding", "Print"],
+    Icon:    PenTool,
+    image:   "/images/services/demo.png",
+    href:    "/services/graphic-design",
+  },
+  {
+    id:      "marketing",
+    title:   "Digital Marketing",
+    text:    "Data-driven campaigns that bring in qualified leads and grow your revenue.",
+    tags:    ["Google Ads", "Meta Ads", "Email"],
+    Icon:    Megaphone,
+    image:   "/images/services/demo.png",
+    href:    "/services/digital-marketing",
+  },
 ];
-
-function Visual({ s, zoom, shade }) {
-  const Icon = s.Icon;
-  return (
-    <div className="absolute inset-0" style={{ background: "linear-gradient(135deg,#1B1714 0%,#101114 60%,#2A160D 100%)" }}>
-      <Icon aria-hidden strokeWidth={1} className="absolute right-[8%] top-[10%] size-32 text-white/10" />
-      <img
-        src={s.image} alt="" loading="lazy"
-        onError={(e) => { e.currentTarget.style.display = "none"; }}
-        className={`absolute inset-0 size-full object-cover transition-transform duration-[6000ms] ease-out ${zoom ? "scale-110" : "scale-100"}`}
-      />
-      {shade && (
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(16,17,20,0.88) 0%, rgba(16,17,20,0.15) 50%, transparent 100%)" }} />
-      )}
-    </div>
-  );
-}
-
-function Tags({ tags, onImage }) {
-  return (
-    <ul className="flex flex-wrap gap-1.5">
-      {tags.map((t) => (
-        <li key={t} style={{
-          borderRadius: 99,
-          padding: "4px 10px",
-          fontSize: "0.78rem",
-          fontWeight: 600,
-          background: onImage ? "rgba(255,255,255,0.15)" : "#FFF0E4",
-          color: onImage ? "#fff" : "#E04F00",
-          border: onImage ? "1px solid rgba(255,255,255,0.2)" : "1px solid #FFD4B3",
-        }}>{t}</li>
-      ))}
-    </ul>
-  );
-}
-
-function Cta({ onImage }) {
-  return (
-    <a
-      href="/contact"
-      style={{
-        display: "inline-flex", alignItems: "center", gap: 8,
-        borderRadius: 99, padding: "10px 20px",
-        fontSize: 13, fontWeight: 700,
-        background: onImage ? "#FC6E04" : "#101114",
-        color: onImage ? "#101114" : "#FC6E04",
-        textDecoration: "none",
-        transition: "background .2s, color .2s, transform .2s",
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.transform = ""; }}
-    >
-      Get a free quote <ArrowUpRight size={16} />
-    </a>
-  );
-}
 
 export default function ServicesShowcase() {
   const [active, setActive] = useState(0);
-
-  const preview = (i) => {
-    if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches) setActive(i);
-  };
+  const s = services[active];
 
   return (
-    <section id="services" className="relative overflow-hidden py-14 sm:py-20 lg:py-28" style={{ background: "#F8F7F4" }}>
-      {/* Subtle orange glow */}
-      <div aria-hidden className="pointer-events-none absolute right-0 top-0 w-[500px] h-[500px] rounded-full opacity-20"
-        style={{ background: "radial-gradient(circle, #FC6E04 0%, transparent 70%)", transform: "translate(30%, -30%)" }} />
+    <section id="services" className="relative overflow-hidden py-14 sm:py-20" style={{ background: "#F8F7F4" }}>
+      {/* Subtle orange glow top-right */}
+      <div aria-hidden className="pointer-events-none absolute right-0 top-0 w-[400px] h-[400px] rounded-full opacity-15"
+        style={{ background: "radial-gradient(circle,#FC6E04 0%,transparent 70%)", transform: "translate(30%,-30%)" }} />
 
       <div className="relative mx-auto w-[min(1200px,100%-40px)]">
-        <header className="mb-8 sm:mb-14">
-          <h2 className="mb-3 text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-tight tracking-tight text-[#171717]">
+        {/* Header */}
+        <div className="mb-10 sm:mb-14">
+          <h2 className="text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-tight tracking-tight" style={{ color: "#171717" }}>
             Our Services
           </h2>
-          <p className="max-w-[46ch] text-base leading-relaxed sm:text-xl" style={{ color: "#6B6B70" }}>
+          <p className="mt-2 max-w-[46ch] text-base sm:text-lg leading-relaxed" style={{ color: "#6B6B70" }}>
             We build digital solutions that drive real business results.
           </p>
-        </header>
+        </div>
 
-        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-center lg:gap-12">
-          {/* Service list */}
-          <div className="flex flex-col gap-2">
-            {services.map((s, i) => {
-              const Icon = s.Icon;
-              const open = active === i;
+        {/* Main layout: left list + right image panel */}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-stretch">
+
+          {/* ── Left: service list ──────────────────────────────── */}
+          <div className="flex flex-col gap-1.5">
+            {services.map((svc, i) => {
+              const Icon = svc.Icon;
+              const isActive = active === i;
               return (
-                <div key={s.id} style={{
-                  borderRadius: 16,
-                  border: `1px solid ${open ? "#FFD4B3" : "transparent"}`,
-                  background: open ? "#fff" : "transparent",
-                  boxShadow: open ? "0 8px 30px rgba(252,110,4,0.12)" : "none",
-                  transition: "border-color .2s, background .2s, box-shadow .2s",
-                }}>
-                  <button
-                    type="button"
-                    aria-expanded={open}
-                    onClick={() => setActive(i)}
-                    onMouseEnter={() => preview(i)}
-                    onFocus={() => preview(i)}
-                    style={{
-                      display: "flex", width: "100%", alignItems: "center", gap: 14,
-                      borderRadius: 16, padding: "12px 16px", textAlign: "left",
-                      background: "none", border: "none", cursor: "pointer",
-                      color: open ? "#171717" : "#6B6B70",
-                      transition: "color .2s",
-                    }}
-                  >
-                    <span style={{
-                      width: 40, height: 40, borderRadius: 12, flexShrink: 0,
-                      display: "grid", placeItems: "center",
-                      background: open ? "#FC6E04" : "#FFF0E4",
-                      color: open ? "#101114" : "#FC6E04",
-                      transition: "background .2s, color .2s",
-                    }}>
-                      <Icon size={20} strokeWidth={1.8} />
-                    </span>
-                    <span style={{ flex: 1, fontSize: 16, fontWeight: 700, letterSpacing: "-0.01em" }}>
-                      {s.title}
-                    </span>
-                    <ChevronDown size={18} style={{
-                      flexShrink: 0, transition: "transform .3s",
-                      transform: open ? "rotate(180deg)" : "none",
-                      color: open ? "#FC6E04" : "#929292",
-                    }} />
-                  </button>
+                <div
+                  key={svc.id}
+                  onMouseEnter={() => setActive(i)}
+                  onClick={() => setActive(i)}
+                  style={{
+                    borderRadius: 14,
+                    padding: "12px 16px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 14,
+                    background: isActive ? "#fff" : "transparent",
+                    border: `1px solid ${isActive ? "#FFD4B3" : "transparent"}`,
+                    boxShadow: isActive ? "0 4px 20px rgba(252,110,4,0.10)" : "none",
+                    transition: "background .2s, border-color .2s, box-shadow .2s",
+                  }}
+                >
+                  {/* Icon */}
+                  <span style={{
+                    width: 40, height: 40, borderRadius: 12, flexShrink: 0,
+                    display: "grid", placeItems: "center",
+                    background: isActive ? "#FC6E04" : "#FFF0E4",
+                    color: isActive ? "#101114" : "#FC6E04",
+                    transition: "background .2s, color .2s",
+                  }}>
+                    <Icon size={19} strokeWidth={1.8} />
+                  </span>
 
-                  {/* Mobile accordion */}
-                  <div style={{
-                    display: "grid",
-                    gridTemplateRows: open ? "1fr" : "0fr",
-                    transition: "grid-template-rows .4s",
-                  }} className="lg:hidden">
-                    <div style={{ overflow: "hidden" }}>
-                      <div className="px-4 pb-4">
-                        <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
-                          <Visual s={s} zoom={open} />
-                        </div>
-                        <p className="mb-3 mt-4 text-sm" style={{ color: "#6B6B70" }}>{s.text}</p>
-                        <div className="mb-4"><Tags tags={s.tags} /></div>
-                        <Cta />
-                      </div>
-                    </div>
-                  </div>
+                  {/* Title */}
+                  <span style={{
+                    flex: 1,
+                    fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em",
+                    color: isActive ? "#171717" : "#6B6B70",
+                    transition: "color .2s",
+                  }}>
+                    {svc.title}
+                  </span>
+
+                  {/* Arrow — shown when active */}
+                  <ChevronRight size={16} style={{
+                    flexShrink: 0,
+                    color: isActive ? "#FC6E04" : "transparent",
+                    transition: "color .2s",
+                  }} />
                 </div>
               );
             })}
           </div>
 
-          {/* Desktop stage */}
-          <div className="relative hidden lg:block h-[440px] xl:h-[480px] overflow-hidden rounded-3xl"
-            style={{ boxShadow: "0 30px 70px rgba(16,17,20,0.30)", border: "1px solid rgba(255,255,255,0.08)" }}>
-            {services.map((s, i) => (
-              <div key={s.id} aria-hidden={active !== i}
-                className={`absolute inset-0 transition-opacity duration-700 ${active === i ? "opacity-100" : "opacity-0"}`}>
-                <Visual s={s} zoom={active === i} shade />
+          {/* ── Right: image + info panel ───────────────────────── */}
+          <div className="hidden lg:flex flex-col gap-4">
+            {/* Image — changes on hover, links to service page */}
+            <Link
+              href={s.href}
+              className="group relative block overflow-hidden rounded-3xl flex-1"
+              style={{
+                minHeight: 320,
+                boxShadow: "0 24px 60px rgba(16,17,20,0.22)",
+                border: "1px solid rgba(252,110,4,0.10)",
+              }}
+            >
+              {/* Background */}
+              <div className="absolute inset-0" style={{ background: "linear-gradient(135deg,#1B1714,#101114,#2A160D)" }}>
+                {/* Large icon watermark */}
+                {(() => { const Icon = s.Icon; return <Icon aria-hidden strokeWidth={0.5} className="absolute right-[6%] top-[8%] size-40 text-white/8" />; })()}
               </div>
-            ))}
 
-            {/* Glass info card */}
-            <div key={services[active].id}
-              className="absolute inset-x-4 bottom-4 rounded-2xl p-5 text-white motion-safe:animate-[rise_0.6s_cubic-bezier(0.2,0.8,0.2,1)_both]"
-              style={{ background: "rgba(16,17,20,0.70)", backdropFilter: "blur(16px)", border: "1px solid rgba(252,110,4,0.20)" }}>
-              <h3 className="mb-1.5 text-xl font-bold tracking-tight">{services[active].title}</h3>
-              <p className="mb-3 text-sm" style={{ color: "rgba(255,255,255,0.75)" }}>{services[active].text}</p>
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <Tags tags={services[active].tags} onImage />
-                <Cta onImage />
+              {/* Service image — transition on active change */}
+              {services.map((svc, i) => (
+                <img
+                  key={svc.id}
+                  src={svc.image}
+                  alt={svc.title}
+                  loading="lazy"
+                  onError={(e) => { e.currentTarget.style.display = "none"; }}
+                  className="absolute inset-0 size-full object-cover transition-all duration-700 ease-out group-hover:scale-105"
+                  style={{ opacity: active === i ? 1 : 0, transition: "opacity .6s ease, transform .7s ease" }}
+                />
+              ))}
+
+              {/* Bottom overlay shade */}
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to top,rgba(16,17,20,0.85) 0%,rgba(16,17,20,0.1) 55%,transparent 100%)" }} />
+
+              {/* Info overlay */}
+              <div className="absolute inset-x-5 bottom-5 text-white">
+                <h3 className="text-xl font-bold leading-tight mb-2">{s.title}</h3>
+                <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.72)" }}>{s.text}</p>
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {s.tags.map((tag) => (
+                    <span key={tag} style={{
+                      borderRadius: 99, padding: "3px 10px",
+                      fontSize: "0.75rem", fontWeight: 600,
+                      background: "rgba(255,255,255,0.15)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      color: "#fff",
+                    }}>{tag}</span>
+                  ))}
+                </div>
+                {/* CTA */}
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  borderRadius: 99, padding: "9px 18px",
+                  fontSize: 13, fontWeight: 700,
+                  background: "#FC6E04", color: "#101114",
+                }}>
+                  Learn more <ArrowUpRight size={14} />
+                </span>
               </div>
+            </Link>
+
+            {/* Service quick-links grid — 3 cards */}
+            <div className="grid grid-cols-3 gap-3">
+              {services.filter((_, i) => i !== active).slice(0, 3).map((svc) => {
+                const Icon = svc.Icon;
+                return (
+                  <Link
+                    key={svc.id}
+                    href={svc.href}
+                    style={{
+                      borderRadius: 14, padding: "14px",
+                      background: "#fff",
+                      border: "1px solid #EAE5DF",
+                      textDecoration: "none",
+                      transition: "border-color .2s, box-shadow .2s, transform .2s",
+                      display: "flex", flexDirection: "column", gap: 8,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = "#FFD4B3";
+                      e.currentTarget.style.boxShadow = "0 4px 16px rgba(252,110,4,0.10)";
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = "#EAE5DF";
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.transform = "";
+                    }}
+                  >
+                    <span style={{ width: 32, height: 32, borderRadius: 9, display: "grid", placeItems: "center", background: "#FFF0E4", color: "#FC6E04" }}>
+                      <Icon size={16} strokeWidth={1.8} />
+                    </span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#171717", lineHeight: 1.3 }}>{svc.title}</span>
+                  </Link>
+                );
+              })}
             </div>
+          </div>
+
+          {/* ── Mobile: accordion (accordion opens below each item) ── */}
+          <div className="lg:hidden">
+            {services.map((svc, i) => {
+              const isOpen = active === i;
+              if (!isOpen) return null;
+              return (
+                <div key={svc.id}>
+                  <div className="relative aspect-[16/9] overflow-hidden rounded-2xl mb-4">
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(135deg,#1B1714,#101114)" }} />
+                    <img src={svc.image} alt={svc.title} className="absolute inset-0 size-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top,rgba(16,17,20,0.75) 0%,transparent 60%)" }} />
+                  </div>
+                  <p className="text-sm mb-3" style={{ color: "#6B6B70" }}>{svc.text}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {svc.tags.map((t) => (
+                      <span key={t} style={{ borderRadius: 99, padding: "3px 10px", fontSize: "0.75rem", fontWeight: 600, background: "#FFF0E4", color: "#E04F00" }}>{t}</span>
+                    ))}
+                  </div>
+                  <Link href={svc.href} style={{ display: "inline-flex", alignItems: "center", gap: 6, borderRadius: 99, padding: "10px 20px", fontSize: 13, fontWeight: 700, background: "#101114", color: "#FC6E04", textDecoration: "none" }}>
+                    Learn more <ArrowUpRight size={14} />
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

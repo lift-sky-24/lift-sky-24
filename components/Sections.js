@@ -116,7 +116,7 @@ export function CTABand({ title, sub, button = "Get a Free Quote", href = "/cont
       <Reveal>
         <div
           className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 overflow-hidden rounded-3xl p-8 text-white sm:p-10 md:flex-row md:items-center"
-          style={{ background: "linear-gradient(135deg,#101114 0%,#1B1714 55%,#2A160D 100%)" }}
+          style={{ background: "linear-gradient(135deg,#101114 0%,#1B1714 40%,#2A160D 70%,rgba(252,110,4,0.25) 100%)" }}
         >
           <div className="relative z-10">
             <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>

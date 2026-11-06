@@ -5,7 +5,6 @@ import PageHero     from "@/components/PageHero";
 import { Section, MiniCards, CTABand } from "@/components/Sections";
 import ProcessRoadmap from "@/components/ProcessRoadmap";
 import ServicesShowcase from "@/components/Servicesshowcase";
-import ProjectGrid  from "@/components/ProjectGrid";
 import Testimonials from "@/components/Testimonials";
 import FAQ          from "@/components/FAQ";
 import PricingTable from "@/components/PricingTable";
@@ -13,12 +12,10 @@ import { Button, Reveal } from "@/components/ui";
 import { why, processSteps } from "@/lib/data";
 import { BRAND } from "@/data/site-config";
 import { meta } from "@/lib/seo";
-// Page-specific data — all content lives here, not in the JSX
 import {
   homeAboutSnippet,
   whyCtaCard,
   homeProcess,
-  homePortfolioSection,
   homePricingSection,
   homeFaqSection,
   homeCTA,
@@ -43,9 +40,9 @@ export default function Home() {
       {/* 1. Hero */}
       <HeroBanner />
 
-      {/* Tech stack marquee — black bg, orange separators */}
+      {/* Tech stack marquee */}
       <div className="overflow-hidden">
-        <MarqueeRow items={marqueeItems.tech} duration={4} />
+        <MarqueeRow items={marqueeItems.tech} duration={28} />
       </div>
 
       {/* 2. About snippet — content from data/pages/home.js */}
@@ -90,19 +87,9 @@ export default function Home() {
         <ProcessRoadmap items={processSteps} />
       </Section>
 
-      {/* 6. Featured Projects — data from data/site-config.js → PORTFOLIO */}
-      <Section title={homePortfolioSection.title} tone={homePortfolioSection.tone}>
-        <ProjectGrid limit={homePortfolioSection.limit} cols="lg:grid-cols-3" />
-        <div className="mt-6 text-right">
-          <Link href={homePortfolioSection.viewAllHref} className="text-sm font-semibold text-brand hover:underline">
-            {homePortfolioSection.viewAllLabel}
-          </Link>
-        </div>
-      </Section>
-
-      {/* Services marquee reverse — black bg */}
+      {/* Services marquee reverse */}
       <div className="overflow-hidden">
-        <MarqueeRow items={marqueeItems.services} duration={2} reverse />
+        <MarqueeRow items={marqueeItems.services} duration={22} reverse />
       </div>
 
       {/* 7. Testimonials — data from data/site-config.js → TESTIMONIALS */}
