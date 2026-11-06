@@ -44,7 +44,7 @@ export default function Home() {
 
       {/* Tech stack marquee — black bg, orange separators */}
       <div className="overflow-hidden">
-        <MarqueeRow items={marqueeItems.tech} duration={20} />
+        <MarqueeRow items={marqueeItems.tech} duration={4} />
       </div>
 
       {/* 2. About snippet — content from data/pages/home.js */}
@@ -101,7 +101,7 @@ export default function Home() {
 
       {/* Services marquee reverse — black bg */}
       <div className="overflow-hidden">
-        <MarqueeRow items={marqueeItems.services} duration={16} reverse />
+        <MarqueeRow items={marqueeItems.services} duration={2} reverse />
       </div>
 
       {/* 7. Testimonials — data from data/site-config.js → TESTIMONIALS */}
