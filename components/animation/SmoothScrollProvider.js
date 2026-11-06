@@ -1,12 +1,4 @@
 "use client";
-/**
- * SmoothScrollProvider
- * - Lenis smooth scroll on fine-pointer (mouse) desktop only
- * - Syncs with GSAP ScrollTrigger
- * - On route change: scroll to top only — does NOT refresh AOS
- *   (AOS is init-once; refreshing it would re-animate all elements = flicker)
- * - Proper async cleanup to prevent leaked ScrollTriggers
- */
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
@@ -15,7 +7,7 @@ export default function SmoothScrollProvider({ children }) {
   const cleanupRef = useRef(null);
   const pathname   = usePathname();
 
-  // ── Init Lenis + GSAP sync once on mount ────────────────────────
+  // Init Lenis + GSAP sync once on mount (fine-pointer/mouse only)
   useEffect(() => {
     const isMouse   = window.matchMedia("(pointer:fine)").matches;
     const isReduced = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
@@ -74,9 +66,8 @@ export default function SmoothScrollProvider({ children }) {
     };
   }, []);
 
-  // ── Route change: scroll to top only ───────────────────────────
-  // Do NOT call AOS.refresh() here — it re-animates all [data-aos] elements
-  // Do NOT call ScrollTrigger.refresh() here — it restarts GSAP animations
+  // Route change: scroll to top only.
+  // Do not call AOS.refresh() or ScrollTrigger.refresh() — causes all animations to replay.
   useEffect(() => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });

@@ -1,10 +1,6 @@
 "use client";
-/**
- * GlowOrbs — animated CSS gradient orbs.
- * Uses transform:translate (compositor-only) instead of left/top (layout).
- * Blur capped at 80px to reduce GPU paint cost.
- * Paused when scrolled off-screen via IntersectionObserver.
- */
+// Animated CSS gradient orbs. Uses transform:translate (compositor-only, no layout thrashing).
+// Paused when scrolled off-screen via IntersectionObserver.
 import { useEffect, useRef } from "react";
 
 const ORBS = [
@@ -26,10 +22,10 @@ export default function GlowOrbs({ intensity = 1 }) {
     const container = containerRef.current;
     if (!container) return;
 
-    // Create orb elements using transform:translate (compositor-only — no layout)
+    // Create orb elements using transform:translate (compositor-only)
     const orbEls = ORBS.map((orb) => {
       const el         = document.createElement("div");
-      const blur       = Math.min(orb.size * 0.25, 80); // cap blur at 80px
+      const blur = Math.min(orb.size * 0.25, 80); // capped at 80px
       el.style.cssText = `
         position:absolute;
         border-radius:50%;
@@ -63,16 +59,15 @@ export default function GlowOrbs({ intensity = 1 }) {
         const pos = posRef.current[i];
         const mx  = mouseRef.current.x;
         const my  = mouseRef.current.y;
-        // Gentle float — very subtle mouse attraction (intensity controls it)
+        // Gentle float with subtle mouse attraction
         const targetX = orb.x + Math.sin(t * orb.speed * 60 + i * 2) * 6 + (mx - orb.x) * 0.02 * intensity;
         const targetY = orb.y + Math.cos(t * orb.speed * 60 + i * 1.5) * 5 + (my - orb.y) * 0.02 * intensity;
         pos.x += (targetX - pos.x) * 0.025;
         pos.y += (targetY - pos.y) * 0.025;
 
-        // Use translate instead of left/top — compositor-only, no layout
-        const rect    = container.getBoundingClientRect();
-        const pxX     = (pos.x / 100) * rect.width  - orb.size / 2;
-        const pxY     = (pos.y / 100) * rect.height - orb.size / 2;
+        const rect = container.getBoundingClientRect();
+        const pxX  = (pos.x / 100) * rect.width  - orb.size / 2;
+        const pxY  = (pos.y / 100) * rect.height - orb.size / 2;
         orbEls[i].style.transform = `translate(${pxX}px,${pxY}px)`;
       });
       rafRef.current = requestAnimationFrame(tick);

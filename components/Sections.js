@@ -1,20 +1,12 @@
-/**
- * Sections.js — Server Component.
- * All card content renders in SSR HTML — no CLS.
- * Hover lift uses CSS transitions only (no framer-motion here).
- * HoverCard is a tiny client component for the spring lift effect.
- */
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Reveal, Button, Stagger, StaggerItem } from "./ui";
 
 /* ── Section wrapper ──────────────────────────────────────────────── */
 export function Section({ title, sub, children, tone = "white", id, center = false }) {
-  // Background map matching reference file section styles
   const bgMap = {
-    white:   "",
-    soft:    "bg-gradient-to-b from-white to-[#f7f4ff]",   // reference: services gradient
-    process: "",  // handled via className override
+    white: "",
+    soft:  "bg-gradient-to-b from-white to-[#f7f4ff]",
   };
 
   return (

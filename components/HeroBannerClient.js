@@ -1,14 +1,6 @@
 "use client";
-/**
- * HeroBannerClient — decorative animation layer only.
- * No text content — all content is in the server HeroBanner shell.
- * Fixes:
- *  - Stat counters: SSR renders final value; client resets to 0 BEFORE paint,
- *    then counts up — no flash from final→0→final.
- *  - Hero image parallax via GSAP scrub (transform only, no layout).
- *  - GlowOrbs: ssr:false, compositor-friendly transforms.
- *  - Proper cleanup to avoid leaked GSAP contexts on navigation.
- */
+// Decorative animation layer for HeroBanner (stat counters + image parallax).
+// No text content here — all content is server-rendered in HeroBanner.js.
 import { useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
@@ -32,9 +24,7 @@ export default function HeroBannerClient() {
 
         if (cancelled) return;
 
-        // ── Stat counters ────────────────────────────────────────────
-        // Reset to 0 BEFORE browser paints (synchronously in this microtask)
-        // so the user never sees the final value flash to 0.
+        // Reset to 0 before browser paints so the user never sees a flash
         const statEls = document.querySelectorAll("[data-stat-to]");
         statEls.forEach((el) => {
           el.textContent = "0" + (el.dataset.statSuffix || "");
@@ -54,7 +44,7 @@ export default function HeroBannerClient() {
           });
         });
 
-        // ── Hero image parallax ───────────────────────────────────────
+        // Hero image parallax
         ctx = gsap.context(() => {
           const imgWrap = document.getElementById("hero-img-wrap");
           if (imgWrap) {

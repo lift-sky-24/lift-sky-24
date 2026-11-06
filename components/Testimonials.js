@@ -5,8 +5,6 @@ import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Reveal } from "./ui";
 import { TESTIMONIALS } from "@/data/site-config";
 
-// TODO: replace TESTIMONIALS with real client reviews
-
 const SLIDE_VARIANTS = {
   enter: (dir) => ({ x: dir > 0 ? 60 : -60, opacity: 0 }),
   center: { x: 0, opacity: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
@@ -157,7 +155,7 @@ export default function Testimonials() {
 
             {/* Controls */}
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              {/* Dot indicators — count updates with perPage */}
+              {/* Dot indicators */}
               <div style={{ display: "flex", gap: 6 }}>
                 {Array.from({ length: pages }).map((_, k) => (
                   <button

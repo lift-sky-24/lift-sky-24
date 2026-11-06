@@ -1,8 +1,4 @@
 "use client";
-/**
- * MarqueeRow — infinite horizontal scroll marquee.
- * Black background (#101019) with orange star separators (logo orange #FF6B01).
- */
 import { useRef } from "react";
 
 export default function MarqueeRow({ items = [], duration = 32, reverse = false, className = "" }) {
@@ -32,7 +28,6 @@ export default function MarqueeRow({ items = [], duration = 32, reverse = false,
             className="inline-flex items-center gap-4"
             style={{ userSelect: "none" }}
           >
-            {/* Orange star separator — logo orange color */}
             <span style={{
               color: "#FF6B01",
               fontSize: 18,

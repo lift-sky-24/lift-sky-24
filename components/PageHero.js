@@ -1,9 +1,3 @@
-/**
- * PageHero — server component.
- * Content fully server-rendered — always visible, no flash, no CLS.
- * ParallaxSection REMOVED: it was causing scroll flicker on all inner pages
- * because useScroll() fires on every scroll event and recalculates transforms.
- */
 import Image  from "next/image";
 import { Reveal, Button, Counter } from "./ui";
 
@@ -18,7 +12,6 @@ export default function PageHero({
   stats   = [],
   eyebrow,
 }) {
-  // Detect if image is an external URL (Unsplash etc.) or local
   const isExternal = image.startsWith("http");
 
   return (
@@ -90,7 +83,6 @@ export default function PageHero({
           )}
         </div>
 
-        {/* Hero image — no parallax wrapper, no motion, no scroll listener */}
         <div className="relative">
           {isExternal ? (
             <Image

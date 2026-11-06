@@ -1,15 +1,3 @@
-/**
- * HeroBanner — server component shell.
- * All text rendered in SSR HTML, always visible.
- * HeroBannerClient adds animations on top after mount.
- *
- * NOTE: All className values are in ONE literal string (not array.join)
- * so Tailwind's content scanner can detect every class for purge safety.
- *   1. bg-hero-bg-wash   — dual radial lavender/icy-blue glow
- *   2. before:           — aurora conic-gradient blob (600px, blur 70px, 25% opacity, animated)
- *   3. after:            — 8×8px dot grid (25% opacity, fades right via mask)
- * All three are purely decorative: no pointer-events, no layout shift.
- */
 import Image   from "next/image";
 import Link    from "next/link";
 import dynamic from "next/dynamic";
@@ -99,15 +87,15 @@ export default function HeroBanner() {
 
         {/* ── Right: hero image ────────────────────────────────────── */}
         {/*
-          STEP 3: isolate added so the -z-10 glow child does not fall
-          behind the section background. Glow div is first child.
+          isolate added so the -z-10 glow child does not fall
+          behind the section background.
         */}
         <div
           id="hero-img-wrap"
           className="relative isolate mx-auto aspect-[1000/680] w-full max-w-[600px]"
           style={{ willChange: "transform" }}
         >
-          {/* Glow behind the visual (STEP 3) */}
+          {/* Glow behind the hero image */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-x-[3%] top-[12%] bottom-[6%] -z-10 rounded-[48%] bg-hero-bg-glow blur-[45px] opacity-[.35] animate-hero-bg-spin motion-reduce:animate-none"

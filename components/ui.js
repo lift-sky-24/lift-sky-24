@@ -47,7 +47,6 @@ export function Counter({ to, suffix = "" }) {
 
 /**
  * ParallaxImage — subtle scroll parallax on images.
- * Simplified: no initial animation state that could cause flicker.
  */
 export function ParallaxImage({ children }) {
   const { scrollY } = useScroll();

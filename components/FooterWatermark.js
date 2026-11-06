@@ -1,22 +1,5 @@
 "use client";
-/**
- * FooterWatermark
- * ---------------
- * A single large outlined "LiftSky24" centred behind the whole footer.
- * Purely decorative: aria-hidden, pointer-events-none, select-none.
- *
- * Change WATERMARK_TILT (degrees) to rotate the text without editing classes.
- * Currently 0 — perfectly horizontal.
- *
- * Sizing targets (Inter Black, measured at each breakpoint):
- *   360–639 px  → two stacked lines "Lift" / "Sky24" at 28vw → widest line ≈ 82% vw
- *   640–1023 px → one line at 17vw  → text ≈ 86% vw at 768 px
- *   1024–1919px → one line at 15vw, capped at 19rem  → ≈ 76–78% at 1280–1440 px
- *   1920px +    → capped at 19rem, centered, never touches edges
- *
- * Logo orange: #FC6E04
- */
-
+// Change WATERMARK_TILT (degrees) to rotate the text without editing classes.
 import { motion, useReducedMotion } from "framer-motion";
 import { BRAND } from "@/data/site-config";
 
@@ -52,21 +35,19 @@ export default function FooterWatermark() {
         transition={floatTransition}
         style={{ rotate: WATERMARK_TILT }}
         className={[
-          /* Layout */
           "font-black leading-[0.8] tracking-[-0.05em] whitespace-nowrap text-center",
-          /* Colour — transparent fill + optional vertical orange fade */
           "text-transparent",
           "bg-gradient-to-b from-[rgba(252,110,4,0.10)] to-transparent bg-clip-text",
-          /* Outline stroke — mobile vs tablet/desktop */
+          // 1px stroke on mobile, 1.5px on tablet+
           "[-webkit-text-stroke:1px_rgba(252,110,4,0.30)]",
           "sm:[-webkit-text-stroke:1.5px_rgba(252,110,4,0.28)]",
-          /* Responsive font-size using length: hint so Tailwind won't treat value as a color */
+          // length: hint prevents Tailwind treating vw values as colors
           "text-[length:28vw]",
           "sm:text-[length:17vw]",
           "lg:text-[length:min(15vw,19rem)]",
         ].join(" ")}
       >
-        {/* Mobile: two stacked lines; tablet+: single line */}
+      {/* Mobile: two stacked lines; tablet+: single line */}
         <span className="block sm:hidden">
           <span className="block">Lift</span>
           <span className="block">Sky24</span>

@@ -5,11 +5,6 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { NAV } from "@/data/site-config";
 
-/**
- * Header — scroll behavior uses direct DOM classList manipulation
- * instead of React state so there are ZERO React re-renders on scroll.
- * This eliminates header flicker completely.
- */
 export default function Header() {
   const [open,    setOpen]    = useState(false);
   const [openSub, setOpenSub] = useState(null);
@@ -18,13 +13,12 @@ export default function Header() {
 
   useEffect(() => { setOpen(false); setOpenSub(null); }, [path]);
 
-  // Scroll handler — manipulates classList DIRECTLY, no setState, no re-render
-  // Uses rAF throttling to limit to one update per frame
+  // Direct DOM classList manipulation — no React state on scroll, no re-renders
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
 
-    // Detect touch device — skip hide-on-scroll on mobile (causes flicker)
+    // Skip hide-on-scroll on touch devices to prevent flicker
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
 
     let rafId  = null;
@@ -36,14 +30,12 @@ export default function Header() {
       lastScrollY = y;
       rafId = null;
 
-      // Scrolled shadow
       if (y > 10) {
         header.classList.add("scrolled");
       } else {
         header.classList.remove("scrolled");
       }
 
-      // Hide on scroll down / show on scroll up — desktop only
       if (!isTouch) {
         if (y > 80) {
           if (diff > 6)  header.classList.add("hidden");
@@ -55,7 +47,6 @@ export default function Header() {
     };
 
     const onScroll = () => {
-      // Throttle to one rAF per scroll event batch
       if (!rafId) rafId = requestAnimationFrame(update);
     };
 

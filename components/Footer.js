@@ -64,19 +64,15 @@ export default function Footer() {
     .replace(/Flat no\.\s*/i, "");
 
   return (
-    /* position:relative so FooterWatermark (absolute inset-0) is clipped to the footer */
     <footer style={{ position: "relative", background: "#10111a", color: "#fff", overflow: "hidden" }}>
 
-      {/* ── Single centred watermark — sits behind everything at z-0 ── */}
       <FooterWatermark />
 
-      {/* ── All content — z-10 so it renders above the watermark ─────── */}
       <div style={{ position: "relative", zIndex: 10, borderTop: "1px solid rgba(255,255,255,.05)" }}>
         <div style={{ width: "min(1200px,calc(100% - 40px))", margin: "auto", padding: "52px 0 0" }}>
 
           <div className="footer-grid">
 
-            {/* ── Col 1: Brand ─────────────────────────────────────── */}
             <div>
               <Link href="/" aria-label="LiftSky24 home" style={{ display: "inline-flex", marginBottom: 18 }}>
                 <motion.div
@@ -114,7 +110,6 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* ── Col 2: Quick Links ────────────────────────────────── */}
             <div>
               <h4 style={h4Style}>Quick Links</h4>
               {quickLinks.map((x) => (
@@ -122,7 +117,6 @@ export default function Footer() {
               ))}
             </div>
 
-            {/* ── Col 3: Services ──────────────────────────────────── */}
             <div>
               <h4 style={h4Style}>Services</h4>
               {SERVICES.map((s) => (
@@ -130,7 +124,6 @@ export default function Footer() {
               ))}
             </div>
 
-            {/* ── Col 4: Contact + Newsletter ──────────────────────── */}
             <div>
               <h4 style={h4Style}>Contact</h4>
               <p style={{ ...colStyle, fontSize: 12, marginBottom: 10 }}>
@@ -185,7 +178,7 @@ export default function Footer() {
               )}
             </div>
 
-          </div>{/* /footer-grid */}
+          </div>
 
           {/* Bottom bar */}
           <div style={{ borderTop: "1px solid rgba(255,255,255,.06)", marginTop: 40, padding: "18px 0", display: "flex", justifyContent: "space-between", alignItems: "center", color: "#6b6d7d", fontSize: 12, flexWrap: "wrap", gap: 10 }}>
