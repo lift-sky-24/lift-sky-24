@@ -1,6 +1,6 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import HeroBanner   from "@/components/HeroBanner";
+import HeroSection  from "@/components/HeroSection";
 import PageHero     from "@/components/PageHero";
 import { Section, MiniCards, CTABand } from "@/components/Sections";
 import ProcessRoadmap from "@/components/ProcessRoadmap";
@@ -38,7 +38,7 @@ export default function Home() {
   return (
     <>
       {/* 1. Hero */}
-      <HeroBanner />
+      <HeroSection />
 
       {/* Tech stack marquee */}
       <div className="overflow-hidden">
