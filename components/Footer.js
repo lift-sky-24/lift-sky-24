@@ -50,7 +50,13 @@ function FooterLink({ href, children }) {
 /* Shared style for the background LiftSky24 text in each column */
 const watermarkStyle = {
   position: "absolute",
-  top: 0, left: 0, right: 0,
+  top: "50%",
+  left: 0,
+  right: 0,
+  /* translateY(-50%) centres it; Framer Motion adds y offset for bounce */
+  translateY: "-50%",
+  rotate: "-6deg",
+  transformOrigin: "left center",
   fontSize: "clamp(2rem,3.5vw,2.8rem)",
   fontWeight: 900,
   letterSpacing: "-0.04em",
@@ -61,8 +67,7 @@ const watermarkStyle = {
   lineHeight: 1,
   zIndex: 0,
   pointerEvents: "none",
-  transform: "rotate(-6deg) translateX(-4%)",
-  transformOrigin: "left top",
+  marginLeft: "-4%",
 };
 
 export default function Footer() {
@@ -132,13 +137,13 @@ export default function Footer() {
               <motion.span
                 aria-hidden="true"
                 style={watermarkStyle}
-                animate={{ y: [0, -8, 0] }}
+                animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatDelay: 1.8, delay: 0 }}
               >
                 {BRAND.name}
               </motion.span>
               {/* Links on top */}
-              <div style={{ position: "relative", zIndex: 2, paddingTop: "2.4rem" }}>
+              <div style={{ position: "relative", zIndex: 2 }}>
                 <h4 style={h4Style}>Quick Links</h4>
                 {quickLinks.map((x) => (
                   <FooterLink key={x.label} href={x.href}>{x.label}</FooterLink>
@@ -151,12 +156,12 @@ export default function Footer() {
               <motion.span
                 aria-hidden="true"
                 style={watermarkStyle}
-                animate={{ y: [0, -8, 0] }}
+                animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatDelay: 1.8, delay: 0.4 }}
               >
                 {BRAND.name}
               </motion.span>
-              <div style={{ position: "relative", zIndex: 2, paddingTop: "2.4rem" }}>
+              <div style={{ position: "relative", zIndex: 2 }}>
                 <h4 style={h4Style}>Services</h4>
                 {SERVICES.map((s) => (
                   <FooterLink key={s.slug} href={s.href}>{s.name}</FooterLink>
@@ -169,12 +174,12 @@ export default function Footer() {
               <motion.span
                 aria-hidden="true"
                 style={watermarkStyle}
-                animate={{ y: [0, -8, 0] }}
+                animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity, repeatDelay: 1.8, delay: 0.8 }}
               >
                 {BRAND.name}
               </motion.span>
-              <div style={{ position: "relative", zIndex: 2, paddingTop: "2.4rem" }}>
+              <div style={{ position: "relative", zIndex: 2 }}>
                 <h4 style={h4Style}>Contact</h4>
                 <p style={{ ...colStyle, fontSize: 12, marginBottom: 10 }}>
                   {addressLine1},<br />
