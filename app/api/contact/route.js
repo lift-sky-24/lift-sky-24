@@ -3,9 +3,8 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, email, details } = body;
+    const { name, email, phone, details } = body;
 
-    // Basic server-side validation
     if (!name || name.trim().length < 2)
       return NextResponse.json({ error: "Invalid name." }, { status: 400 });
     if (!email || !/^\S+@\S+\.\S+$/.test(email))
@@ -17,14 +16,14 @@ export async function POST(request) {
     const webhookReady = webhookUrl && webhookUrl.startsWith("https://script.google.com");
 
     if (!webhookReady) {
-      // Webhook not configured yet — log and return success so form still works
-      console.warn("[contact] GOOGLE_SHEET_WEBHOOK not set or invalid. Data:", { name, email, details });
+      console.warn("[contact] GOOGLE_SHEET_WEBHOOK not set or invalid. Data:", { name, email, phone, details });
       return NextResponse.json({ success: true, dev: true });
     }
 
     const payload = {
       name:      name.trim(),
       email:     email.trim().toLowerCase(),
+      phone:     phone ? phone.trim() : "",
       details:   details.trim(),
       timestamp: new Date().toISOString(),
       source:    "liftsky24.com contact form",

@@ -3,6 +3,7 @@ import "aos/dist/aos.css";
 import Header              from "@/components/Header";
 import Footer              from "@/components/Footer";
 import WhatsAppFAB         from "@/components/WhatsAppFAB";
+import LeadPopup           from "@/components/LeadPopup";
 import SmoothScrollProvider from "@/components/animation/SmoothScrollProvider";
 import AOSProvider          from "@/components/animation/AOSProvider";
 import ScrollProgressBar    from "@/components/animation/ScrollProgressBar";
@@ -87,6 +88,7 @@ export default function RootLayout({ children }) {
             </main>
             <Footer />
             <WhatsAppFAB />
+            <LeadPopup />
           </AOSProvider>
         </SmoothScrollProvider>
       </body>

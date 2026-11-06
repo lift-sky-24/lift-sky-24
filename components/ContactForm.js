@@ -3,9 +3,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
 
-const empty = { name: "", email: "", details: "" };
+const empty = { name: "", email: "", phone: "", details: "" };
 
-/* Animated field wrapper with floating label */
 function AnimField({ id, label, error, children }) {
   return (
     <motion.div
@@ -43,6 +42,8 @@ export default function ContactForm() {
     const e = {};
     if (form.name.trim().length < 2)          e.name    = "Please enter your name.";
     if (!/^\S+@\S+\.\S+$/.test(form.email))   e.email   = "Enter a valid email address.";
+    if (form.phone && !/^[+\d\s\-()]{7,15}$/.test(form.phone.trim()))
+                                               e.phone   = "Enter a valid phone number.";
     if (form.details.trim().length < 10)       e.details = "Tell us a little more (at least 10 characters).";
     return e;
   };
@@ -77,7 +78,7 @@ export default function ContactForm() {
   };
 
   const inputCls = (k) =>
-    `mt-1 w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none transition-all duration-200 focus:border-brand focus:ring-2 focus:ring-brand/20 focus:scale-[1.01] disabled:opacity-60 ${errors[k] ? "border-red-400" : "border-slate-200"}`;
+    `w-full rounded-xl border bg-white px-4 py-3 text-sm outline-none transition-all duration-200 focus:border-brand focus:ring-2 focus:ring-brand/20 focus:scale-[1.01] disabled:opacity-60 ${errors[k] ? "border-red-400" : "border-slate-200"}`;
 
   const field = (k) => ({
     id:       k,
@@ -90,7 +91,6 @@ export default function ContactForm() {
     className: inputCls(k),
   });
 
-  /* ── Success state ── */
   if (status === "success") {
     return (
       <motion.div
@@ -98,28 +98,18 @@ export default function ContactForm() {
         initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
-        {/* Animated checkmark circle */}
         <motion.span
           className="grid h-16 w-16 place-items-center rounded-full bg-emerald-50 text-emerald-500"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
+          initial={{ scale: 0 }} animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
         >
           <CheckCircle2 size={32} />
         </motion.span>
-        <motion.h3
-          className="text-lg font-bold text-navy-900"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-        >
+        <motion.h3 className="text-lg font-bold text-navy-900" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
           Message Received!
         </motion.h3>
-        <motion.p
-          className="text-sm text-slate-500 max-w-xs"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}
-        >
-          Thanks for reaching out. We&apos;ve saved your enquiry and will get back to you within one business day.
+        <motion.p className="text-sm text-slate-500 max-w-xs" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
+          Thanks for reaching out. We&apos;ll get back to you within one business day.
         </motion.p>
         <motion.button
           onClick={() => setStatus("idle")}
@@ -142,6 +132,10 @@ export default function ContactForm() {
         <input type="email" autoComplete="email" placeholder="Enter your email" {...field("email")} />
       </AnimField>
 
+      <AnimField id="phone" label="Phone Number" error={errors.phone}>
+        <input type="tel" autoComplete="tel" placeholder="+91 98765 43210" {...field("phone")} />
+      </AnimField>
+
       <AnimField id="details" label="Project Details *" error={errors.details}>
         <textarea rows={4} placeholder="Tell us about your project" {...field("details")} />
       </AnimField>
@@ -162,7 +156,7 @@ export default function ContactForm() {
         type="submit"
         disabled={status === "sending"}
         className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-brand-gradient px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110 active:scale-[.98] disabled:opacity-70 disabled:cursor-not-allowed"
-        whileHover={{ scale: 1.02, boxShadow: "0 8px 24px rgba(101,87,255,.35)" }}
+        whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
         {status === "sending"
