@@ -52,6 +52,34 @@ function FooterLink({ href, children }) {
   );
 }
 
+/* Bounce animation variants — each copy at different delay */
+const bounceVariants = {
+  initial: { y: 0 },
+  animate: (delay) => ({
+    y: [0, -10, 0],
+    transition: {
+      delay,
+      duration: 2.2,
+      ease: "easeInOut",
+      repeat: Infinity,
+      repeatDelay: 1.5,
+    },
+  }),
+};
+
+/* Brand name text style — orange outline, transparent fill */
+const brandTextStyle = {
+  fontSize: "clamp(1.8rem,3.2vw,3rem)",
+  fontWeight: 900,
+  letterSpacing: "-0.04em",
+  color: "transparent",
+  WebkitTextStroke: "1.5px rgba(255,107,1,0.35)",
+  userSelect: "none",
+  whiteSpace: "nowrap",
+  lineHeight: 1,
+  display: "block",
+};
+
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [msg,   setMsg]   = useState({ ok: false, text: "" });
@@ -64,26 +92,79 @@ export default function Footer() {
     setEmail("");
   };
 
-  // Address — "Flat No." removed
   const addressLine1 = CONTACT.address.line1.replace(/Flat No\.\s*/i, "").replace(/Flat no\.\s*/i, "");
 
   return (
     <footer style={{ background: "#10111a", color: "#fff", overflow: "hidden" }}>
-
-      {/* ── Main grid ─────────────────────────────────────────────── */}
       <div style={{ borderTop: "1px solid rgba(255,255,255,.05)" }}>
         <div style={{ width: "min(1200px,calc(100% - 40px))", margin: "auto", padding: "52px 0 0" }}>
 
           {/*
-            Footer 4-col grid.
-            Cols 2-4 (Quick Links, Services, Contact) share a
-            relative wrapper so "LiftSky24" can be absolutely
-            positioned behind them as a large orange-outline watermark.
+            ── 3× "LiftSky24" row — spans cols 2-4 above links ──────
+            Each copy is full, complete, no clipping, bounce animated.
+            Sits in a dedicated row ABOVE the footer-grid columns.
+            Uses CSS grid to align each brand text to its column.
           */}
+          <div
+            aria-hidden="true"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1.4fr 1fr 1fr 1fr", /* matches .footer-grid */
+              gap: 30,
+              marginBottom: 8,
+            }}
+          >
+            {/* Col 1: empty — aligns with brand column */}
+            <div />
+
+            {/* Col 2: Quick Links brand text */}
+            <div style={{ display: "flex", alignItems: "flex-end", paddingBottom: 6, overflow: "visible" }}>
+              <motion.span
+                style={brandTextStyle}
+                custom={0}
+                variants={bounceVariants}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: false, amount: 0.5 }}
+              >
+                {BRAND.name}
+              </motion.span>
+            </div>
+
+            {/* Col 3: Services brand text */}
+            <div style={{ display: "flex", alignItems: "flex-end", paddingBottom: 6, overflow: "visible" }}>
+              <motion.span
+                style={brandTextStyle}
+                custom={0.4}
+                variants={bounceVariants}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: false, amount: 0.5 }}
+              >
+                {BRAND.name}
+              </motion.span>
+            </div>
+
+            {/* Col 4: Contact brand text */}
+            <div style={{ display: "flex", alignItems: "flex-end", paddingBottom: 6, overflow: "visible" }}>
+              <motion.span
+                style={brandTextStyle}
+                custom={0.8}
+                variants={bounceVariants}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: false, amount: 0.5 }}
+              >
+                {BRAND.name}
+              </motion.span>
+            </div>
+          </div>
+
+          {/* ── Footer 4-col grid ──────────────────────────────────── */}
           <div className="footer-grid">
 
-            {/* ── Col 1: Brand ──────────────────────────────────── */}
-            <div style={{ position: "relative", zIndex: 1 }}>
+            {/* Col 1: Brand */}
+            <div>
               <Link href="/" aria-label="LiftSky24 home" style={{ display: "inline-flex", marginBottom: 18 }}>
                 <motion.div
                   style={{ background: "#fff", borderRadius: 10, padding: "6px 12px", display: "inline-flex" }}
@@ -99,8 +180,6 @@ export default function Footer() {
               <p style={{ ...colStyle, fontSize: 12 }}>
                 Web, apps, software, SEO, social media, graphic design and digital marketing — all under one roof.
               </p>
-
-              {/* Social icons */}
               <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
                 {SOCIAL_ICONS.filter(({ key }) => SOCIAL[key]).map(({ key, Icon, label }, i) => (
                   <motion.a
@@ -122,177 +201,75 @@ export default function Footer() {
               </div>
             </div>
 
-            {/*
-              ── Cols 2-4 wrapper — "LiftSky24" as background ───────
-              Position: relative so the big text is behind the links.
-              The brand text is absolute, centered, huge, orange outline.
-            */}
-            <div
-              style={{
-                display: "contents", /* cols still flow into footer-grid */
-              }}
-            >
-              {/* Quick Links */}
-              <div style={{ position: "relative" }}>
-                {/* LiftSky24 watermark — behind Quick Links column */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    overflow: "hidden",
-                    pointerEvents: "none",
-                    zIndex: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <span style={{
-                    fontSize: "clamp(2.5rem,6vw,5rem)",
-                    fontWeight: 900,
-                    letterSpacing: "-0.04em",
-                    color: "transparent",
-                    WebkitTextStroke: "1px rgba(255,107,1,0.22)",
-                    userSelect: "none",
-                    whiteSpace: "nowrap",
-                    transform: "rotate(-8deg)",
-                    opacity: 0.9,
-                  }}>
-                    {BRAND.name}
-                  </span>
-                </div>
-                <div style={{ position: "relative", zIndex: 2 }}>
-                  <h4 style={h4Style}>Quick Links</h4>
-                  {quickLinks.map((x) => (
-                    <FooterLink key={x.label} href={x.href}>{x.label}</FooterLink>
-                  ))}
-                </div>
-              </div>
+            {/* Col 2: Quick Links */}
+            <div>
+              <h4 style={h4Style}>Quick Links</h4>
+              {quickLinks.map((x) => (
+                <FooterLink key={x.label} href={x.href}>{x.label}</FooterLink>
+              ))}
+            </div>
 
-              {/* Services */}
-              <div style={{ position: "relative" }}>
-                {/* LiftSky24 watermark — behind Services column */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    overflow: "hidden",
-                    pointerEvents: "none",
-                    zIndex: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <span style={{
-                    fontSize: "clamp(2.5rem,6vw,5rem)",
-                    fontWeight: 900,
-                    letterSpacing: "-0.04em",
-                    color: "transparent",
-                    WebkitTextStroke: "1px rgba(255,107,1,0.22)",
-                    userSelect: "none",
-                    whiteSpace: "nowrap",
-                    transform: "rotate(-8deg)",
-                    opacity: 0.9,
-                  }}>
-                    {BRAND.name}
-                  </span>
-                </div>
-                <div style={{ position: "relative", zIndex: 2 }}>
-                  <h4 style={h4Style}>Services</h4>
-                  {SERVICES.map((s) => (
-                    <FooterLink key={s.slug} href={s.href}>{s.name}</FooterLink>
-                  ))}
-                </div>
-              </div>
+            {/* Col 3: Services */}
+            <div>
+              <h4 style={h4Style}>Services</h4>
+              {SERVICES.map((s) => (
+                <FooterLink key={s.slug} href={s.href}>{s.name}</FooterLink>
+              ))}
+            </div>
 
-              {/* Contact + newsletter */}
-              <div style={{ position: "relative" }}>
-                {/* LiftSky24 watermark — behind Contact column */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    overflow: "hidden",
-                    pointerEvents: "none",
-                    zIndex: 0,
-                    display: "flex",
-                    alignItems: "flex-start",
-                    justifyContent: "center",
-                    paddingTop: "20%",
-                  }}
-                >
-                  <span style={{
-                    fontSize: "clamp(2.5rem,6vw,5rem)",
-                    fontWeight: 900,
-                    letterSpacing: "-0.04em",
-                    color: "transparent",
-                    WebkitTextStroke: "1px rgba(255,107,1,0.22)",
-                    userSelect: "none",
-                    whiteSpace: "nowrap",
-                    transform: "rotate(-8deg)",
-                    opacity: 0.9,
-                  }}>
-                    {BRAND.name}
-                  </span>
-                </div>
-                <div style={{ position: "relative", zIndex: 2 }}>
-                  <h4 style={h4Style}>Contact</h4>
-                  <p style={{ ...colStyle, fontSize: 12, marginBottom: 10 }}>
-                    {addressLine1},<br />
-                    {CONTACT.address.line2},<br />
-                    {CONTACT.address.city} – {CONTACT.address.pin}
-                  </p>
-                  <a
-                    href={`mailto:${CONTACT.email}`}
-                    style={{ ...colStyle, fontSize: 13, display: "block", margin: "4px 0", transition: "color .2s" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
-                  >
-                    {CONTACT.email}
-                  </a>
-                  <a
-                    href={CONTACT.phoneTel}
-                    style={{ ...colStyle, fontSize: 13, display: "block", margin: "4px 0 12px", transition: "color .2s" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
-                  >
-                    {CONTACT.phone}
-                  </a>
-                  <p style={{ ...colStyle, fontSize: 11, marginBottom: 16 }}>{CONTACT.hours}</p>
+            {/* Col 4: Contact + newsletter */}
+            <div>
+              <h4 style={h4Style}>Contact</h4>
+              <p style={{ ...colStyle, fontSize: 12, marginBottom: 10 }}>
+                {addressLine1},<br />
+                {CONTACT.address.line2},<br />
+                {CONTACT.address.city} – {CONTACT.address.pin}
+              </p>
+              <a
+                href={`mailto:${CONTACT.email}`}
+                style={{ ...colStyle, fontSize: 13, display: "block", margin: "4px 0", transition: "color .2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
+              >
+                {CONTACT.email}
+              </a>
+              <a
+                href={CONTACT.phoneTel}
+                style={{ ...colStyle, fontSize: 13, display: "block", margin: "4px 0 12px", transition: "color .2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#FF6B01")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#b4b5c1")}
+              >
+                {CONTACT.phone}
+              </a>
+              <p style={{ ...colStyle, fontSize: 11, marginBottom: 16 }}>{CONTACT.hours}</p>
 
-                  <p style={{ fontSize: 10, fontWeight: 900, textTransform: "uppercase", letterSpacing: ".1em", color: "#fff", marginBottom: 8 }}>Newsletter</p>
-                  <form onSubmit={subscribe} noValidate style={{ display: "flex", gap: 6 }}>
-                    <label htmlFor="footer-newsletter" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)" }}>
-                      Email address
-                    </label>
-                    <input
-                      id="footer-newsletter"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      style={{ flex: 1, minWidth: 0, background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 99, padding: "8px 14px", fontSize: 12, color: "#fff", outline: "none" }}
-                    />
-                    <motion.button
-                      type="submit"
-                      style={{ background: "linear-gradient(110deg,#FF6B01,#ff4fa3)", color: "#fff", border: "none", borderRadius: 99, padding: "8px 14px", fontSize: 12, fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" }}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.96 }}
-                    >
-                      Subscribe
-                    </motion.button>
-                  </form>
-                  {msg.text && (
-                    <p role="status" aria-live="polite" style={{ fontSize: 11, marginTop: 6, color: msg.ok ? "#6ee7b7" : "#fca5a5" }}>
-                      {msg.text}
-                    </p>
-                  )}
-                </div>
-              </div>
+              <p style={{ fontSize: 10, fontWeight: 900, textTransform: "uppercase", letterSpacing: ".1em", color: "#fff", marginBottom: 8 }}>Newsletter</p>
+              <form onSubmit={subscribe} noValidate style={{ display: "flex", gap: 6 }}>
+                <label htmlFor="footer-newsletter" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)" }}>
+                  Email address
+                </label>
+                <input
+                  id="footer-newsletter"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  style={{ flex: 1, minWidth: 0, background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 99, padding: "8px 14px", fontSize: 12, color: "#fff", outline: "none" }}
+                />
+                <motion.button
+                  type="submit"
+                  style={{ background: "linear-gradient(110deg,#FF6B01,#ff4fa3)", color: "#fff", border: "none", borderRadius: 99, padding: "8px 14px", fontSize: 12, fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  Subscribe
+                </motion.button>
+              </form>
+              {msg.text && (
+                <p role="status" aria-live="polite" style={{ fontSize: 11, marginTop: 6, color: msg.ok ? "#6ee7b7" : "#fca5a5" }}>
+                  {msg.text}
+                </p>
+              )}
             </div>
 
           </div>{/* /footer-grid */}
