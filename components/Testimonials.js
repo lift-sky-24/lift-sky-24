@@ -94,12 +94,27 @@ function TestimonialCard({ t, delay = 0 }) {
 }
 
 export default function Testimonials() {
-  const items  = TESTIMONIALS;
-  const total  = items.length;              // 4
-  const [page, setPage]   = useState(0);   // 0 = items[0,1], 1 = items[2,3]
-  const [dir,  setDir]    = useState(1);
+  const items = TESTIMONIALS;
+
+  // perPage: 1 on mobile (<640px), 2 on tablet/desktop
+  const [perPage, setPerPage] = useState(2);
+
+  useEffect(() => {
+    const update = () => setPerPage(window.innerWidth < 640 ? 1 : 2);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const total = items.length;
+  const pages = Math.ceil(total / perPage);
+
+  const [page,   setPage]   = useState(0);
+  const [dir,    setDir]    = useState(1);
   const [paused, setPaused] = useState(false);
-  const pages = Math.ceil(total / 2);      // 2 pages of 2
+
+  // Reset to page 0 when perPage changes to avoid out-of-range index
+  useEffect(() => { setPage(0); }, [perPage]);
 
   const go = (d) => {
     setDir(d);
@@ -111,9 +126,9 @@ export default function Testimonials() {
     if (paused) return;
     const id = setInterval(() => go(1), 6000);
     return () => clearInterval(id);
-  }, [paused, page]);
+  }, [paused, page, perPage]);
 
-  const pair = [items[page * 2], items[page * 2 + 1]].filter(Boolean);
+  const slice = items.slice(page * perPage, page * perPage + perPage).filter(Boolean);
 
   return (
     <section
@@ -142,7 +157,7 @@ export default function Testimonials() {
 
             {/* Controls */}
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              {/* Dot indicators */}
+              {/* Dot indicators — count updates with perPage */}
               <div style={{ display: "flex", gap: 6 }}>
                 {Array.from({ length: pages }).map((_, k) => (
                   <button
@@ -164,7 +179,7 @@ export default function Testimonials() {
               <button
                 onClick={() => go(-1)}
                 aria-label="Previous"
-                style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(16,17,26,.12)", background: "#fff", cursor: "pointer", display: "grid", placeItems: "center", transition: "background .2s, transform .2s" }}
+                style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(16,17,26,.12)", background: "#fff", cursor: "pointer", display: "grid", placeItems: "center", transition: "background .2s" }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = "#0C1323"; e.currentTarget.style.color = "#fff"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "inherit"; }}
               >
@@ -173,7 +188,7 @@ export default function Testimonials() {
               <button
                 onClick={() => go(1)}
                 aria-label="Next"
-                style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(16,17,26,.12)", background: "#fff", cursor: "pointer", display: "grid", placeItems: "center", transition: "background .2s, transform .2s" }}
+                style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(16,17,26,.12)", background: "#fff", cursor: "pointer", display: "grid", placeItems: "center", transition: "background .2s" }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = "#FF6B01"; e.currentTarget.style.color = "#fff"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "inherit"; }}
               >
@@ -183,11 +198,11 @@ export default function Testimonials() {
           </div>
         </Reveal>
 
-        {/* 2 cards — slide in/out together */}
+        {/* Cards — slide in/out */}
         <div style={{ position: "relative", overflow: "hidden" }}>
           <AnimatePresence custom={dir} mode="wait">
             <motion.div
-              key={page}
+              key={`${page}-${perPage}`}
               custom={dir}
               variants={SLIDE_VARIANTS}
               initial="enter"
@@ -195,11 +210,11 @@ export default function Testimonials() {
               exit="exit"
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
+                gridTemplateColumns: perPage === 1 ? "1fr" : "1fr 1fr",
                 gap: 20,
               }}
             >
-              {pair.map((t, i) => (
+              {slice.map((t, i) => (
                 <TestimonialCard key={t.name} t={t} delay={i * 0.07} />
               ))}
             </motion.div>
@@ -209,7 +224,7 @@ export default function Testimonials() {
         {/* Progress bar */}
         <div style={{ marginTop: 20, height: 2, background: "rgba(16,17,26,.08)", borderRadius: 2, overflow: "hidden" }}>
           <motion.div
-            key={page}
+            key={`${page}-${perPage}`}
             style={{ height: "100%", background: "linear-gradient(90deg,#0C1323,#FF6B01)", transformOrigin: "left" }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: paused ? undefined : 1 }}
@@ -217,12 +232,6 @@ export default function Testimonials() {
           />
         </div>
 
-        {/* Mobile: single column */}
-        <style>{`
-          @media (max-width: 640px) {
-            .testimonial-grid { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
       </div>
     </section>
   );
