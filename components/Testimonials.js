@@ -1,229 +1,228 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Quote } from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Reveal } from "./ui";
 import { TESTIMONIALS } from "@/data/site-config";
 
 // TODO: replace TESTIMONIALS with real client reviews
 
-// Card gradient palettes — inspired by reference tile cards
-const CARD_PALETTES = [
-  { bg: "linear-gradient(145deg,#ffe8d4,#ffb9ce)",  text: "#14121f", accent: "#FF6B01" },
-  { bg: "linear-gradient(145deg,#e2d9ff,#9b86ff)",  text: "#14121f", accent: "#7357ff" },
-  { bg: "linear-gradient(145deg,#d9f0ff,#809de8)",  text: "#14121f", accent: "#2563eb" },
-  { bg: "linear-gradient(145deg,#d9ffeb,#7fd3a1)",  text: "#14121f", accent: "#059669" },
-];
+const SLIDE_VARIANTS = {
+  enter: (dir) => ({ x: dir > 0 ? 60 : -60, opacity: 0 }),
+  center: { x: 0, opacity: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+  exit:   (dir) => ({ x: dir > 0 ? -60 : 60, opacity: 0, transition: { duration: 0.3, ease: [0.55, 0, 1, 0.45] } }),
+};
 
-// Orb decoration inside each card
-function CardOrb({ color }) {
+function TestimonialCard({ t, delay = 0 }) {
   return (
-    <div
-      aria-hidden="true"
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay, ease: "easeOut" }}
       style={{
-        position: "absolute",
-        width: 140,
-        height: 140,
-        borderRadius: "45% 55% 65% 35%",
-        right: -24,
-        bottom: -28,
-        background: `linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.08))`,
-        transform: "rotate(28deg)",
-        transition: "transform .7s ease",
-        pointerEvents: "none",
+        background: "#fff",
+        border: "1px solid rgba(16,17,26,.08)",
+        borderRadius: 20,
+        padding: "28px 26px 24px",
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        height: "100%",
+        position: "relative",
+        overflow: "hidden",
       }}
-    />
+    >
+      {/* Subtle top-left accent line */}
+      <div style={{
+        position: "absolute", top: 0, left: 0,
+        width: 48, height: 3,
+        background: "linear-gradient(90deg,#FF6B01,#0C1323)",
+        borderRadius: "0 0 4px 0",
+      }} />
+
+      {/* Quote icon */}
+      <Quote
+        size={22}
+        style={{ color: "#FF6B01", opacity: 0.5, flexShrink: 0 }}
+        aria-hidden="true"
+      />
+
+      {/* Quote text */}
+      <blockquote style={{
+        margin: 0, flex: 1,
+        fontSize: 14, lineHeight: 1.75,
+        color: "#3a3b4a",
+        fontStyle: "italic",
+      }}>
+        &ldquo;{t.quote}&rdquo;
+      </blockquote>
+
+      {/* Result tag */}
+      {t.result && (
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 5,
+          padding: "4px 10px",
+          borderRadius: 99,
+          background: "rgba(255,107,1,0.08)",
+          border: "1px solid rgba(255,107,1,0.18)",
+          fontSize: 11, fontWeight: 700,
+          color: "#FF6B01",
+          width: "fit-content",
+        }}>
+          <span style={{ fontSize: 8 }}>✦</span>
+          {t.result}
+        </div>
+      )}
+
+      {/* Author */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, borderTop: "1px solid rgba(16,17,26,.06)", paddingTop: 16 }}>
+        <div style={{
+          width: 38, height: 38, borderRadius: "50%", flexShrink: 0,
+          background: "linear-gradient(135deg,#0C1323,#FF6B01)",
+          display: "grid", placeItems: "center",
+          fontSize: 14, fontWeight: 900, color: "#fff",
+        }}>
+          {t.avatar}
+        </div>
+        <div>
+          <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#10111a", lineHeight: 1.2 }}>{t.name}</p>
+          <p style={{ margin: 0, fontSize: 11, color: "#747684", lineHeight: 1.4 }}>{t.role}</p>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
 export default function Testimonials() {
-  const items = TESTIMONIALS;
-  const [active, setActive] = useState(0);
+  const items  = TESTIMONIALS;
+  const total  = items.length;              // 4
+  const [page, setPage]   = useState(0);   // 0 = items[0,1], 1 = items[2,3]
+  const [dir,  setDir]    = useState(1);
   const [paused, setPaused] = useState(false);
+  const pages = Math.ceil(total / 2);      // 2 pages of 2
 
-  // Auto-advance
+  const go = (d) => {
+    setDir(d);
+    setPage((p) => (p + d + pages) % pages);
+  };
+
+  // Auto-advance every 6s
   useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => setActive((v) => (v + 1) % items.length), 6000);
+    const id = setInterval(() => go(1), 6000);
     return () => clearInterval(id);
-  }, [paused, items.length, active]);
+  }, [paused, page]);
+
+  const pair = [items[page * 2], items[page * 2 + 1]].filter(Boolean);
 
   return (
     <section
       aria-label="Client testimonials"
-      className="py-16 lg:py-20 overflow-hidden"
+      className="py-16 lg:py-20"
       style={{ background: "linear-gradient(180deg,#f7f5f0,#eeebff)" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Reveal className="mb-12">
-          <div className="flex items-end justify-between gap-6 flex-wrap">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+
+        {/* Header */}
+        <Reveal className="mb-10">
+          <div className="flex items-end justify-between gap-4 flex-wrap">
             <div>
-              <p className="text-xs font-black uppercase tracking-widest text-muted mb-2">Client Stories</p>
-              <h2 className="text-2xl font-bold tracking-tight text-navy-900 sm:text-3xl">What Our Clients Say</h2>
+              <p style={{ fontSize: 10, fontWeight: 900, letterSpacing: "1.6px", textTransform: "uppercase", color: "#747684", marginBottom: 8 }}>
+                Client Stories
+              </p>
+              <h2 className="text-2xl font-bold tracking-tight text-navy-900 sm:text-3xl">
+                What Our Clients Say
+              </h2>
+              <p style={{ marginTop: 6, fontSize: 13, color: "#747684" }}>
+                Trusted by startups, local businesses and growing brands.
+              </p>
             </div>
-            {/* Dot nav */}
-            <div className="flex gap-2">
-              {items.map((_, k) => (
-                <button
-                  key={k}
-                  onClick={() => { setActive(k); setPaused(true); }}
-                  aria-label={`Testimonial ${k + 1}`}
-                  style={{
-                    width: active === k ? 28 : 8,
-                    height: 8,
-                    borderRadius: 99,
-                    background: active === k ? "#FF6B01" : "rgba(16,17,26,.2)",
-                    border: "none",
-                    cursor: "pointer",
-                    transition: "width .3s, background .3s",
-                    padding: 0,
-                  }}
-                />
-              ))}
+
+            {/* Controls */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              {/* Dot indicators */}
+              <div style={{ display: "flex", gap: 6 }}>
+                {Array.from({ length: pages }).map((_, k) => (
+                  <button
+                    key={k}
+                    onClick={() => { setDir(k > page ? 1 : -1); setPage(k); }}
+                    aria-label={`Page ${k + 1}`}
+                    style={{
+                      width: page === k ? 22 : 7,
+                      height: 7, borderRadius: 99,
+                      background: page === k ? "#FF6B01" : "rgba(16,17,26,.2)",
+                      border: "none", cursor: "pointer", padding: 0,
+                      transition: "width .3s, background .3s",
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Arrows */}
+              <button
+                onClick={() => go(-1)}
+                aria-label="Previous"
+                style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(16,17,26,.12)", background: "#fff", cursor: "pointer", display: "grid", placeItems: "center", transition: "background .2s, transform .2s" }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#0C1323"; e.currentTarget.style.color = "#fff"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "inherit"; }}
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={() => go(1)}
+                aria-label="Next"
+                style={{ width: 38, height: 38, borderRadius: "50%", border: "1px solid rgba(16,17,26,.12)", background: "#fff", cursor: "pointer", display: "grid", placeItems: "center", transition: "background .2s, transform .2s" }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "#FF6B01"; e.currentTarget.style.color = "#fff"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "inherit"; }}
+              >
+                <ChevronRight size={16} />
+              </button>
             </div>
           </div>
         </Reveal>
 
-        {/* Cards grid — bento style */}
-        <div
-          className="grid gap-5"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          {items.map((t, i) => {
-            const palette   = CARD_PALETTES[i % CARD_PALETTES.length];
-            const isActive  = i === active;
-            const isFeatured = isActive; // active card is slightly larger
-
-            return (
-              <motion.div
-                key={t.name}
-                onClick={() => setActive(i)}
-                layout
-                animate={{
-                  scale:   isFeatured ? 1.02 : 1,
-                  opacity: isFeatured ? 1 : 0.78,
-                }}
-                whileHover={{ scale: 1.03, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 260, damping: 22 }}
-                style={{
-                  position: "relative",
-                  overflow: "hidden",
-                  borderRadius: 22,
-                  padding: "26px 24px 22px",
-                  background: palette.bg,
-                  color: palette.text,
-                  cursor: "pointer",
-                  minHeight: isFeatured ? 220 : 200,
-                  border: isFeatured ? `2px solid ${palette.accent}40` : "2px solid transparent",
-                  boxShadow: isFeatured ? `0 16px 40px ${palette.accent}20` : "0 4px 16px rgba(0,0,0,0.06)",
-                }}
-              >
-                <CardOrb color={palette.accent} />
-
-                {/* Quote mark */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 16,
-                    right: 18,
-                    opacity: 0.15,
-                    fontSize: 48,
-                    lineHeight: 1,
-                    fontWeight: 900,
-                    color: palette.accent,
-                    userSelect: "none",
-                  }}
-                  aria-hidden="true"
-                >
-                  "
-                </div>
-
-                {/* Avatar + name */}
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-                  <div
-                    style={{
-                      width: 38,
-                      height: 38,
-                      borderRadius: "50%",
-                      background: palette.accent,
-                      display: "grid",
-                      placeItems: "center",
-                      fontSize: 15,
-                      fontWeight: 900,
-                      color: "#fff",
-                      flexShrink: 0,
-                      boxShadow: `0 4px 12px ${palette.accent}40`,
-                    }}
-                    aria-hidden="true"
-                  >
-                    {t.avatar}
-                  </div>
-                  <div>
-                    <p style={{ margin: 0, fontSize: 14, fontWeight: 800, lineHeight: 1.2 }}>{t.name}</p>
-                    <p style={{ margin: 0, fontSize: 11, opacity: 0.65, lineHeight: 1.3 }}>{t.role}</p>
-                  </div>
-                </div>
-
-                {/* Quote text */}
-                <blockquote style={{ margin: 0, fontSize: 13, lineHeight: 1.65, opacity: 0.85, position: "relative", zIndex: 2 }}>
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-
-                {/* Result tag */}
-                {t.result && (
-                  <div
-                    style={{
-                      marginTop: 14,
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 5,
-                      padding: "4px 10px",
-                      borderRadius: 99,
-                      background: "rgba(255,255,255,0.55)",
-                      fontSize: 10,
-                      fontWeight: 800,
-                      color: palette.accent,
-                      position: "relative",
-                      zIndex: 2,
-                    }}
-                  >
-                    <span style={{ fontSize: 8 }}>✦</span>
-                    {t.result}
-                  </div>
-                )}
-
-                {/* Active indicator line */}
-                {isFeatured && (
-                  <motion.div
-                    layoutId="active-line"
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: 3,
-                      background: palette.accent,
-                      borderRadius: "0 0 22px 22px",
-                    }}
-                  />
-                )}
-              </motion.div>
-            );
-          })}
+        {/* 2 cards — slide in/out together */}
+        <div style={{ position: "relative", overflow: "hidden" }}>
+          <AnimatePresence custom={dir} mode="wait">
+            <motion.div
+              key={page}
+              custom={dir}
+              variants={SLIDE_VARIANTS}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 20,
+              }}
+            >
+              {pair.map((t, i) => (
+                <TestimonialCard key={t.name} t={t} delay={i * 0.07} />
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        {/* Auto-progress bar */}
-        <div style={{ marginTop: 24, height: 2, background: "rgba(16,17,26,.1)", borderRadius: 2, overflow: "hidden" }}>
+        {/* Progress bar */}
+        <div style={{ marginTop: 20, height: 2, background: "rgba(16,17,26,.08)", borderRadius: 2, overflow: "hidden" }}>
           <motion.div
-            key={active}
-            style={{ height: "100%", background: "#FF6B01", transformOrigin: "left" }}
+            key={page}
+            style={{ height: "100%", background: "linear-gradient(90deg,#0C1323,#FF6B01)", transformOrigin: "left" }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: paused ? undefined : 1 }}
             transition={{ duration: 6, ease: "linear" }}
           />
         </div>
+
+        {/* Mobile: single column */}
+        <style>{`
+          @media (max-width: 640px) {
+            .testimonial-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </div>
     </section>
   );
