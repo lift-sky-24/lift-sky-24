@@ -349,8 +349,6 @@ export default function ServicesShowcase() {
 
         </div>
       </div>
-
-      {/* Hover-only style for list items (not applied on touch) */}
     </section>
   );
 }
