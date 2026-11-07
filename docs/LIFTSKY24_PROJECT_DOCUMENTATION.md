@@ -838,7 +838,7 @@ bg-brand-gradient bg-clip-text text-transparent
 | 2 | About snippet | `PageHero` | 2-col grid (lg), cream wash bg |
 | 3 | Services (tabbed) | `ServicesShowcase` | Accordion (mobile) / 2-col stage (desktop), `#F5F6FC` bg |
 | 4 | Why Choose Us | `Section` + `MiniCards` + brand gradient box | `lg:grid-cols-[1fr_22rem]`, soft bg |
-| 5 | How We Work | `Section` + `Steps` | 4-col steps (lg), white bg |
+| 5 | How We Work | `Section` + `ProcessRoadmap` | Winding road — wave (xl), zigzag (sm-xl), mobile left-side. Three.js layer on xl desktop. |
 | 6 | Featured Projects | `Section` + `ProjectGrid` | Currently shows empty state, soft bg |
 | 7 | Testimonials | `Testimonials` | Centered max-w-4xl, `bg-slate-50/70` |
 | 8 | Pricing preview | `Section` + `PricingTable` + link | 3-col grid (lg), white bg, centered |
@@ -860,7 +860,8 @@ bg-brand-gradient bg-clip-text text-transparent
 
 **Section 5 (Process) exact content:**
 - H2: "How We Work"
-- Sub: "A clear, four-step process. No surprises."
+- Sub: "A clear, five-step process. No surprises."
+- Component: `ProcessRoadmap` (winding road — see component docs below)
 - Steps: Discuss, Design, Develop, Deliver, Support (5 steps from `PROCESS`)
 
 **Section 6 (Projects):**
@@ -944,7 +945,7 @@ bg-brand-gradient bg-clip-text text-transparent
 
 **Layout used:** `IconCards` (icon cards grid) — this is the "icon cards grid with feature tags" layout as specified. Cols: `lg:grid-cols-3 sm:grid-cols-2`. Each card is a link to its service detail page.
 
-**Section 2:** "How We Work" (tone="soft") — `Steps` with 5 process steps
+**Section 2:** "How We Work" (tone="soft") — `ProcessRoadmap` with 5 process steps (winding road)
 
 **CTA:** "Not Sure Which Service You Need?" / "Tell us about your goal — we'll recommend the right approach. Free, no-commitment call."
 
@@ -1642,6 +1643,47 @@ All changes made to the original demo site in this Kiro session:
 - **Accessibility:** Full ARIA tabs pattern (`role="tablist"`, `role="tab"`, `role="tabpanel"`, roving tabindex, keyboard ArrowDown/Up/Home/End/Enter/Space, visible focus ring 2px navy).
 - **Files changed:** `components/Servicesshowcase.jsx`, `docs/LIFTSKY24_PROJECT_DOCUMENTATION.md`
 - **Build:** ✓ 0 errors.
+
+### Phase 14 — Process Roadmap (Winding Road + Three.js Layer)
+
+#### What changed
+- **Replaced:** Old flat `ProcessRoadmap.js` (5 equal-height cards in a row with a horizontal dashed SVG road) replaced with a winding road component on Home and Services hub. `Steps` component in `Sections.js` is unchanged (still used on all service detail pages).
+- **New files:** `components/ProcessRoadmap.js` (full rewrite), `components/ProcessRoadmap3D.js` (new Three.js layer).
+- **Dependencies added:** `@react-three/fiber@8.17.10` (pinned exact). `three@0.169.0` was already installed.
+- **next.config.mjs:** Added `transpilePackages: ["three"]`.
+- **tailwind.config.js:** Added `brand.text: "#C2410C"` (AA small orange text), `amber.DEFAULT: "#FFC247"`, `amber.dark: "#F59E0B"`, `navy.DEFAULT: "#0C1322"`.
+
+#### ProcessRoadmap component (`components/ProcessRoadmap.js`)
+- **Type:** `"use client"`. Accepts `items` prop (array `{t, d}`).
+- **Three layouts, one DOM** (`<ol role="list">` with 5 `<li role="listitem">`):
+  - **xl (≥1280px) wave grid:** `xl:grid xl:grid-cols-5` with `gridTemplateRows: "auto 200px auto"`. `xl:contents` on each `<li>` dissolves it into grid items. Cards for steps 1,3,5 in row 1 (`xl:row-start-1 xl:self-end`); steps 2,4 in row 3 (`xl:row-start-3 xl:self-start`). Milestones (54px) in row 2 with `MS_MT` margin-top [33,113,33,113,33]px. Wave SVG spans full row 2 (`xl:col-span-5 xl:row-start-2`).
+  - **sm–xl (640–1279px) zigzag:** `sm:grid sm:grid-cols-[1fr_56px_1fr]` per item; cards alternate left/right column; 44px milestones center column; vertical dotted road in CSS background-image.
+  - **<640px single-side:** `grid grid-cols-[44px_1fr]` per item; 36px milestone left, card right; 3px dotted road along left edge.
+- **Wave SVG:** `viewBox="0 0 1000 200"`, `preserveAspectRatio="none"`. Three strokes: track (#ECE8DF, w=34), ghost dashed route (orange/25, `1 13` dash), progress route (orange gradient, clipped by Framer Motion `clipPath inset`).
+- **Scroll progress:** `useScroll({ target: olRef, offset: ["start 75%","end 45%"] })`. Desktop: `clipPath inset(0 {100-p}% 0 0)` reveals wave left-to-right. Tablet/mobile: `scaleY` on the dotted overlay line. `useMotionValueEvent` computes `activeIndex` without re-renders per frame.
+- **Milestones:** 54px (desktop), 44px (tablet), 36px (mobile); brand gradient fill; navy number; `scale(0.85) opacity(0.55)` when unreached. Pulse ring via `animate-ping` on the latest-reached milestone.
+- **Card structure:** OUTER `motion.div` (Framer entrance only); INNER `div` (CSS hover + 3D writes `style.transform`). Icon (lucide: MessageCircle/PenTool/Code2/Rocket/Headphones), "STEP 0n" pill, `<h3>` title, description.
+- **CSS hover fallback** (`@media (hover:hover)`): `translateY(-6px)`, orange border/shadow, icon box turns brand gradient. Disabled (transform only) when `data-3d="on"` on the `<ol>`.
+- **3D eligibility:** checked client-side: matchMedia xl+hover+fine, NOT reduced-motion, NOT saveData, hardwareConcurrency>4, deviceMemory>4, WebGL available, section near viewport (IntersectionObserver rootMargin 300px). All conditions must be true; any failure → CSS-only.
+- **Accessibility:** `role="list"`, `role="listitem"`, `<h3>` titles, road/milestones/pills `aria-hidden`. `prefers-reduced-motion`: final state shown immediately, no animations.
+- **END labels:** START pill (navy bg, white text) + GO LIVE ✳ pill (amber bg, navy text) decorative, `aria-hidden`.
+
+#### ProcessRoadmap3D component (`components/ProcessRoadmap3D.js`)
+- **Type:** `"use client"`. Loaded only via `next/dynamic({ ssr: false })` from ProcessRoadmap. Never touches SSR.
+- **Canvas:** `@react-three/fiber v8` orthographic (`zoom: 1` → 1 world unit = 1 CSS px), `dpr [1,1.5]`, `alpha: true`, `powerPreference: "low-power"`. Absolutely positioned over the `<ol>`, `pointer-events: none`, `aria-hidden`, `tabIndex: -1`.
+- **Frame loop:** `useFrame` only. No React state updated per frame. Card inner elements' `style.transform` is written directly.
+- **Moving cards:** idle float `y=sin(t*0.8+i*1.3)*5px`, `rotateZ=sin(t*0.6+i)*0.35deg`. Hover: `perspective(900px) translate3d … rotateX(ptr.y*8deg) rotateY(ptr.x*10deg) scale(1.03) translateZ(36px)`. Other cards while hovering: `scale(0.985)`.
+- **Twin planes:** `ShapeGeometry` rounded rect (card size +16px, r=22). Orange (even steps) or navy (odd) fill, opacity 0.10 idle → 0.24 hover. Moves opposite to pointer on hover. Additive glow `Sprite` fades in behind on hover.
+- **Orb:** `CurvePath` of 6 `CubicBezierCurve3` matching the SVG wave in pixel space. Amber core mesh + orange halo `Sprite`. 18-item comet trail ring buffer. Ping `RingGeometry` spawned when `activeIndex` increases.
+- **Particles:** 60 `Points`, orange/amber/navy, `opacity 0.25`, drift upward with sine wobble, pointer parallax.
+- **Error boundary:** `class ErrBound extends Component` silently unmounts on any error.
+- **Pause:** `frameloop="never"` when the section is not intersecting or tab is hidden.
+- **Dispose:** all geometries/materials/textures cleaned up on unmount.
+
+#### Build verification
+- `three` lives in `_app-pages-browser_components_ProcessRoadmap3D_js.js` (lazy chunk, ~7MB uncompressed), NOT in the shared bundle.
+- First Load JS for `/`: 167 kB (was 162 kB — 5 kB increase from ProcessRoadmap.js own code, not three).
+- `@react-three/drei` NOT installed (as specified). Named imports only from `three`.
 
 ---
 

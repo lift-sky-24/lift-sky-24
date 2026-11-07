@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // Three.js uses ESM-only imports — must be transpiled by Next.js
+  transpilePackages: ["three"],
+
   // Permanent redirects for removed / renamed service routes
   async redirects() {
     return [

@@ -20,8 +20,13 @@ module.exports = {
           light:   "#FFF0E4",
           orange:  "#FC6E04",
           warm:    "#FF8A1F",
+          text:    "#C2410C",   // small orange text — AA contrast on white
         },
-        navy: { 900: "#171717", 800: "#101114", 700: "#2A160D" },
+        amber: {
+          DEFAULT: "#FFC247",
+          dark:    "#F59E0B",
+        },
+        navy: { 900: "#171717", 800: "#101114", 700: "#2A160D", DEFAULT: "#0C1322" },
         // Border helpers
         border: {
           DEFAULT: "#EAE5DF",
