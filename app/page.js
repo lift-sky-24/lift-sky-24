@@ -1,29 +1,26 @@
 import Link from "next/link";
-import dynamic from "next/dynamic";
-import HeroSection  from "@/components/HeroSection";
-import PageHero     from "@/components/PageHero";
+import HeroSection      from "@/components/HeroSection";
+import PageHero         from "@/components/PageHero";
 import { Section, MiniCards, CTABand } from "@/components/Sections";
-import ProcessRoadmap from "@/components/ProcessRoadmap";
+import ProcessRoadmap   from "@/components/ProcessRoadmap";
 import ServicesShowcase from "@/components/Servicesshowcase";
-import Testimonials from "@/components/Testimonials";
-import FAQ          from "@/components/FAQ";
-import PricingTable from "@/components/PricingTable";
-import { Button, Reveal } from "@/components/ui";
+import Testimonials     from "@/components/Testimonials";
+import FAQ              from "@/components/FAQ";
+import PricingTable     from "@/components/PricingTable";
+import { Reveal }       from "@/components/ui";
+import { TechMarquee, ServicesMarquee } from "@/components/HomeMarquees";
+import WhyCtaCard       from "@/components/WhyCtaCard";
 import { why, processSteps } from "@/lib/data";
-import { BRAND } from "@/data/site-config";
-import { meta } from "@/lib/seo";
+import { BRAND }        from "@/data/site-config";
+import { meta }         from "@/lib/seo";
 import {
   homeAboutSnippet,
   whyCtaCard,
   homeProcess,
   homePricingSection,
-  homeFaqSection,
   homeCTA,
   marqueeItems,
 } from "@/data/pages/home";
-
-const MarqueeRow     = dynamic(() => import("@/components/animation/MarqueeRow"),     { ssr: false });
-const MagneticButton = dynamic(() => import("@/components/animation/MagneticButton"), { ssr: false });
 
 export const metadata = {
   ...meta(
@@ -41,11 +38,9 @@ export default function Home() {
       <HeroSection />
 
       {/* Tech stack marquee */}
-      <div className="overflow-hidden">
-        <MarqueeRow items={marqueeItems.tech} duration={28} />
-      </div>
+      <TechMarquee items={marqueeItems.tech} />
 
-      {/* 2. About snippet — content from data/pages/home.js */}
+      {/* 2. About snippet */}
       <PageHero
         title={homeAboutSnippet.title}
         accent={homeAboutSnippet.accent}
@@ -56,46 +51,37 @@ export default function Home() {
         ctas={homeAboutSnippet.ctas}
       />
 
-      {/* 3. Services (tabbed showcase) */}
+      {/* 3. Services */}
       <ServicesShowcase />
 
-      {/* 4. Why Choose Us — data from data/site-config.js → WHY (via lib/data why) */}
+      {/* 4. Why Choose Us */}
       <Section title="Why Choose LiftSky24?" tone="soft">
         <div className="grid gap-5 lg:grid-cols-[1fr_22rem]">
           <MiniCards items={why} cols="md:grid-cols-3" />
           <Reveal>
-            <div
-              className="flex h-full flex-col justify-center rounded-2xl p-7 text-white relative overflow-hidden"
-              style={{ background: "linear-gradient(135deg,#101114 0%,#1B1714 60%,#2A160D 100%)" }}
-            >
-              <div aria-hidden style={{ position:"absolute",inset:0,background:"linear-gradient(105deg,transparent 40%,rgba(255,255,255,.08) 50%,transparent 60%)",backgroundSize:"200% 100%",animation:"marquee-scroll 3s linear infinite" }} />
-              <p className="text-xl font-bold leading-tight relative z-10" style={{ whiteSpace:"pre-line" }}>{whyCtaCard.title}</p>
-              <p className="mt-2 text-sm text-white/80 relative z-10">{whyCtaCard.sub}</p>
-              <div className="mt-5 w-fit relative z-10">
-                <MagneticButton>
-                  <Button href={whyCtaCard.href} variant="light">{whyCtaCard.cta}</Button>
-                </MagneticButton>
-              </div>
-              <p className="mt-3 text-xs text-white/60 relative z-10">{whyCtaCard.footnote}</p>
-            </div>
+            <WhyCtaCard
+              title={whyCtaCard.title}
+              sub={whyCtaCard.sub}
+              href={whyCtaCard.href}
+              cta={whyCtaCard.cta}
+              footnote={whyCtaCard.footnote}
+            />
           </Reveal>
         </div>
       </Section>
 
-      {/* 5. Process — road-path showcase */}
+      {/* 5. Process */}
       <Section title={homeProcess.title} sub={homeProcess.sub}>
         <ProcessRoadmap items={processSteps} />
       </Section>
 
       {/* Services marquee reverse */}
-      <div className="overflow-hidden">
-        <MarqueeRow items={marqueeItems.services} duration={22} reverse />
-      </div>
+      <ServicesMarquee items={marqueeItems.services} />
 
-      {/* 7. Testimonials — data from data/site-config.js → TESTIMONIALS */}
+      {/* 6. Testimonials */}
       <Testimonials />
 
-      {/* 8. Pricing preview — data from data/site-config.js → PRICING */}
+      {/* 7. Pricing */}
       <Section title={homePricingSection.title} sub={homePricingSection.sub} center={homePricingSection.center}>
         <PricingTable />
         <div className="mt-8 text-center">
@@ -105,10 +91,10 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 9. FAQ — data from data/site-config.js → FAQS */}
+      {/* 8. FAQ */}
       <FAQ />
 
-      {/* 10. Final CTA */}
+      {/* 9. Final CTA */}
       <CTABand title={homeCTA.title} sub={homeCTA.sub} button={homeCTA.button} href={homeCTA.href} />
     </>
   );

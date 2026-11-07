@@ -362,7 +362,8 @@ export default function ProcessRoadmap({ items = [] }) {
         if (cancelled) return;
         if (entry.isIntersecting) {
           io.disconnect();
-          dynamic(() => import("@/components/ProcessRoadmap3D"), { ssr: false, loading: () => null })
+          // import() directly — next/dynamic returns a component, not a Promise
+          import("@/components/ProcessRoadmap3D")
             .then((mod) => { if (!cancelled) { setScene3D(() => mod.default); setIs3DActive(true); } })
             .catch(() => {});
         }

@@ -351,19 +351,6 @@ export default function ServicesShowcase() {
       </div>
 
       {/* Hover-only style for list items (not applied on touch) */}
-      <style>{`
-        @media (hover: hover) {
-          .svc-tab-btn:not([aria-selected="true"]):hover {
-            background: rgba(255,255,255,0.6) !important;
-            transform: translateX(4px);
-          }
-        }
-        /* Focus ring */
-        .svc-tab-btn:focus-visible {
-          outline: 2px solid #171717;
-          outline-offset: 3px;
-        }
-      `}</style>
     </section>
   );
 }

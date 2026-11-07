@@ -584,3 +584,15 @@ html:not([data-aos-init]) [data-aos] { opacity:1 !important; transform:none !imp
   /* GO LIVE pill — col 5, row 2, bottom-right */
   .rm-golive { grid-column: 5; grid-row: 2; justify-self: end; align-self: end; padding-bottom: 12px; }
 }
+
+/* ── ServicesShowcase tab hover + focus (moved from JSX <style> to fix hydration) ── */
+@media (hover: hover) {
+  .svc-tab-btn:not([aria-selected="true"]):hover {
+    background: rgba(255,255,255,0.6) !important;
+    transform: translateX(4px);
+  }
+}
+.svc-tab-btn:focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 3px;
+}
