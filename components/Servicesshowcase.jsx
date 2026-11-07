@@ -6,15 +6,11 @@ import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import {
   Globe, Smartphone, Code2, Share2, Search, PenTool,
-  Megaphone, ArrowUpRight, ChevronRight,
+  Megaphone, ArrowUpRight, ChevronRight, ChevronDown,
 } from "lucide-react";
 import { IMG } from "@/data/images";
 
-/* ─────────────────────────────────────────────────────────────────
-   Service data — single source (never duplicated in this file)
-   image + alt pulled from the centralised data/images.js registry
-   so swapping a real photo later requires one edit there.
-───────────────────────────────────────────────────────────────── */
+/* ─── Service definitions ─────────────────────────────────────── */
 const SERVICES = [
   {
     slug:  "website-development",
@@ -74,59 +70,86 @@ const SERVICES = [
   },
 ];
 
-/* ─────────────────────────────────────────────────────────────────
-   Main component
-───────────────────────────────────────────────────────────────── */
+/* ─── Shared overlay info (used inside the image on both layouts) ── */
+function ServiceOverlay({ svc }) {
+  return (
+    <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 z-10">
+      <h3
+        className="text-xl sm:text-2xl font-extrabold leading-snug mb-1.5"
+        style={{ color: "#fff", letterSpacing: "-0.02em", textShadow: "0 1px 4px rgba(0,0,0,0.4)" }}
+      >
+        {svc.title}
+      </h3>
+      <p className="text-sm leading-relaxed mb-3 line-clamp-2" style={{ color: "rgba(255,255,255,0.82)" }}>
+        {svc.text}
+      </p>
+
+      {/* Tags */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {svc.tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded-full px-2.5 py-1 text-xs font-semibold whitespace-nowrap"
+            style={{
+              background: "rgba(252,110,4,0.18)",
+              border:     "1px solid rgba(252,110,4,0.45)",
+              color:      "#FFD4B3",
+            }}
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      {/* CTA — stopPropagation so mobile accordion doesn't toggle on link click */}
+      <Link
+        href={svc.href}
+        onClick={(e) => e.stopPropagation()}
+        className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
+        style={{
+          background: "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)",
+          color:      "#101114",
+          boxShadow:  "0 4px 14px rgba(252,110,4,0.30)",
+        }}
+      >
+        Learn more <ArrowUpRight size={14} aria-hidden="true" />
+      </Link>
+    </div>
+  );
+}
+
+/* ─── Main component ──────────────────────────────────────────── */
 export default function ServicesShowcase() {
   const [active, setActive] = useState(0);
-  const stageRef  = useRef(null);
   const timerRef  = useRef(null);
   const reduced   = useReducedMotion();
 
-  /* ── hover-intent: 80 ms delay before switching active ── */
+  /* hover-intent: 80ms delay */
   const hoverActivate = useCallback((i) => {
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => setActive(i), 80);
   }, []);
-
-  /* cancel pending hover when pointer leaves the list */
   const cancelHover = useCallback(() => clearTimeout(timerRef.current), []);
-
-  /* cleanup on unmount */
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
-  /* ── mobile scroll-into-view after tab tap ── */
-  const handleTabClick = useCallback((i) => {
-    setActive(i);
-    if (!stageRef.current) return;
-    const isDesktop = window.matchMedia("(min-width:1024px)").matches;
-    if (isDesktop) return;
-    const rect = stageRef.current.getBoundingClientRect();
-    const notVisible = rect.top < 70 || rect.bottom / window.innerHeight < 0.7;
-    if (notVisible) {
-      stageRef.current.scrollIntoView({
-        behavior: reduced ? "auto" : "smooth",
-        block: "start",
-      });
-    }
-  }, [reduced]);
-
-  /* ── keyboard roving tabindex ── */
+  /* keyboard roving tabindex */
   const handleKeyDown = useCallback((e, i) => {
     const last = SERVICES.length - 1;
     let next = i;
-    if (e.key === "ArrowDown")       { e.preventDefault(); next = i < last ? i + 1 : 0; }
-    else if (e.key === "ArrowUp")    { e.preventDefault(); next = i > 0    ? i - 1 : last; }
-    else if (e.key === "Home")       { e.preventDefault(); next = 0; }
-    else if (e.key === "End")        { e.preventDefault(); next = last; }
-    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleTabClick(i); return; }
+    if      (e.key === "ArrowDown")                  { e.preventDefault(); next = i < last ? i + 1 : 0; }
+    else if (e.key === "ArrowUp")                    { e.preventDefault(); next = i > 0    ? i - 1 : last; }
+    else if (e.key === "Home")                       { e.preventDefault(); next = 0; }
+    else if (e.key === "End")                        { e.preventDefault(); next = last; }
+    else if (e.key === "Enter" || e.key === " ")     { e.preventDefault(); setActive(i); return; }
     else return;
     setActive(next);
-    /* move focus to the newly activated tab */
     document.getElementById(`svc-tab-${SERVICES[next].slug}`)?.focus();
-  }, [handleTabClick]);
+  }, []);
 
-  const s = SERVICES[active];
+  /* mobile accordion toggle */
+  const handleAccordionClick = useCallback((i) => {
+    setActive((prev) => (prev === i ? i : i)); // always open clicked, never close last
+  }, []);
 
   return (
     <section
@@ -142,7 +165,7 @@ export default function ServicesShowcase() {
       />
 
       <div className="relative mx-auto w-[min(1200px,100%-40px)]">
-        {/* ── Section header ──────────────────────────────────────── */}
+        {/* Header */}
         <div className="mb-10 sm:mb-14">
           <h2
             className="text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-tight tracking-tight"
@@ -155,27 +178,21 @@ export default function ServicesShowcase() {
           </p>
         </div>
 
-        {/* ── Two-column grid (lg+) / single column (below lg) ────── */}
-        {/*
-            Mobile order:  stage (order-1 → top), list (order-2 → bottom)
-            Desktop order: list left, stage right — normal flow
-        */}
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-stretch">
+        {/* ═══════════════════════════════════════════════════════
+            DESKTOP LAYOUT (lg+): left tabs + right unified card
+        ═══════════════════════════════════════════════════════ */}
+        <div className="hidden lg:grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-stretch">
 
-          {/* ══════════════════════════════════════════════════════════
-              LEFT — tab list
-              Desktop: natural order (left).
-              Mobile: pushed below the stage with order-2.
-          ══════════════════════════════════════════════════════════ */}
+          {/* Left — tab list */}
           <div
             role="tablist"
             aria-label="Our services"
             aria-orientation="vertical"
-            className="flex flex-col gap-1.5 order-2 lg:order-1"
+            className="flex flex-col gap-1.5"
             onMouseLeave={cancelHover}
           >
             {SERVICES.map((svc, i) => {
-              const Icon    = svc.Icon;
+              const Icon     = svc.Icon;
               const isActive = active === i;
               return (
                 <button
@@ -186,41 +203,33 @@ export default function ServicesShowcase() {
                   aria-controls={`svc-panel-${svc.slug}`}
                   tabIndex={isActive ? 0 : -1}
                   onMouseEnter={() => hoverActivate(i)}
-                  onClick={() => handleTabClick(i)}
+                  onClick={() => setActive(i)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
-                  /* min-h-[64px] keeps list height stable regardless of active item */
                   className="svc-tab-btn flex w-full items-center gap-3.5 rounded-[14px] px-4 min-h-[64px] py-3 text-left transition-all duration-200"
                   style={{
-                    background:  isActive ? "#fff" : "transparent",
-                    border:      `1px solid ${isActive ? "rgba(252,110,4,0.30)" : "transparent"}`,
-                    boxShadow:   isActive ? "0 4px 20px rgba(252,110,4,0.10)" : "none",
-                    cursor:      "pointer",
+                    background: isActive ? "#fff" : "transparent",
+                    border:     `1px solid ${isActive ? "rgba(252,110,4,0.30)" : "transparent"}`,
+                    boxShadow:  isActive ? "0 4px 20px rgba(252,110,4,0.10)" : "none",
+                    cursor:     "pointer",
                   }}
                 >
-                  {/* Icon box */}
                   <span
                     aria-hidden="true"
                     className="grid place-items-center shrink-0 rounded-xl transition-all duration-200"
                     style={{
                       width: 40, height: 40,
-                      background: isActive
-                        ? "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)"
-                        : "#FFF0E4",
-                      color: isActive ? "#101114" : "#FC6E04",
+                      background: isActive ? "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)" : "#FFF0E4",
+                      color:      isActive ? "#101114" : "#FC6E04",
                     }}
                   >
                     <Icon size={19} strokeWidth={1.8} />
                   </span>
-
-                  {/* Title */}
                   <span
                     className="flex-1 text-[15px] font-bold leading-snug transition-colors duration-200"
                     style={{ letterSpacing: "-0.01em", color: isActive ? "#171717" : "#6B6B70" }}
                   >
                     {svc.title}
                   </span>
-
-                  {/* Active chevron */}
                   <ChevronRight
                     aria-hidden="true"
                     size={16}
@@ -232,121 +241,157 @@ export default function ServicesShowcase() {
             })}
           </div>
 
-          {/* ══════════════════════════════════════════════════════════
-              RIGHT — image stage + info panel
-              Desktop: natural order (right).
-              Mobile: pushed to top with order-1.
-          ══════════════════════════════════════════════════════════ */}
+          {/* Right — unified image + overlay card */}
           <div
-            ref={stageRef}
-            className="flex flex-col gap-4 order-1 lg:order-2 scroll-mt-24"
+            id={`svc-panel-${SERVICES[active].slug}`}
+            role="tabpanel"
+            aria-labelledby={`svc-tab-${SERVICES[active].slug}`}
+            className="relative overflow-hidden rounded-3xl min-h-[28rem]"
+            style={{
+              boxShadow: "0 24px 60px rgba(16,17,20,0.22)",
+              border:    "1px solid rgba(252,110,4,0.08)",
+            }}
           >
-            {/* Image stage */}
-            <div
-              className="relative overflow-hidden rounded-3xl lg:flex-1 lg:min-h-[28rem]"
-              /* Mobile: aspect ratio; desktop: stretches to match list height */
-              style={{
-                aspectRatio: "16/10",
-                boxShadow:   "0 24px 60px rgba(16,17,20,0.18)",
-                border:      "1px solid rgba(252,110,4,0.08)",
-              }}
-            >
-              {/* Aspect ratio only applies on mobile/tablet; on desktop flex-1 takes over */}
-              <style>{`
-                @media (min-width:1024px){
-                  .svc-stage-ar { aspect-ratio: unset !important; }
-                }
-              `}</style>
-              <div className="svc-stage-ar absolute inset-0" style={{ aspectRatio: "16/10" }}>
-                {/* Dark base layer */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0"
-                  style={{ background: "linear-gradient(135deg,#1B1714,#101114,#2A160D)" }}
+            {/* Dark base */}
+            <div className="absolute inset-0" style={{ background: "#101114" }} aria-hidden="true" />
+
+            {/* All 7 images — stacked, cross-faded */}
+            {SERVICES.map((svc, i) => {
+              const imgData = IMG.services[svc.slug] ?? IMG.services["website-development"];
+              return (
+                <Image
+                  key={svc.slug}
+                  src={imgData.src}
+                  alt={active === i ? imgData.alt : ""}
+                  aria-hidden={active !== i}
+                  fill
+                  sizes="(min-width:1024px) 50vw, 100vw"
+                  className="object-contain transition-opacity duration-500 ease-in-out"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  style={{
+                    opacity:    active === i ? 1 : 0,
+                    transition: reduced ? "none" : "opacity .5s ease",
+                  }}
                 />
+              );
+            })}
 
-                {/* All 7 images stacked, cross-faded — ONE DOM node per image */}
-                {SERVICES.map((svc, i) => {
-                  const imgData = IMG.services[svc.slug] ?? IMG.services["website-development"];
-                  return (
-                    <Image
-                      key={svc.slug}
-                      src={imgData.src}
-                      alt={active === i ? imgData.alt : ""}
-                      aria-hidden={active !== i}
-                      fill
-                      sizes="(min-width:1024px) 50vw, 100vw"
-                      className="object-cover transition-transform duration-700 ease-out"
-                      loading={i === 0 ? "eager" : "lazy"}
-                      style={{
-                        opacity:         active === i ? 1 : 0,
-                        transition:      reduced ? "none" : "opacity .5s ease",
-                        transform:       active === i ? "scale(1)" : "scale(1.06)",
-                      }}
-                    />
-                  );
-                })}
-
-                {/* Bottom gradient overlay for panel legibility (no text sits on raw image) */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0"
-                  style={{ background: "linear-gradient(to top, rgba(16,17,20,0.5) 0%, transparent 55%)" }}
-                />
-              </div>
-            </div>
-
-            {/* Info panel — sits BELOW the image, not overlaid on it */}
+            {/* Strong bottom gradient so overlay text is always readable */}
             <div
-              id={`svc-panel-${s.slug}`}
-              role="tabpanel"
-              aria-labelledby={`svc-tab-${s.slug}`}
-              key={s.slug}   /* re-mounts on change → triggers rise animation */
-              className="rounded-2xl border p-5 bg-white/90 backdrop-blur-xl"
+              aria-hidden="true"
+              className="absolute inset-0 pointer-events-none"
               style={{
-                borderColor: "rgba(255,255,255,0.6)",
-                boxShadow:   "0 4px 20px rgba(16,17,20,0.06)",
-                animation:   reduced ? "none" : "rise 0.6s cubic-bezier(0.2,0.8,0.2,1) both",
+                background:
+                  "linear-gradient(to top, rgba(10,11,14,0.92) 0%, rgba(10,11,14,0.55) 40%, transparent 70%)",
               }}
-            >
-              <h3
-                className="text-lg font-bold leading-snug mb-1"
-                style={{ color: "#171717", letterSpacing: "-0.01em" }}
-              >
-                {s.title}
-              </h3>
-              <p className="text-sm leading-relaxed mb-3" style={{ color: "#6B6B70" }}>
-                {s.text}
-              </p>
+            />
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {s.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full px-2.5 py-1 text-xs font-semibold"
-                    style={{ background: "#FFF0E4", color: "#E04F00", border: "1px solid #FFD4B3" }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            {/* Overlay info — title, desc, tags, CTA all inside the card */}
+            <ServiceOverlay svc={SERVICES[active]} key={SERVICES[active].slug} />
+          </div>
+        </div>
 
-              {/* CTA */}
-              <Link
-                href={s.href}
-                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-0.5"
+        {/* ═══════════════════════════════════════════════════════
+            MOBILE LAYOUT (<lg): vertical accordion
+        ═══════════════════════════════════════════════════════ */}
+        <div className="lg:hidden flex flex-col gap-3">
+          {SERVICES.map((svc, i) => {
+            const Icon     = svc.Icon;
+            const isOpen   = active === i;
+            const imgData  = IMG.services[svc.slug] ?? IMG.services["website-development"];
+
+            return (
+              <div
+                key={svc.slug}
+                className="overflow-hidden rounded-2xl transition-all duration-300"
                 style={{
-                  background:  "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)",
-                  color:       "#101114",
-                  boxShadow:   "0 4px 14px rgba(252,110,4,0.22)",
+                  border:    `1px solid ${isOpen ? "rgba(252,110,4,0.35)" : "#EAE5DF"}`,
+                  boxShadow: isOpen ? "0 8px 30px rgba(252,110,4,0.12)" : "0 1px 4px rgba(16,17,20,0.05)",
+                  background: "#fff",
                 }}
               >
-                Learn more <ArrowUpRight size={14} aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
+                {/* Accordion header — always visible */}
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={`mob-svc-${svc.slug}`}
+                  onClick={() => handleAccordionClick(i)}
+                  className="flex w-full items-center gap-3 px-4 py-4 text-left"
+                  style={{ background: "none", border: "none", cursor: "pointer" }}
+                >
+                  <span
+                    className="grid place-items-center shrink-0 rounded-xl transition-all duration-200"
+                    style={{
+                      width: 38, height: 38,
+                      background: isOpen ? "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)" : "#FFF0E4",
+                      color:      isOpen ? "#101114" : "#FC6E04",
+                    }}
+                  >
+                    <Icon size={17} strokeWidth={1.9} aria-hidden="true" />
+                  </span>
+                  <span
+                    className="flex-1 text-[15px] font-bold leading-snug"
+                    style={{ color: isOpen ? "#171717" : "#6B6B70", letterSpacing: "-0.01em" }}
+                  >
+                    {svc.title}
+                  </span>
+                  <ChevronDown
+                    aria-hidden="true"
+                    size={18}
+                    className="shrink-0 transition-transform duration-300"
+                    style={{
+                      color:     isOpen ? "#FC6E04" : "#929292",
+                      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    }}
+                  />
+                </button>
 
+                {/* Accordion body — image + overlay, collapses when closed */}
+                <div
+                  id={`mob-svc-${svc.slug}`}
+                  style={{
+                    display:         "grid",
+                    gridTemplateRows: isOpen ? "1fr" : "0fr",
+                    transition:       reduced ? "none" : "grid-template-rows 0.35s ease",
+                  }}
+                >
+                  <div style={{ overflow: "hidden" }}>
+                    {/* Image + overlay unified card */}
+                    <div
+                      className="relative mx-4 mb-4 overflow-hidden rounded-2xl"
+                      style={{ aspectRatio: "16/9" }}
+                    >
+                      {/* Dark base */}
+                      <div className="absolute inset-0" style={{ background: "#101114" }} aria-hidden="true" />
+
+                      {/* Image */}
+                      <Image
+                        src={imgData.src}
+                        alt={imgData.alt}
+                        fill
+                        sizes="100vw"
+                        className="object-contain"
+                        loading={i === 0 ? "eager" : "lazy"}
+                      />
+
+                      {/* Gradient overlay */}
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background:
+                            "linear-gradient(to top, rgba(10,11,14,0.90) 0%, rgba(10,11,14,0.50) 45%, transparent 70%)",
+                        }}
+                      />
+
+                      {/* Info overlay inside the image */}
+                      <ServiceOverlay svc={svc} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
