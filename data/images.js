@@ -1,9 +1,6 @@
 /**
  * Centralized image registry.
  * Change a path here and it updates everywhere.
- *
- * TODO: Replace placeholder Unsplash URLs with final production images.
- *       Update IMAGES in data/site-config.js too if you change service images.
  */
 
 export const IMG = {
@@ -16,15 +13,15 @@ export const IMG = {
   team:    { src: "/images/team.svg",           alt: "LiftSky24 team working together",          w: 600,  h: 500 },
   about:   { src: "/images/about.png",          alt: "LiftSky24 office and team",                w: 900,  h: 600 },
 
-  // ── Service pages (TODO: replace with real photography/illustrations) ──
+  // ── Service images — real WebP photos from public/images/services/ ──
   services: {
-    "website-development":    { src: "/images/hero.svg",    alt: "Website development services",          w: 600, h: 500 },
-    "app-development":        { src: "/images/phones.svg",  alt: "Mobile app development services",       w: 600, h: 500 },
-    "software-development":   { src: "/images/hero.svg",    alt: "Custom software development",           w: 600, h: 500 },
-    "social-media-management":{ src: "/images/hero.svg",    alt: "Social media management services",      w: 600, h: 500 },
-    "seo":                    { src: "/images/hero.svg",    alt: "Search engine optimisation services",   w: 600, h: 500 },
-    "graphic-design":         { src: "/images/design.svg",  alt: "Graphic design and branding services",  w: 600, h: 500 },
-    "digital-marketing":      { src: "/images/hero.svg",    alt: "Digital marketing agency services",     w: 600, h: 500 },
+    "website-development":    { src: "/images/services/web-development.webp",        alt: "Website development services",          w: 600, h: 500 },
+    "app-development":        { src: "/images/services/app-development.webp",        alt: "Mobile app development services",       w: 600, h: 500 },
+    "software-development":   { src: "/images/services/software-development.webp",   alt: "Custom software development",           w: 600, h: 500 },
+    "social-media-management":{ src: "/images/services/social-media-management.webp",alt: "Social media management services",      w: 600, h: 500 },
+    "seo":                    { src: "/images/services/seo.webp",                    alt: "Search engine optimisation services",   w: 600, h: 500 },
+    "graphic-design":         { src: "/images/services/graphic-design.webp",         alt: "Graphic design and branding services",  w: 600, h: 500 },
+    "digital-marketing":      { src: "/images/services/digital-marketing.webp",      alt: "Digital marketing agency services",     w: 600, h: 500 },
   },
 
   // ── Blog post thumbnails (placeholder — swap with real images) ───
