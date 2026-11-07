@@ -1655,14 +1655,17 @@ All changes made to the original demo site in this Kiro session:
 
 #### ProcessRoadmap component (`components/ProcessRoadmap.js`)
 - **Type:** `"use client"`. Accepts `items` prop (array `{t, d}`).
-- **Three layouts, one DOM** (`<ol role="list">` with 5 `<li role="listitem">`):
-  - **xl (≥1280px) wave grid:** `xl:grid xl:grid-cols-5` with `gridTemplateRows: "auto 200px auto"`. `xl:contents` on each `<li>` dissolves it into grid items. Cards for steps 1,3,5 in row 1 (`xl:row-start-1 xl:self-end`); steps 2,4 in row 3 (`xl:row-start-3 xl:self-start`). Milestones (54px) in row 2 with `MS_MT` margin-top [33,113,33,113,33]px. Wave SVG spans full row 2 (`xl:col-span-5 xl:row-start-2`).
+- **Three layouts, one DOM** (`<ol role="list" data-roadmap>` with 5 `<li role="listitem">`):
+  - **xl (≥1280px) wave grid:** `.rm-ol` class (from `globals.css`) makes it a 5-col CSS grid (`grid-template-columns: repeat(5, minmax(0,1fr))`, `grid-template-rows: auto 200px auto`). `.rm-li` on each `<li>` sets `display:contents` at xl so its children become direct grid items. `.rm-item` + CSS custom props (`--col`, `--row`, `--card-align`, `--ms-top`, `--conn-align`) set via inline `style` place every child exactly. Wave SVG uses `.rm-road` (col 1–5, row 2). START/GO LIVE use `.rm-start` / `.rm-golive`.
   - **sm–xl (640–1279px) zigzag:** `sm:grid sm:grid-cols-[1fr_56px_1fr]` per item; cards alternate left/right column; 44px milestones center column; vertical dotted road in CSS background-image.
   - **<640px single-side:** `grid grid-cols-[44px_1fr]` per item; 36px milestone left, card right; 3px dotted road along left edge.
+- **Why `.rm-*` CSS classes instead of Tailwind placement utilities:** Tailwind's static scanner cannot detect dynamic class names built with template literals (e.g. `` `xl:col-start-${i+1}` ``). Those classes are purged and never reach the browser. Without explicit `grid-column`, every grid item falls back to auto-placement. The road SVG spans all 5 columns of row 2, causing milestones to auto-place into columns 6–10, creating 5 extra tiny implicit tracks and cards ≈115px wide. The fix: all `.rm-*` placement rules live in `globals.css` (never purged) and use CSS custom properties set per element via inline `style`.
+- **Data attributes for testing:** `data-roadmap` on the `<ol>`, `data-roadmap-card="i"` on each card inner div, `data-roadmap-milestone="i"` on each desktop milestone, `data-roadmap-connector="i"` on each connector.
+- **STEP pill:** `whitespace-nowrap shrink-0` — never wraps. Top row is `flex flex-nowrap items-center gap-2`.
 - **Wave SVG:** `viewBox="0 0 1000 200"`, `preserveAspectRatio="none"`. Three strokes: track (#ECE8DF, w=34), ghost dashed route (orange/25, `1 13` dash), progress route (orange gradient, clipped by Framer Motion `clipPath inset`).
 - **Scroll progress:** `useScroll({ target: olRef, offset: ["start 75%","end 45%"] })`. Desktop: `clipPath inset(0 {100-p}% 0 0)` reveals wave left-to-right. Tablet/mobile: `scaleY` on the dotted overlay line. `useMotionValueEvent` computes `activeIndex` without re-renders per frame.
 - **Milestones:** 54px (desktop), 44px (tablet), 36px (mobile); brand gradient fill; navy number; `scale(0.85) opacity(0.55)` when unreached. Pulse ring via `animate-ping` on the latest-reached milestone.
-- **Card structure:** OUTER `motion.div` (Framer entrance only); INNER `div` (CSS hover + 3D writes `style.transform`). Icon (lucide: MessageCircle/PenTool/Code2/Rocket/Headphones), "STEP 0n" pill, `<h3>` title, description.
+- **Card structure:** OUTER `motion.div` (Framer entrance only); INNER `div` with `data-roadmap-card` (CSS hover + 3D writes `style.transform`). Icon (lucide: MessageCircle/PenTool/Code2/Rocket/Headphones), "STEP 0n" pill, `<h3>` title, description.
 - **CSS hover fallback** (`@media (hover:hover)`): `translateY(-6px)`, orange border/shadow, icon box turns brand gradient. Disabled (transform only) when `data-3d="on"` on the `<ol>`.
 - **3D eligibility:** checked client-side: matchMedia xl+hover+fine, NOT reduced-motion, NOT saveData, hardwareConcurrency>4, deviceMemory>4, WebGL available, section near viewport (IntersectionObserver rootMargin 300px). All conditions must be true; any failure → CSS-only.
 - **Accessibility:** `role="list"`, `role="listitem"`, `<h3>` titles, road/milestones/pills `aria-hidden`. `prefers-reduced-motion`: final state shown immediately, no animations.
@@ -1684,6 +1687,22 @@ All changes made to the original demo site in this Kiro session:
 - `three` lives in `_app-pages-browser_components_ProcessRoadmap3D_js.js` (lazy chunk, ~7MB uncompressed), NOT in the shared bundle.
 - First Load JS for `/`: 167 kB (was 162 kB — 5 kB increase from ProcessRoadmap.js own code, not three).
 - `@react-three/drei` NOT installed (as specified). Named imports only from `three`.
+
+### Phase 15 — ProcessRoadmap Desktop Grid Bug Fix
+
+**Root cause:** Template-literal Tailwind class names (`` `xl:col-start-${i+1}` ``, `` `xl:row-start-2` `` inside dynamic arrays) were purged from the compiled CSS because Tailwind's static scanner cannot detect them. Without explicit `grid-column`, all grid items fell back to auto-placement. The road `<li>` spanning all 5 columns of row 2 caused milestones to auto-place into columns 6–10, creating 5 extra tiny implicit tracks. Cards ended up ≈115px wide and the STEP pill wrapped to two lines.
+
+**Fix:**
+- All desktop grid placement moved to `.rm-*` CSS classes in `globals.css` (never purged). CSS custom properties (`--col`, `--row`, `--card-align`, `--ms-top`, `--conn-align`) are set via inline `style` per element.
+- `whitespace-nowrap shrink-0` added to STEP pill; top row changed to `flex flex-nowrap`.
+- `data-roadmap`, `data-roadmap-card`, `data-roadmap-milestone`, `data-roadmap-connector` attributes added for DevTools verification.
+- Tablet and mobile layouts unchanged.
+
+**CSS verification (compiled output):** `.rm-ol`, `.rm-li`, `.rm-item`, `.rm-card`, `.rm-ms`, `.rm-conn`, `.rm-road`, `.rm-start`, `.rm-golive`, `repeat(5`, `grid-column:var(--col)`, `grid-row:var(--row)` — all confirmed present.
+
+**Files changed:** `components/ProcessRoadmap.js`, `app/globals.css`, `docs/LIFTSKY24_PROJECT_DOCUMENTATION.md`
+
+**Build:** ✓ 0 errors, 27/27 pages.
 
 ---
 

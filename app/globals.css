@@ -542,3 +542,45 @@ html:not([data-aos-init]) [data-aos] { opacity:1 !important; transform:none !imp
 
 /* Header scroll compat */
 .header-scrolled { box-shadow:0 2px 20px rgba(16,17,20,.07); }
+
+/* ── ProcessRoadmap desktop grid (xl 1280px+) ──────────────────────
+   CSS-variable placement — immune to Tailwind purge.
+   Tailwind dynamic classes like xl:col-start-${n} are NOT used here.
+─────────────────────────────────────────────────────────────────── */
+@media (min-width: 1280px) {
+  .rm-ol {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: auto 200px auto;
+    grid-auto-flow: row;
+    width: 100%;
+    overflow: visible;
+  }
+  /* li becomes display:contents so its children are direct grid items */
+  .rm-li { display: contents; }
+
+  /* Every placed item reads its column/row from CSS vars set inline */
+  .rm-item {
+    grid-column: var(--col);
+    grid-row: var(--row);
+    min-width: 0;
+  }
+
+  /* Card wrapper — align-self and side margin from vars */
+  .rm-card { align-self: var(--card-align); margin-inline: 8px; }
+
+  /* Milestone — centered in its column, margin-top from var */
+  .rm-ms { justify-self: center; align-self: start; margin-top: var(--ms-top); }
+
+  /* Dashed vertical connector between card and milestone */
+  .rm-conn { justify-self: center; align-self: var(--conn-align); height: 33px; }
+
+  /* Wave SVG — spans all 5 columns in row 2 */
+  .rm-road { grid-column: 1 / span 5; grid-row: 2; }
+
+  /* START pill — col 1, row 2, bottom-left */
+  .rm-start { grid-column: 1; grid-row: 2; justify-self: start; align-self: end; padding-bottom: 12px; }
+
+  /* GO LIVE pill — col 5, row 2, bottom-right */
+  .rm-golive { grid-column: 5; grid-row: 2; justify-self: end; align-self: end; padding-bottom: 12px; }
+}
