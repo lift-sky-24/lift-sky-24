@@ -1,89 +1,153 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { Globe, Smartphone, Code2, Share2, Search, PenTool, Megaphone, ArrowUpRight, ChevronRight } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
+import {
+  Globe, Smartphone, Code2, Share2, Search, PenTool,
+  Megaphone, ArrowUpRight, ChevronRight,
+} from "lucide-react";
+import { IMG } from "@/data/images";
 
-const services = [
+/* ─────────────────────────────────────────────────────────────────
+   Service data — single source (never duplicated in this file)
+   image + alt pulled from the centralised data/images.js registry
+   so swapping a real photo later requires one edit there.
+───────────────────────────────────────────────────────────────── */
+const SERVICES = [
   {
-    id:      "website",
-    title:   "Website Development",
-    text:    "Modern, responsive websites and web apps built for speed, SEO and conversions.",
-    tags:    ["Next.js", "React", "Responsive"],
-    Icon:    Globe,
-    image:   "/images/services/demo.png",
-    href:    "/services/website-development",
+    slug:  "website-development",
+    title: "Website Development",
+    text:  "Modern, responsive websites and web apps built for speed, SEO and conversions.",
+    tags:  ["Next.js", "React", "Responsive"],
+    Icon:  Globe,
+    href:  "/services/website-development",
   },
   {
-    id:      "app",
-    title:   "App Development",
-    text:    "iOS and Android apps built for performance — cross-platform or native.",
-    tags:    ["iOS", "Android", "React Native"],
-    Icon:    Smartphone,
-    image:   "/images/services/demo.png",
-    href:    "/services/app-development",
+    slug:  "app-development",
+    title: "App Development",
+    text:  "iOS and Android apps built for performance — cross-platform or native.",
+    tags:  ["iOS", "Android", "React Native"],
+    Icon:  Smartphone,
+    href:  "/services/app-development",
   },
   {
-    id:      "software",
-    title:   "Software Development",
-    text:    "Custom software that automates your workflows and scales with your business.",
-    tags:    ["Custom", "APIs", "SaaS"],
-    Icon:    Code2,
-    image:   "/images/services/demo.png",
-    href:    "/services/software-development",
+    slug:  "software-development",
+    title: "Software Development",
+    text:  "Custom software that automates your workflows and scales with your business.",
+    tags:  ["Custom", "APIs", "SaaS"],
+    Icon:  Code2,
+    href:  "/services/software-development",
   },
   {
-    id:      "social",
-    title:   "Social Media Management",
-    text:    "Consistent, on-brand content and community management across every platform.",
-    tags:    ["Content", "Reels", "Campaigns"],
-    Icon:    Share2,
-    image:   "/images/services/demo.png",
-    href:    "/services/social-media-management",
+    slug:  "social-media-management",
+    title: "Social Media Management",
+    text:  "Consistent, on-brand content and community management across every platform.",
+    tags:  ["Content", "Reels", "Campaigns"],
+    Icon:  Share2,
+    href:  "/services/social-media-management",
   },
   {
-    id:      "seo",
-    title:   "Search Engine Optimization",
-    text:    "Rank higher on Google and get found by the right customers at the right time.",
-    tags:    ["On-page", "Keywords", "Technical"],
-    Icon:    Search,
-    image:   "/images/services/demo.png",
-    href:    "/services/seo",
+    slug:  "seo",
+    title: "Search Engine Optimization",
+    text:  "Rank higher on Google and get found by the right customers at the right time.",
+    tags:  ["On-page", "Keywords", "Technical"],
+    Icon:  Search,
+    href:  "/services/seo",
   },
   {
-    id:      "graphic",
-    title:   "Graphic Design",
-    text:    "Logos, brand identities and creative visuals that make your business unforgettable.",
-    tags:    ["Logos", "Branding", "Print"],
-    Icon:    PenTool,
-    image:   "/images/services/demo.png",
-    href:    "/services/graphic-design",
+    slug:  "graphic-design",
+    title: "Graphic Design",
+    text:  "Logos, brand identities and creative visuals that make your business unforgettable.",
+    tags:  ["Logos", "Branding", "Print"],
+    Icon:  PenTool,
+    href:  "/services/graphic-design",
   },
   {
-    id:      "marketing",
-    title:   "Digital Marketing",
-    text:    "Data-driven campaigns that bring in qualified leads and grow your revenue.",
-    tags:    ["Google Ads", "Meta Ads", "Email"],
-    Icon:    Megaphone,
-    image:   "/images/services/demo.png",
-    href:    "/services/digital-marketing",
+    slug:  "digital-marketing",
+    title: "Digital Marketing",
+    text:  "Data-driven campaigns that bring in qualified leads and grow your revenue.",
+    tags:  ["Google Ads", "Meta Ads", "Email"],
+    Icon:  Megaphone,
+    href:  "/services/digital-marketing",
   },
 ];
 
+/* ─────────────────────────────────────────────────────────────────
+   Main component
+───────────────────────────────────────────────────────────────── */
 export default function ServicesShowcase() {
   const [active, setActive] = useState(0);
-  const s = services[active];
+  const stageRef  = useRef(null);
+  const timerRef  = useRef(null);
+  const reduced   = useReducedMotion();
+
+  /* ── hover-intent: 80 ms delay before switching active ── */
+  const hoverActivate = useCallback((i) => {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setActive(i), 80);
+  }, []);
+
+  /* cancel pending hover when pointer leaves the list */
+  const cancelHover = useCallback(() => clearTimeout(timerRef.current), []);
+
+  /* cleanup on unmount */
+  useEffect(() => () => clearTimeout(timerRef.current), []);
+
+  /* ── mobile scroll-into-view after tab tap ── */
+  const handleTabClick = useCallback((i) => {
+    setActive(i);
+    if (!stageRef.current) return;
+    const isDesktop = window.matchMedia("(min-width:1024px)").matches;
+    if (isDesktop) return;
+    const rect = stageRef.current.getBoundingClientRect();
+    const notVisible = rect.top < 70 || rect.bottom / window.innerHeight < 0.7;
+    if (notVisible) {
+      stageRef.current.scrollIntoView({
+        behavior: reduced ? "auto" : "smooth",
+        block: "start",
+      });
+    }
+  }, [reduced]);
+
+  /* ── keyboard roving tabindex ── */
+  const handleKeyDown = useCallback((e, i) => {
+    const last = SERVICES.length - 1;
+    let next = i;
+    if (e.key === "ArrowDown")       { e.preventDefault(); next = i < last ? i + 1 : 0; }
+    else if (e.key === "ArrowUp")    { e.preventDefault(); next = i > 0    ? i - 1 : last; }
+    else if (e.key === "Home")       { e.preventDefault(); next = 0; }
+    else if (e.key === "End")        { e.preventDefault(); next = last; }
+    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleTabClick(i); return; }
+    else return;
+    setActive(next);
+    /* move focus to the newly activated tab */
+    document.getElementById(`svc-tab-${SERVICES[next].slug}`)?.focus();
+  }, [handleTabClick]);
+
+  const s = SERVICES[active];
 
   return (
-    <section id="services" className="relative overflow-hidden py-14 sm:py-20" style={{ background: "#F8F7F4" }}>
-      {/* Subtle orange glow top-right */}
-      <div aria-hidden className="pointer-events-none absolute right-0 top-0 w-[400px] h-[400px] rounded-full opacity-15"
-        style={{ background: "radial-gradient(circle,#FC6E04 0%,transparent 70%)", transform: "translate(30%,-30%)" }} />
+    <section
+      id="services"
+      className="relative overflow-hidden py-14 sm:py-20"
+      style={{ background: "#F8F7F4" }}
+    >
+      {/* Subtle orange glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 top-0 w-[400px] h-[400px] rounded-full opacity-15"
+        style={{ background: "radial-gradient(circle,#FC6E04 0%,transparent 70%)", transform: "translate(30%,-30%)" }}
+      />
 
       <div className="relative mx-auto w-[min(1200px,100%-40px)]">
-        {/* Header */}
+        {/* ── Section header ──────────────────────────────────────── */}
         <div className="mb-10 sm:mb-14">
-          <h2 className="text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-tight tracking-tight" style={{ color: "#171717" }}>
+          <h2
+            className="text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-tight tracking-tight"
+            style={{ color: "#171717" }}
+          >
             Our Services
           </h2>
           <p className="mt-2 max-w-[46ch] text-base sm:text-lg leading-relaxed" style={{ color: "#6B6B70" }}>
@@ -91,190 +155,215 @@ export default function ServicesShowcase() {
           </p>
         </div>
 
-        {/* Main layout: left list + right image panel */}
+        {/* ── Two-column grid (lg+) / single column (below lg) ────── */}
+        {/*
+            Mobile order:  stage (order-1 → top), list (order-2 → bottom)
+            Desktop order: list left, stage right — normal flow
+        */}
         <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-stretch">
 
-          {/* ── Left: service list ──────────────────────────────── */}
-          <div className="flex flex-col gap-1.5">
-            {services.map((svc, i) => {
-              const Icon = svc.Icon;
+          {/* ══════════════════════════════════════════════════════════
+              LEFT — tab list
+              Desktop: natural order (left).
+              Mobile: pushed below the stage with order-2.
+          ══════════════════════════════════════════════════════════ */}
+          <div
+            role="tablist"
+            aria-label="Our services"
+            aria-orientation="vertical"
+            className="flex flex-col gap-1.5 order-2 lg:order-1"
+            onMouseLeave={cancelHover}
+          >
+            {SERVICES.map((svc, i) => {
+              const Icon    = svc.Icon;
               const isActive = active === i;
               return (
-                <div
-                  key={svc.id}
-                  onMouseEnter={() => setActive(i)}
-                  onClick={() => setActive(i)}
+                <button
+                  key={svc.slug}
+                  id={`svc-tab-${svc.slug}`}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={`svc-panel-${svc.slug}`}
+                  tabIndex={isActive ? 0 : -1}
+                  onMouseEnter={() => hoverActivate(i)}
+                  onClick={() => handleTabClick(i)}
+                  onKeyDown={(e) => handleKeyDown(e, i)}
+                  /* min-h-[64px] keeps list height stable regardless of active item */
+                  className="svc-tab-btn flex w-full items-center gap-3.5 rounded-[14px] px-4 min-h-[64px] py-3 text-left transition-all duration-200"
                   style={{
-                    borderRadius: 14,
-                    padding: "12px 16px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 14,
-                    background: isActive ? "#fff" : "transparent",
-                    border: `1px solid ${isActive ? "#FFD4B3" : "transparent"}`,
-                    boxShadow: isActive ? "0 4px 20px rgba(252,110,4,0.10)" : "none",
-                    transition: "background .2s, border-color .2s, box-shadow .2s",
+                    background:  isActive ? "#fff" : "transparent",
+                    border:      `1px solid ${isActive ? "rgba(252,110,4,0.30)" : "transparent"}`,
+                    boxShadow:   isActive ? "0 4px 20px rgba(252,110,4,0.10)" : "none",
+                    cursor:      "pointer",
                   }}
                 >
-                  {/* Icon */}
-                  <span style={{
-                    width: 40, height: 40, borderRadius: 12, flexShrink: 0,
-                    display: "grid", placeItems: "center",
-                    background: isActive ? "#FC6E04" : "#FFF0E4",
-                    color: isActive ? "#101114" : "#FC6E04",
-                    transition: "background .2s, color .2s",
-                  }}>
+                  {/* Icon box */}
+                  <span
+                    aria-hidden="true"
+                    className="grid place-items-center shrink-0 rounded-xl transition-all duration-200"
+                    style={{
+                      width: 40, height: 40,
+                      background: isActive
+                        ? "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)"
+                        : "#FFF0E4",
+                      color: isActive ? "#101114" : "#FC6E04",
+                    }}
+                  >
                     <Icon size={19} strokeWidth={1.8} />
                   </span>
 
                   {/* Title */}
-                  <span style={{
-                    flex: 1,
-                    fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em",
-                    color: isActive ? "#171717" : "#6B6B70",
-                    transition: "color .2s",
-                  }}>
+                  <span
+                    className="flex-1 text-[15px] font-bold leading-snug transition-colors duration-200"
+                    style={{ letterSpacing: "-0.01em", color: isActive ? "#171717" : "#6B6B70" }}
+                  >
                     {svc.title}
                   </span>
 
-                  {/* Arrow — shown when active */}
-                  <ChevronRight size={16} style={{
-                    flexShrink: 0,
-                    color: isActive ? "#FC6E04" : "transparent",
-                    transition: "color .2s",
-                  }} />
-                </div>
+                  {/* Active chevron */}
+                  <ChevronRight
+                    aria-hidden="true"
+                    size={16}
+                    className="shrink-0 transition-colors duration-200"
+                    style={{ color: isActive ? "#FC6E04" : "transparent" }}
+                  />
+                </button>
               );
             })}
           </div>
 
-          {/* ── Right: image + info panel ───────────────────────── */}
-          <div className="hidden lg:flex flex-col gap-4">
-            {/* Image — changes on hover, links to service page */}
-            <Link
-              href={s.href}
-              className="group relative block overflow-hidden rounded-3xl flex-1"
+          {/* ══════════════════════════════════════════════════════════
+              RIGHT — image stage + info panel
+              Desktop: natural order (right).
+              Mobile: pushed to top with order-1.
+          ══════════════════════════════════════════════════════════ */}
+          <div
+            ref={stageRef}
+            className="flex flex-col gap-4 order-1 lg:order-2 scroll-mt-24"
+          >
+            {/* Image stage */}
+            <div
+              className="relative overflow-hidden rounded-3xl lg:flex-1 lg:min-h-[28rem]"
+              /* Mobile: aspect ratio; desktop: stretches to match list height */
               style={{
-                minHeight: 320,
-                boxShadow: "0 24px 60px rgba(16,17,20,0.22)",
-                border: "1px solid rgba(252,110,4,0.10)",
+                aspectRatio: "16/10",
+                boxShadow:   "0 24px 60px rgba(16,17,20,0.18)",
+                border:      "1px solid rgba(252,110,4,0.08)",
               }}
             >
-              {/* Background */}
-              <div className="absolute inset-0" style={{ background: "linear-gradient(135deg,#1B1714,#101114,#2A160D)" }}>
-                {/* Large icon watermark */}
-                {(() => { const Icon = s.Icon; return <Icon aria-hidden strokeWidth={0.5} className="absolute right-[6%] top-[8%] size-40 text-white/8" />; })()}
-              </div>
-
-              {/* Service image — transition on active change */}
-              {services.map((svc, i) => (
-                <img
-                  key={svc.id}
-                  src={svc.image}
-                  alt={svc.title}
-                  loading="lazy"
-                  onError={(e) => { e.currentTarget.style.display = "none"; }}
-                  className="absolute inset-0 size-full object-cover transition-all duration-700 ease-out group-hover:scale-105"
-                  style={{ opacity: active === i ? 1 : 0, transition: "opacity .6s ease, transform .7s ease" }}
+              {/* Aspect ratio only applies on mobile/tablet; on desktop flex-1 takes over */}
+              <style>{`
+                @media (min-width:1024px){
+                  .svc-stage-ar { aspect-ratio: unset !important; }
+                }
+              `}</style>
+              <div className="svc-stage-ar absolute inset-0" style={{ aspectRatio: "16/10" }}>
+                {/* Dark base layer */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0"
+                  style={{ background: "linear-gradient(135deg,#1B1714,#101114,#2A160D)" }}
                 />
-              ))}
 
-              {/* Bottom overlay shade */}
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to top,rgba(16,17,20,0.85) 0%,rgba(16,17,20,0.1) 55%,transparent 100%)" }} />
+                {/* All 7 images stacked, cross-faded — ONE DOM node per image */}
+                {SERVICES.map((svc, i) => {
+                  const imgData = IMG.services[svc.slug] ?? IMG.services["website-development"];
+                  return (
+                    <Image
+                      key={svc.slug}
+                      src={imgData.src}
+                      alt={active === i ? imgData.alt : ""}
+                      aria-hidden={active !== i}
+                      fill
+                      sizes="(min-width:1024px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 ease-out"
+                      loading={i === 0 ? "eager" : "lazy"}
+                      style={{
+                        opacity:         active === i ? 1 : 0,
+                        transition:      reduced ? "none" : "opacity .5s ease",
+                        transform:       active === i ? "scale(1)" : "scale(1.06)",
+                      }}
+                    />
+                  );
+                })}
 
-              {/* Info overlay */}
-              <div className="absolute inset-x-5 bottom-5 text-white">
-                <h3 className="text-xl font-bold leading-tight mb-2">{s.title}</h3>
-                <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.72)" }}>{s.text}</p>
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {s.tags.map((tag) => (
-                    <span key={tag} style={{
-                      borderRadius: 99, padding: "3px 10px",
-                      fontSize: "0.75rem", fontWeight: 600,
-                      background: "rgba(255,255,255,0.15)",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                      color: "#fff",
-                    }}>{tag}</span>
-                  ))}
-                </div>
-                {/* CTA */}
-                <span style={{
-                  display: "inline-flex", alignItems: "center", gap: 6,
-                  borderRadius: 99, padding: "9px 18px",
-                  fontSize: 13, fontWeight: 700,
-                  background: "#FC6E04", color: "#101114",
-                }}>
-                  Learn more <ArrowUpRight size={14} />
-                </span>
+                {/* Bottom gradient overlay for panel legibility (no text sits on raw image) */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0"
+                  style={{ background: "linear-gradient(to top, rgba(16,17,20,0.5) 0%, transparent 55%)" }}
+                />
               </div>
-            </Link>
+            </div>
 
-            {/* Service quick-links grid — 3 cards */}
-            <div className="grid grid-cols-3 gap-3">
-              {services.filter((_, i) => i !== active).slice(0, 3).map((svc) => {
-                const Icon = svc.Icon;
-                return (
-                  <Link
-                    key={svc.id}
-                    href={svc.href}
-                    style={{
-                      borderRadius: 14, padding: "14px",
-                      background: "#fff",
-                      border: "1px solid #EAE5DF",
-                      textDecoration: "none",
-                      transition: "border-color .2s, box-shadow .2s, transform .2s",
-                      display: "flex", flexDirection: "column", gap: 8,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "#FFD4B3";
-                      e.currentTarget.style.boxShadow = "0 4px 16px rgba(252,110,4,0.10)";
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "#EAE5DF";
-                      e.currentTarget.style.boxShadow = "none";
-                      e.currentTarget.style.transform = "";
-                    }}
+            {/* Info panel — sits BELOW the image, not overlaid on it */}
+            <div
+              id={`svc-panel-${s.slug}`}
+              role="tabpanel"
+              aria-labelledby={`svc-tab-${s.slug}`}
+              key={s.slug}   /* re-mounts on change → triggers rise animation */
+              className="rounded-2xl border p-5 bg-white/90 backdrop-blur-xl"
+              style={{
+                borderColor: "rgba(255,255,255,0.6)",
+                boxShadow:   "0 4px 20px rgba(16,17,20,0.06)",
+                animation:   reduced ? "none" : "rise 0.6s cubic-bezier(0.2,0.8,0.2,1) both",
+              }}
+            >
+              <h3
+                className="text-lg font-bold leading-snug mb-1"
+                style={{ color: "#171717", letterSpacing: "-0.01em" }}
+              >
+                {s.title}
+              </h3>
+              <p className="text-sm leading-relaxed mb-3" style={{ color: "#6B6B70" }}>
+                {s.text}
+              </p>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {s.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full px-2.5 py-1 text-xs font-semibold"
+                    style={{ background: "#FFF0E4", color: "#E04F00", border: "1px solid #FFD4B3" }}
                   >
-                    <span style={{ width: 32, height: 32, borderRadius: 9, display: "grid", placeItems: "center", background: "#FFF0E4", color: "#FC6E04" }}>
-                      <Icon size={16} strokeWidth={1.8} />
-                    </span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: "#171717", lineHeight: 1.3 }}>{svc.title}</span>
-                  </Link>
-                );
-              })}
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <Link
+                href={s.href}
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-0.5"
+                style={{
+                  background:  "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)",
+                  color:       "#101114",
+                  boxShadow:   "0 4px 14px rgba(252,110,4,0.22)",
+                }}
+              >
+                Learn more <ArrowUpRight size={14} aria-hidden="true" />
+              </Link>
             </div>
           </div>
 
-          {/* ── Mobile: accordion (accordion opens below each item) ── */}
-          <div className="lg:hidden">
-            {services.map((svc, i) => {
-              const isOpen = active === i;
-              if (!isOpen) return null;
-              return (
-                <div key={svc.id}>
-                  <div className="relative aspect-[16/9] overflow-hidden rounded-2xl mb-4">
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(135deg,#1B1714,#101114)" }} />
-                    <img src={svc.image} alt={svc.title} className="absolute inset-0 size-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; }} />
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top,rgba(16,17,20,0.75) 0%,transparent 60%)" }} />
-                  </div>
-                  <p className="text-sm mb-3" style={{ color: "#6B6B70" }}>{svc.text}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {svc.tags.map((t) => (
-                      <span key={t} style={{ borderRadius: 99, padding: "3px 10px", fontSize: "0.75rem", fontWeight: 600, background: "#FFF0E4", color: "#E04F00" }}>{t}</span>
-                    ))}
-                  </div>
-                  <Link href={svc.href} style={{ display: "inline-flex", alignItems: "center", gap: 6, borderRadius: 99, padding: "10px 20px", fontSize: 13, fontWeight: 700, background: "#101114", color: "#FC6E04", textDecoration: "none" }}>
-                    Learn more <ArrowUpRight size={14} />
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
+
+      {/* Hover-only style for list items (not applied on touch) */}
+      <style>{`
+        @media (hover: hover) {
+          .svc-tab-btn:not([aria-selected="true"]):hover {
+            background: rgba(255,255,255,0.6) !important;
+            transform: translateX(4px);
+          }
+        }
+        /* Focus ring */
+        .svc-tab-btn:focus-visible {
+          outline: 2px solid #171717;
+          outline-offset: 3px;
+        }
+      `}</style>
     </section>
   );
 }

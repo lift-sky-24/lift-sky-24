@@ -696,21 +696,37 @@ bg-brand-gradient bg-clip-text text-transparent
 ### ServicesShowcase (`components/Servicesshowcase.jsx`)
 
 - **Type:** `"use client"`
-- **Used on:** Home page (the main services section)
-- **Font:** Bricolage Grotesque (headings) + DM Sans (body)
-- **Section background:** `#F5F6FC`
+- **Used on:** Home page (section 3 — main services showcase)
+- **Section background:** `#F8F7F4` (warm cream — matches site background)
 - **Section ID:** `id="services"`
-- **H2:** "Our Services" in Bricolage Grotesque, `clamp(2.2rem,5.5vw,4rem)`, `font-extrabold`, `leading-[1.02]`, `tracking-[-0.03em]`, `#0F1A4D`
-- **Sub:** "We build digital solutions that drive real business results." — `text-[#5B6489] text-base sm:text-xl`
-- **Services list (7):** All 7 services — each has id, title, text, tags, Icon, image
-  - image: all use `/images/services/demo.png` (same placeholder for all)
-- **Desktop behavior:** Hover/focus on list item previews service on the right image stage
-- **Mobile behavior:** Tap opens accordion — image + text expand inline
-- **Active item styling:** `bg-white shadow`, icon changes to `bg-indigo-600 text-white`
-- **Desktop stage:** 440px (xl: 480px) height, image fills with `scale-110` zoom when active, glass info card at bottom with `backdrop-blur-xl`, animated in via `@keyframes rise` (defined in globals.css)
-- **CTA button in each service:** "Get a free quote" → `href="#contact"` (anchor, not Next.js route)
-- **Tags on dark background:** `border border-white/25 bg-white/15 text-white`
-- **Tags on light background:** `bg-indigo-50 text-indigo-700`
+- **H2:** "Our Services" — `clamp(2rem,5vw,3.5rem)`, `font-extrabold`, `tracking-tight`, `#171717`
+- **Sub:** "We build digital solutions that drive real business results." — `text-base sm:text-lg`, `#6B6B70`
+- **Data source:** Service content (title, text, tags, Icon, href) defined inline in the component. Images pulled from `IMG.services[slug]` in `data/images.js` so each can be swapped with one edit.
+- **DOM structure:** ONE list of 7 buttons + ONE image stage (no duplicate markup, no accordion). Desktop and mobile share the same elements, CSS order utilities switch the visual arrangement.
+
+#### Desktop layout (≥1024px)
+- Two-column grid `lg:grid-cols-[5fr_6fr]`, `items-stretch` — list height equals stage height exactly. No fixed stage height (`h-[440px]` etc. removed); stage uses `flex-1 min-h-[28rem]`.
+- List items: `min-h-[64px] py-3 gap-1.5` — consistent height so total never shifts.
+- Inactive item: transparent bg, muted text, soft orange icon box. Hover (pointer:hover only): `bg-white/60 translateX(4px)`. Active: white card, 1px `rgba(252,110,4,0.30)` border, orange shadow, orange gradient icon box, navy title, chevron.
+- Hover-intent delay: 80ms (`setTimeout`) — mouse moving across list does not flicker. Mouse leaving the list cancels the pending switch and keeps last active.
+- Right stage: `overflow-hidden rounded-3xl`, 7 `next/image` (fill, object-cover) stacked and cross-faded via `opacity 0.5s`. First image `loading="eager"`, rest `loading="lazy"`. `sizes="(min-width:1024px) 50vw, 100vw"`. Subtle zoom: `scale(1.06) → scale(1)` over 0.7s on active image, disabled with `prefers-reduced-motion`.
+- Info panel: sits BELOW the image in normal flow (`rounded-2xl border bg-white/90 backdrop-blur-xl p-5`). Contains: title (navy, bold), description (muted), tags (orange soft pill), "Learn more ↗" CTA (orange gradient pill → service detail page). Panel re-mounts by `key={slug}` to replay `@keyframes rise` (0.6s) on each change.
+
+#### Mobile/tablet layout (<1024px)
+- Single column. Image stage at top (`order-1`), info panel below image, tab list at bottom (`order-2`). No accordion expand/collapse inside the list.
+- Image: `aspect-[16/10]` (≥640px: `aspect-[16/9]`), `max-h-[420px]`, `rounded-2xl`.
+- Tap any tab → image cross-fades + info panel updates. Active tab styled same as desktop.
+- Scroll-into-view: after tap, if stage is not fully visible, `stageRef.current.scrollIntoView({ behavior:"smooth", block:"start" })`. Disabled with `prefers-reduced-motion`. `scroll-mt-24` prevents header overlap.
+- Tap targets: `min-h-[64px]` (≥48px).
+
+#### Accessibility (ARIA tabs pattern)
+- List wrapper: `role="tablist" aria-orientation="vertical"`
+- Each item: `<button role="tab" id="svc-tab-{slug}" aria-selected aria-controls="svc-panel-{slug}" tabIndex={active?0:-1}>` (roving tabindex)
+- Panel: `role="tabpanel" id="svc-panel-{slug}" aria-labelledby="svc-tab-{slug}"`
+- Keyboard: `ArrowDown/Up` move + activate, `Home/End` jump to first/last, `Enter/Space` activate
+- Focus ring: `outline: 2px solid #171717; outline-offset: 3px`
+- Active image: descriptive alt from `data/images.js`. Inactive images: `alt="" aria-hidden`
+- `prefers-reduced-motion`: no zoom, no rise animation, instant cross-fade (`transition:none`)
 
 ### FAQ (`components/FAQ.js`)
 
@@ -1244,10 +1260,9 @@ Home (/), About (/about), Services (/services) [dropdown: All Services + 7 servi
 | Sections — `Reveal` | Framer Motion | fade up y:24→0, opacity 0→1 | whileInView (margin -60px, once) | 0.55s | easeOut | configurable | Default y=24 |
 | Sections — `Stagger` | Framer Motion | stagger children | whileInView (margin -60px, once) | — | — | — | `staggerChildren: 0.08s` |
 | Sections — `StaggerItem` | Framer Motion | y:20→0, opacity 0→1 | parent trigger | 0.45s | default | — | |
-| ServicesShowcase — image zoom | CSS transition | scale 1→1.1 when active | click/hover | 6000ms | ease-out | — | Very slow zoom |
-| ServicesShowcase — glass card | CSS `@keyframes rise` | opacity 0→1, translateY 14→0 | re-mount on active change | 0.6s | cubic-bezier(.2,.8,.2,1) | 0 | |
-| ServicesShowcase — image panel | CSS transition | opacity 0↔1 | active state change | 0.7s | default | — | Cross-fade |
-| ServicesShowcase — accordion | CSS grid-rows transition | `grid-rows-[0fr]`→`[1fr]` | click | 0.5s | default | — | Mobile only |
+| ServicesShowcase — image zoom | CSS transition | `scale(1.06)→scale(1)` on active | active state change | 0.7s | ease-out | — | Disabled with prefers-reduced-motion |
+| ServicesShowcase — info panel | CSS `@keyframes rise` | opacity 0→1, translateY 14→0 | key re-mount on slug change | 0.6s | cubic-bezier(.2,.8,.2,1) | 0 | |
+| ServicesShowcase — image cross-fade | CSS transition | opacity 0↔1 | active state change | 0.5s | ease | — | All 7 stacked; instant with reduced-motion |
 | FAQ — accordion | Framer Motion `AnimatePresence` | height 0→auto, opacity 0→1 | click | 0.25s | default | — | Per-item |
 | Testimonials — slide | Framer Motion `AnimatePresence mode="wait"` | x:30→0, exit x→-30, opacity | auto (7s) + manual | 0.3s | default | — | |
 | PricingTable — hover | Framer Motion `whileHover` | y: 0→-6 | hover | 0.25s | default | — | |
@@ -1282,7 +1297,7 @@ Home (/), About (/about), Services (/services) [dropdown: All Services + 7 servi
 | design.svg | `/images/design.svg` | PageHero for Graphic Design | varies | 640×460 | SVG | 1.6 KB | |
 | pricing.svg | `/images/pricing.svg` | PageHero for Pricing | "LiftSky24 pricing plans illustration" | 640×460 | SVG | 1.1 KB | |
 | industries.svg | `/images/industries.svg` | PageHero for Industries | "Industries served by LiftSky24" | 640×460 | SVG | 1.1 KB | |
-| services/demo.png | `/images/services/demo.png` | ServicesShowcase (all 7 services) | "" (empty — decorative) | various | PNG | 1.8 MB | Single placeholder for all service images — TODO replace |
+| services/demo.png | `/images/services/demo.png` | ServicesShowcase (all 7 services) | Active image uses per-service alt from `data/images.js`; inactive images `alt="" aria-hidden` | various | PNG | 1.8 MB | Single placeholder for all service images — TODO replace |
 | og-image.png | `/images/og-image.png` | OG/Twitter meta tags | `${BRAND.name} — ${title}` | 1200×630 | PNG | **FILE DOES NOT EXIST** | TODO: create this file |
 | Logo.jpeg | `/images/Logo.jpeg` | Not used | — | — | JPEG | 73 KB | Old logo — not in use |
 | logo.png | `/images/logo.png` | Not used | — | — | PNG | 930 KB | Old logo — not in use |
@@ -1437,7 +1452,7 @@ All 4 social icons (Facebook, Twitter, LinkedIn, Instagram) have `href="#"` — 
 
 ### Image Optimization
 
-- `next/image` used in: `HeroBanner` (fill + priority), `PageHero` (width=640, height=460, priority), `ServicesShowcase` (plain `<img>` tag — **not using next/image**)
+- `next/image` used in: `PageHero` (width=640, height=460, priority), `ServicesShowcase` (fill, object-cover, cross-faded — migrated from `<img>` to `next/image`)
 - `priority` only on hero images (HeroBanner, PageHero)
 - `loading="lazy"` on non-priority images
 - Remote patterns for Unsplash configured in `next.config.mjs`
@@ -1607,8 +1622,7 @@ All changes made to the original demo site in this Kiro session:
 - **CSS verification (post-build):** All 12 tokens confirmed present in compiled `layout.css`:
   `hero-bg-wash` ✓ · `hero-bg-aurora` ✓ · `hero-bg-glow` ✓ · `hero-bg-dots` ✓ · `hero-bg-spin` ✓ · `blur(70px)` ✓ · `8px 8px` ✓ · `mask-image` ✓ · `@keyframes hero-bg-aurora` ✓ · `@keyframes hero-bg-spin` ✓ · `animate-hero-bg-aurora` ✓ · `animate-hero-bg-spin` ✓
 
-### Phase 12 — Footer Watermark Redesign (Single Centred Mark)
-- **Removed:** Three per-column `motion.span` watermarks with `watermarkStyle` (one behind Quick Links, one behind Services, one behind Contact). Also removed the `position:relative` wrapper divs and `zIndex:2` inner divs that existed only to support the old watermarks.
+### Phase 12 — Footer Watermark Redesign (Single Centred Mark)- **Removed:** Three per-column `motion.span` watermarks with `watermarkStyle` (one behind Quick Links, one behind Services, one behind Contact). Also removed the `position:relative` wrapper divs and `zIndex:2` inner divs that existed only to support the old watermarks.
 - **Created:** `components/FooterWatermark.js` — new `"use client"` component. Renders one large "LiftSky24" absolutely positioned and centered over the entire footer. Uses `useReducedMotion()` from Framer Motion.
 - **Wiring:** `footer` root gets `position:relative` (was missing). `FooterWatermark` is first child at `z-0`. Content wrapper div gets `position:relative; zIndex:10` so all footer text / links / icons render on top.
 - **Responsive sizing:** Mobile two-line ("Lift" / "Sky24") at `text-[length:28vw]`, tablet one-line at `sm:text-[length:17vw]`, desktop one-line at `lg:text-[length:min(15vw,19rem)]` (capped at 1920px+).
@@ -1617,6 +1631,17 @@ All changes made to the original demo site in this Kiro session:
 - **Optional cleanup applied:** Social hover gradient and Subscribe button updated from old `#FF6B01→#ff4fa3` (pink) to brand orange `linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)`. Subscribe button text changed to navy `#0C1323`. Footer link hover color updated from `#FF6B01` to `#FC6E04`. No other content changed.
 - **Files changed:** `components/Footer.js`, `components/FooterWatermark.js` (new), `docs/LIFTSKY24_PROJECT_DOCUMENTATION.md`
 - **Build result:** ✓ 0 errors, 27/27 pages generated. All watermark CSS classes verified in compiled output.
+
+### Phase 13 — ServicesShowcase Redesign (Proper Tabs, Matched Heights)
+- **Removed:** 3 extra quick-link cards below the desktop stage (were `services.filter(…).slice(0,3).map(…)`). Removed separate mobile accordion markup. No more duplicate image requests or duplicate DOM nodes.
+- **Single source of truth:** One list of 7 `<button role="tab">` elements, one image stage — desktop and mobile share the same DOM. CSS `order-1/order-2` utilities swap visual arrangement per breakpoint.
+- **Desktop (≥1024px):** List left, stage right (`lg:grid-cols-[5fr_6fr]`, `items-stretch`). Stage height equals list height exactly — no fixed `h-[440px]`. Info panel sits below the image in normal flow (`bg-white/90 backdrop-blur-xl`), so text never sits on raw image pixels. Hover-intent 80 ms delay.
+- **Mobile (<1024px):** Image stage top (`order-1`), info panel below, tab list at bottom (`order-2`). Tap → cross-fade + scroll-into-view (only if stage not visible, skipped with prefers-reduced-motion).
+- **Images:** Migrated from `<img>` to `next/image` (fill, object-cover). First `loading="eager"`, rest `loading="lazy"`. `sizes="(min-width:1024px) 50vw, 100vw"`. Source and alt text from `data/images.js` registry.
+- **Animations:** Zoom `scale(1.06)→scale(1)` over 0.7s (was 6s). Cross-fade 0.5s. Info panel `@keyframes rise` re-triggered on slug key change. All off with `prefers-reduced-motion`.
+- **Accessibility:** Full ARIA tabs pattern (`role="tablist"`, `role="tab"`, `role="tabpanel"`, roving tabindex, keyboard ArrowDown/Up/Home/End/Enter/Space, visible focus ring 2px navy).
+- **Files changed:** `components/Servicesshowcase.jsx`, `docs/LIFTSKY24_PROJECT_DOCUMENTATION.md`
+- **Build:** ✓ 0 errors.
 
 ---
 
@@ -1631,9 +1656,7 @@ All changes made to the original demo site in this Kiro session:
 | 3 | Social icons on Contact page all `href="#"` | `app/contact/page.js` | Add real social profile URLs |
 | 4 | "Get Directions" link is generic | `app/contact/page.js` | Replace `https://maps.app.goo.gl/TaxilaBusinessSchoolJaipur` with real Google Maps share link |
 | 5 | Newsletter form has no backend | `components/Footer.js` | Connect to Mailchimp / ConvertKit / any email service |
-| 6 | `ServicesShowcase` "Get a free quote" → `href="#contact"` | `Servicesshowcase.jsx` | Change to `href="/contact"` |
-| 7 | Google Sheets webhook not configured | `.env.local` | Deploy Apps Script, add URL to env var |
-| 8 | All service images use `hero.svg` or `demo.png` | `data/site-config.js → IMAGES.services` | Add real photography/illustrations per service |
+| 6 | All service images use `hero.svg` or `demo.png` | `data/images.js → IMG.services` | Add real photography/illustrations per service |
 
 ### Content — Owner Input Required
 
