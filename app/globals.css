@@ -426,6 +426,16 @@ html:not([data-aos-init]) [data-aos] { opacity:1 !important; transform:none !imp
   transition:opacity .18s, visibility .18s, transform .2s;
   transform:translateY(-6px); z-index:110;
 }
+/* Invisible hover bridge — fills the 6px gap so mouse never leaves hover zone */
+.h-drop-menu::before {
+  content:'';
+  position:absolute;
+  top:-8px;
+  left:0;
+  width:100%;
+  height:8px;
+  background:transparent;
+}
 .h-dropdown:hover .h-drop-menu,
 .h-dropdown:focus-within .h-drop-menu {
   visibility:visible; opacity:1; pointer-events:auto; transform:translateY(0);

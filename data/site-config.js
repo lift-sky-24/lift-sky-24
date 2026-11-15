@@ -136,7 +136,6 @@ export const NAV = [
   },
   { label: "Industries", href: "/industries" },
   { label: "Blog",       href: "/blog"       },
-  { label: "Pricing",    href: "/pricing"    },
   { label: "Contact",    href: "/contact"    },
 ];
 
