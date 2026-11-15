@@ -84,7 +84,7 @@ function SectionHeader({ heading, subheading, light = false, center = true }) {
 /* ═══════════════════════════════════════════════════════════════
    SECTION 1 — HERO
 ══════════════════════════════════════════════════════════════ */
-function HeroSection() {
+function HeroSection({ breadcrumb = [] }) {
   const reduced = useReducedMotion();
 
   /* Split heading into words for stagger */
@@ -108,6 +108,34 @@ function HeroSection() {
       />
 
       <div className="relative z-10 mx-auto w-[min(1200px,100%-40px)]">
+        {/* Breadcrumb nav — inside hero on dark background */}
+        {breadcrumb.length > 0 && (
+          <nav aria-label="Breadcrumb" className="mb-8 flex flex-wrap items-center gap-1.5 text-xs font-medium">
+            {breadcrumb.map((item, i) => (
+              <span key={i} className="flex items-center gap-1.5">
+                {i > 0 && (
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M4.5 2.5 L7.5 6 L4.5 9.5" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+                {i < breadcrumb.length - 1 ? (
+                  <a
+                    href={item.href}
+                    className="transition-colors duration-150 hover:text-white"
+                    style={{ color: "rgba(255,255,255,0.50)", textDecoration: "none" }}
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <span aria-current="page" style={{ color: "#FC6E04" }}>
+                    {item.name}
+                  </span>
+                )}
+              </span>
+            ))}
+          </nav>
+        )}
+
         {/* Eyebrow */}
         <motion.p
           className="text-sm font-semibold uppercase tracking-[0.2em]"
@@ -813,10 +841,10 @@ function FinalCtaSection() {
 /* ═══════════════════════════════════════════════════════════════
    ROOT EXPORT
 ══════════════════════════════════════════════════════════════ */
-export default function WebsiteDevelopmentPage() {
+export default function WebsiteDevelopmentPage({ breadcrumb = [] }) {
   return (
     <main>
-      <HeroSection />
+      <HeroSection breadcrumb={breadcrumb} />
       <ServicesSection />
       <WhySection />
       <TechStackSection />

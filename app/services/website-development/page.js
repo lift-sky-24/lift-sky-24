@@ -1,6 +1,5 @@
 import WebsiteDevelopmentPage from "@/components/WebsiteDevelopmentPage";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import { meta, faqSchema } from "@/lib/seo";
+import { meta, faqSchema, breadcrumbSchema } from "@/lib/seo";
 import { websiteDevelopmentData } from "@/data/service-details/website-development";
 
 export const metadata = meta(
@@ -10,25 +9,31 @@ export const metadata = meta(
 );
 
 export default function WebsiteDevelopment() {
-  /* Map FAQ shape {question, answer} → {q, a} expected by faqSchema */
   const faqsForSchema = websiteDevelopmentData.faqs.map((f) => ({
     q: f.question,
     a: f.answer,
   }));
 
+  const breadcrumbItems = [
+    { name: "Home",                href: "/" },
+    { name: "Services",            href: "/services" },
+    { name: "Website Development", href: "/services/website-development" },
+  ];
+
   return (
     <>
+      {/* FAQPage JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(faqsForSchema)) }}
       />
-      <Breadcrumbs
-        items={[
-          { name: "Services", href: "/services" },
-          { name: "Website Development" },
-        ]}
+      {/* BreadcrumbList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema(breadcrumbItems)) }}
       />
-      <WebsiteDevelopmentPage />
+      {/* Breadcrumb nav rendered inside the hero via prop */}
+      <WebsiteDevelopmentPage breadcrumb={breadcrumbItems} />
     </>
   );
 }
