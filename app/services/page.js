@@ -4,8 +4,7 @@ import { services, processSteps } from "@/lib/data";
 import { meta } from "@/lib/seo";
 import { BRAND, LOCAL_SEO } from "@/data/site-config";
 import { servicesGridSection, servicesProcessSection, servicesCTA } from "@/data/pages/services";
-import FloatingHero from "@/components/FloatingHero";
-import { heroElements } from "@/data/hero-elements";
+import ServicesHero from "@/components/ServicesHero";
 
 export const metadata = meta(
   "Our Services",
@@ -16,19 +15,7 @@ export const metadata = meta(
 export default function Services() {
   return (
     <>
-      <FloatingHero
-        eyebrow="7 CORE SERVICES"
-        title="Everything Your Business Needs to Grow Online"
-        titleAccent="Grow Online"
-        description="From your first website to a full digital strategy — we offer web, app, software, SEO, social media, design and marketing under one roof."
-        ctas={[
-          { text: "Get a Free Quote", href: "/contact",  variant: "primary"   },
-          { text: "View Pricing",     href: "/pricing",  variant: "secondary" },
-        ]}
-        centerIcon={heroElements.services.centerIcon}
-        centerLabel={heroElements.services.centerLabel}
-        floatingElements={heroElements.services.elements}
-      />
+      <ServicesHero />
       <Section title={servicesGridSection.title} sub={servicesGridSection.sub}>
         <IconCards items={services} cols={servicesGridSection.cols} />
       </Section>
