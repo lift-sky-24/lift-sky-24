@@ -12,22 +12,13 @@ export default function BlogHero() {
   return (
     <>
       <style>{`
-        #blog-hero {
-          background-image: url('${BG_IMAGE}');
-          background-size: cover;
-          background-position: center right;
-          background-repeat: no-repeat;
-        }
         /* Tablet: shift slightly left so books stay visible */
         @media (max-width: 1199px) and (min-width: 768px) {
-          #blog-hero { background-position: 70% center; }
+          #blog-hero { background-position: 70% center !important; }
         }
-        /* Mobile: show the atom/books while keeping text readable */
+        /* Mobile */
         @media (max-width: 767px) {
-          #blog-hero {
-            background-position: 60% center;
-            background-size: cover;
-          }
+          #blog-hero { background-position: 60% center !important; }
         }
       `}</style>
 
@@ -37,6 +28,10 @@ export default function BlogHero() {
         style={{
           minHeight: "clamp(520px,65vh,650px)",
           background: "#080A0D",
+          backgroundImage: `url('${BG_IMAGE}')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center right",
+          backgroundRepeat: "no-repeat",
         }}
       >
         {/* Gradient overlay — darkens left side for text contrast, fades toward the books */}
