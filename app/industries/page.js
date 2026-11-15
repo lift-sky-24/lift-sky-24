@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import FloatingHero from "@/components/FloatingHero";
 import { heroElements } from "@/data/hero-elements";
+import IndustriesHero from "@/components/IndustriesHero";
 
 export const metadata = meta(
   "Industries We Serve",
@@ -50,19 +51,7 @@ export default function Industries() {
 
   return (
     <>
-      <FloatingHero
-        eyebrow="ACROSS EVERY SECTOR"
-        title="Digital Solutions Built for Your Industry"
-        titleAccent="Your Industry"
-        description="From healthcare and education to retail, hospitality and finance — we build digital solutions shaped around how your specific industry works."
-        ctas={[
-          { text: "Start a Project", href: "/contact",  variant: "primary"   },
-          { text: "Our Services",    href: "/services", variant: "secondary" },
-        ]}
-        centerIcon={heroElements.industries.centerIcon}
-        centerLabel={heroElements.industries.centerLabel}
-        floatingElements={heroElements.industries.elements}
-      />
+      <IndustriesHero />
 
       {/* ── Intro strip ─────────────────────────────────────────── */}
       <section className="bg-navy-900 py-10">
