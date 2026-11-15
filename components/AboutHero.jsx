@@ -6,7 +6,7 @@ import { HeartHandshake, PackageCheck, Award } from "lucide-react";
 const handStyle = { fontFamily: "Caveat, cursive" };
 
 const BG_IMAGE   = "/Bg/liftsky24-about-hero.webp";
-const SHOW_NOTE  = true;
+const SHOW_NOTE  = false;
 
 const stats = [
   { to: 500, label: "Happy Clients",      Icon: HeartHandshake },
