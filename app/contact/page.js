@@ -5,8 +5,7 @@ import { Reveal } from "@/components/ui";
 import { meta } from "@/lib/seo";
 import { CONTACT } from "@/data/site-config";
 import { contactInfoLabels, contactLocationSection } from "@/data/pages/contact";
-import FloatingHero from "@/components/FloatingHero";
-import { heroElements } from "@/data/hero-elements";
+import ContactHero from "@/components/ContactHero";
 
 export const metadata = meta(
   "Contact Us",
@@ -37,19 +36,10 @@ const MAP_EMBED = CONTACT.address.mapEmbed;
 export default function Contact() {
   return (
     <>
-      <FloatingHero
-        eyebrow="GET IN TOUCH"
-        title="Let's Talk About Your Next Project"
-        titleAccent="Next Project"
-        description="Have an idea? We'd love to hear it. Get a free quote within 24 hours — no commitment, no jargon."
-        ctas={[
-          { text: "Send a Message", href: "#main",    variant: "primary"   },
-          { text: "WhatsApp Us",    href: CONTACT.whatsapp, variant: "secondary" },
-        ]}
-        centerIcon={heroElements.contact.centerIcon}
-        centerLabel={heroElements.contact.centerLabel}
-        floatingElements={heroElements.contact.elements}
-      />
+      <ContactHero />
+
+      {/* contact-section anchor — scroll target from hero CTA */}
+      <div id="contact-section" />
 
       <Section>
         <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
