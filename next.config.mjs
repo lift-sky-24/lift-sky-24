@@ -8,10 +8,11 @@ const nextConfig = {
   // Permanent redirects for removed / renamed service routes
   async redirects() {
     return [
-      { source: "/services/ai-ml",          destination: "/services",                  permanent: true },
-      { source: "/services/mobile-apps",     destination: "/services/app-development",  permanent: true },
-      { source: "/services/ui-ux-design",    destination: "/services/graphic-design",   permanent: true },
-      { source: "/services/web-development", destination: "/services/website-development", permanent: true },
+      { source: "/services/ai-ml",             destination: "/services",                   permanent: true },
+      { source: "/services/mobile-apps",        destination: "/services/app-development",   permanent: true },
+      { source: "/services/ui-ux-design",        destination: "/services/graphic-design",    permanent: true },
+      { source: "/services/web-development",    destination: "/services/website-development",permanent: true },
+      { source: "/services/software-development",destination: "/services/ai-agents",         permanent: true },
     ];
   },
 

@@ -1,9 +1,70 @@
-﻿/**
- * data/service-details/graphic-design.js
- * Service detail data for: graphic-design
- * This re-exports from lib/data.js → serviceDetails.
- * To edit content, update the relevant entry in lib/data.js → serviceDetails["graphic-design"].
- */
-import { serviceDetails } from "@/lib/data";
-export const serviceData = serviceDetails["graphic-design"];
-export default serviceData;
+﻿export const graphicDesignData = {
+  hero: {
+    eyebrow: "CREATIVE DIRECTION. BOLD TYPOGRAPHY.",
+    title: "Graphic Design & Branding in Jaipur",
+    description: "Your brand deserves to be seen, remembered and recognised. We turn ideas into meaningful visual experiences through creative branding, impactful graphics and thoughtful design that give your business a distinctive identity.",
+    primaryCta:   { text: "Let's Create Your Identity", href: "/contact" },
+    secondaryCta: { text: "View Our Work",              href: "/portfolio" },
+    highlights: ["Logo Design","Brand Identity","Social Media Creatives","Packaging","Print Design","UI Design"],
+  },
+  services: {
+    heading:    "Every Great Brand Starts with a Powerful Visual.",
+    subheading: "From building your identity to capturing attention across digital platforms, we create designs that give your business a consistent and recognisable presence.",
+    items: [
+      { number:"01", title:"Logo & Brand Identity",          description:"More than a symbol — your logo represents your business. We create distinctive logos, colour systems and brand identities that reflect your vision.",       icon:"Fingerprint", tags:["Logo","Color System","Typography"] },
+      { number:"02", title:"Social Media Creatives",         description:"Turn your social media presence into a visual experience. We design engaging posts, stories, carousels and campaign creatives that make your brand stand out.", icon:"Share2",      tags:["Posts","Stories","Carousels"] },
+      { number:"03", title:"Brochures & Company Profiles",   description:"Give your business story a professional presentation through beautifully structured brochures, company profiles and product catalogues.",                     icon:"BookOpen",    tags:["Brochures","Catalogues","Profiles"] },
+      { number:"04", title:"Packaging & Label Design",       description:"Make your products memorable before customers even open them. We design packaging and labels that communicate quality and reflect your brand.",               icon:"Package",     tags:["Packaging","Labels","Product"] },
+      { number:"05", title:"Advertising & Campaign Designs", description:"Make every promotion count with creative ad banners, posters, promotional graphics, hoardings and campaign visuals.",                                          icon:"Megaphone",   tags:["Banners","Posters","Hoardings"] },
+      { number:"06", title:"Business Stationery",            description:"Bring consistency to every business interaction with professionally designed business cards, letterheads and branded stationery.",                            icon:"CreditCard",  tags:["Business Cards","Letterheads"] },
+      { number:"07", title:"Presentation & Pitch Decks",     description:"Transform information into powerful visual communication through professional presentations and investor pitch decks.",                                        icon:"Presentation", tags:["Decks","Presentations"] },
+      { number:"08", title:"Digital Interface Design",       description:"Create a better first impression online with modern website layouts, mobile app screens and intuitive user interfaces.",                                       icon:"Layout",      tags:["Web UI","App UI","Wireframes"] },
+    ],
+  },
+  why: {
+    heading:    "Creativity Meets Business Thinking.",
+    subheading: "Design that works as hard as you do.",
+    items: [
+      { title:"Designed Around Your Brand",    description:"Every design reflects your business identity and audience.",                                             icon:"Palette"       },
+      { title:"Creative Meets Practical",      description:"Beautiful work that communicates clearly and achieves real results.",                                     icon:"Wrench"        },
+      { title:"Understanding Local Markets",   description:"We know what resonates with audiences in Jaipur and across India.",                                      icon:"MapPin"        },
+      { title:"Clear Project Communication",   description:"No surprises — we keep you informed at every step of the process.",                                      icon:"MessageCircle" },
+      { title:"One Connected Team",            description:"Design, development and marketing working together under one roof.",                                      icon:"Users"         },
+    ],
+  },
+  process: {
+    heading:    "From First Thought to Final Impression.",
+    steps: [
+      { number:"01", title:"Discover",          description:"Understand your business, audience, objectives and creative expectations." },
+      { number:"02", title:"Imagine",           description:"Explore references, concepts and visual directions that match your brand." },
+      { number:"03", title:"Create",            description:"Transform the selected direction into professional designs." },
+      { number:"04", title:"Refine & Deliver",  description:"Incorporate agreed feedback and deliver your approved designs in required formats." },
+    ],
+  },
+  portfolio: {
+    heading:         "Ideas We Turned Into Visual Experiences.",
+    subheading:      "Selected creative projects across branding, print and digital design.",
+    categories:      ["Brand Identity","Social Media Campaigns","Print & Packaging","Digital Creatives","Website UI Design"],
+    comingSoonTitle: "Creative Projects Coming Soon",
+    comingSoonDesc:  "We're documenting our design work. Have a project in mind? Let's talk.",
+    cta: { text:"Have a Project in Mind? Let's Talk.", href:"/contact" },
+  },
+  faqs: [
+    { question:"What graphic design services does LiftSky24 provide?",  answer:"We provide logo design, branding, social media creatives, brochures, packaging, advertising graphics, business stationery and digital interface design." },
+    { question:"How much do graphic design services cost in Jaipur?",   answer:"Pricing depends on the design requirements, complexity and deliverables. Contact us for a project-specific quotation." },
+    { question:"Can you create a complete brand identity?",             answer:"Yes. We can create logos, colour palettes, typography systems and supporting brand materials to establish a consistent visual identity." },
+    { question:"Do you design social media posts and advertisements?",  answer:"Yes. We create platform-specific graphics for Instagram, Facebook, LinkedIn and digital advertising campaigns." },
+    { question:"How long does a design project take?",                  answer:"The timeline depends on the project scope and feedback process. We share an estimated timeline before starting." },
+    { question:"Do you provide services outside Jaipur?",               answer:"Yes. We serve businesses throughout Rajasthan and India through online project collaboration." },
+    { question:"Can you create designs in Hindi and English?",          answer:"Yes. We support bilingual creative designs with appropriate typography and layouts." },
+  ],
+  faqHeading: "Everything You Need to Know Before We Create.",
+  finalCta: {
+    heading:         "Your Next Big Idea Deserves Great Design.",
+    accentWord:      "Great Design.",
+    description:     "Let's build a visual identity that reflects your ambition, communicates your value and makes your business stand apart.",
+    primaryCta:   { text:"Start Your Project",    href:"/contact" },
+    secondaryCta: { text:"Chat with Our Team",    href:"/contact" },
+    supportingText: "Logo Design | Branding | Social Media | Print | Jaipur, Rajasthan",
+  },
+};

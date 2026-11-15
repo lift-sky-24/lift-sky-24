@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, BookOpen } from "lucide-react";
 
-const BG_IMAGE = "/Bg/liftsky24-blog-hero.webp";
+const BG_IMAGE = "/Bg/blog-hero.webp";
 
 export default function BlogHero() {
   const reduced = useReducedMotion();

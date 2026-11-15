@@ -1,9 +1,72 @@
-﻿/**
- * data/service-details/digital-marketing.js
- * Service detail data for: digital-marketing
- * This re-exports from lib/data.js → serviceDetails.
- * To edit content, update the relevant entry in lib/data.js → serviceDetails["digital-marketing"].
- */
-import { serviceDetails } from "@/lib/data";
-export const serviceData = serviceDetails["digital-marketing"];
-export default serviceData;
+﻿export const digitalMarketingData = {
+  hero: {
+    eyebrow: "DIGITAL MARKETING",
+    title: "Digital Marketing Company in Jaipur",
+    description: "Grow your business online with strategic digital marketing services. LiftSky24 helps businesses in Jaipur and across Rajasthan improve online visibility, reach the right audience and generate quality leads through SEO, paid advertising and social media marketing.",
+    primaryCta:   { text:"Get Free Strategy Call",  href:"/contact" },
+    secondaryCta: { text:"Discuss Your Project",    href:"/contact" },
+    highlights: ["SEO & Local SEO","Google Ads","Social Media Marketing","Meta Ads","Content Marketing","Performance Tracking"],
+  },
+  services: {
+    heading:    "Complete Digital Marketing Solutions for Business Growth",
+    subheading: "Every channel working together — search, social, content and paid advertising aligned with your business goals.",
+    items: [
+      { number:"01", title:"SEO",                       description:"Improve search rankings through technical SEO, keyword research, on-page optimisation and content strategy.",              icon:"Search",          tags:["Keywords","Technical","On-Page"] },
+      { number:"02", title:"Local SEO",                 description:"Increase local search visibility through Google Business Profile optimisation and location-based keyword targeting.",        icon:"MapPin",          tags:["GBP","Local Keywords"] },
+      { number:"03", title:"Google Ads & PPC",          description:"Drive targeted traffic through carefully managed Search, Display and Shopping ad campaigns on Google.",                      icon:"MousePointerClick",tags:["Search Ads","Display"] },
+      { number:"04", title:"Social Media Marketing",    description:"Build brand presence and engage your audience through consistent content and community management across platforms.",         icon:"Share2",          tags:["Content","Engagement"] },
+      { number:"05", title:"Meta & Instagram Ads",      description:"Reach targeted audiences and generate leads through strategically managed Meta and Instagram advertising campaigns.",        icon:"Target",          tags:["Lead Gen","Brand Reach"] },
+      { number:"06", title:"Content Marketing",         description:"Attract and educate your audience through well-researched blogs, service pages and landing pages optimised for search.",    icon:"FileText",        tags:["Blogs","Landing Pages"] },
+      { number:"07", title:"Graphic Design & Branding", description:"Compelling creative assets — ad banners, social creatives and campaign visuals that communicate your message clearly.",     icon:"Palette",         tags:["Creatives","Banners"] },
+      { number:"08", title:"Email & WhatsApp Marketing",description:"Nurture leads and retain customers through targeted email campaigns and WhatsApp marketing sequences.",                     icon:"Mail",            tags:["Campaigns","Follow-ups"] },
+    ],
+  },
+  why: {
+    heading:    "A Digital Marketing Partner That Understands Technology",
+    items: [
+      { title:"Integrated Services",        description:"Web development, SEO, ads and social media working together.",                 icon:"Layers"       },
+      { title:"Customised Strategies",      description:"Marketing plans built around your specific business goals and audience.",       icon:"Target"       },
+      { title:"Local Market Understanding", description:"Knowledge of Jaipur and Rajasthan audience behaviour and preferences.",        icon:"MapPin"       },
+      { title:"Transparent Reporting",      description:"Clear, regular updates on campaign performance and what is being improved.",    icon:"BarChart3"    },
+      { title:"Business-Focused Approach",  description:"Every decision is measured against real business outcomes, not just metrics.", icon:"TrendingUp"   },
+      { title:"Account Ownership",          description:"Your ad accounts, analytics and assets always remain yours.",                  icon:"ShieldCheck"  },
+    ],
+  },
+  process: {
+    heading:    "A Clear Process from Strategy to Execution",
+    steps: [
+      { number:"01", title:"Business Analysis",    description:"Understand your business, audience, competition and current digital presence." },
+      { number:"02", title:"Marketing Strategy",   description:"Define channel mix, budget allocation and campaign objectives." },
+      { number:"03", title:"Setup & Launch",       description:"Configure tracking, create assets and launch initial campaigns." },
+      { number:"04", title:"Optimisation",         description:"Monitor performance and continuously improve campaigns and content." },
+      { number:"05", title:"Reporting & Growth",   description:"Share regular performance reports and refine strategy based on results." },
+    ],
+  },
+  portfolio: {
+    heading:         "Our Digital Marketing Work",
+    subheading:      "Campaigns and strategies built for real business growth.",
+    categories:      ["SEO Projects","Google Ads","Social Media","Content Marketing","Email Campaigns"],
+    comingSoonTitle: "Marketing Portfolio Coming Soon",
+    comingSoonDesc:  "We're documenting our digital marketing results. Contact us to discuss your project.",
+    cta: { text:"Get Free Strategy Call", href:"/contact" },
+  },
+  faqs: [
+    { question:"What digital marketing services does LiftSky24 provide?",  answer:"We provide SEO, local SEO, Google Ads, social media marketing, Meta and Instagram advertising, content marketing, graphic design and email and WhatsApp marketing." },
+    { question:"Does LiftSky24 provide digital marketing services in Jaipur?", answer:"Yes. We serve businesses in Jaipur and across Rajasthan with digital marketing services including SEO, Google Ads and social media management." },
+    { question:"Do you manage social media as part of digital marketing?",  answer:"Yes. Social media content and advertising is an integrated part of our digital marketing services." },
+    { question:"Can you run Google Ads and Meta Ads campaigns?",            answer:"Yes. We plan, set up and manage Google Search, Display and Meta advertising campaigns based on your budget and business goals." },
+    { question:"How long before digital marketing shows results?",          answer:"SEO typically takes 3–6 months for measurable results. Paid advertising can deliver leads faster. Timeline depends on competition, budget and strategy." },
+    { question:"Do I need a website before starting digital marketing?",    answer:"A website is recommended but not always essential. We can help evaluate your current digital presence and recommend the right starting point." },
+    { question:"Can you handle both web development and digital marketing?", answer:"Yes. LiftSky24 provides website development alongside digital marketing, allowing both to work together more effectively." },
+    { question:"Do you provide monthly performance reports?",               answer:"Yes. We share regular reports covering traffic, rankings, ad performance and lead generation with clear explanations and next steps." },
+  ],
+  faqHeading: "Digital Marketing Questions Answered",
+  finalCta: {
+    heading:         "Ready to Grow Your Business with Digital Marketing?",
+    accentWord:      "Digital Marketing?",
+    description:     "Let's understand your business goals and build a marketing strategy that improves your online visibility and generates quality leads.",
+    primaryCta:   { text:"Get Free Strategy Call", href:"/contact" },
+    secondaryCta: { text:"Start Your Project",     href:"/contact" },
+    supportingText: "SEO | Google Ads | Social Media | Meta Ads | Jaipur, Rajasthan",
+  },
+};

@@ -1,9 +1,73 @@
-﻿/**
- * data/service-details/social-media-management.js
- * Service detail data for: social-media-management
- * This re-exports from lib/data.js → serviceDetails.
- * To edit content, update the relevant entry in lib/data.js → serviceDetails["social-media-management"].
- */
-import { serviceDetails } from "@/lib/data";
-export const serviceData = serviceDetails["social-media-management"];
-export default serviceData;
+﻿export const socialMediaData = {
+  hero: {
+    eyebrow: "SOCIAL MEDIA MARKETING",
+    title: "Social Media Marketing Company in Jaipur",
+    description: "Turn your social media presence into meaningful business opportunities. LiftSky24 helps businesses build brand awareness, engage the right audience and generate enquiries through strategic content, social media management and paid advertising.",
+    primaryCta:   { text:"Get a Free Social Media Plan", href:"/contact" },
+    secondaryCta: { text:"Chat on WhatsApp",             href:"https://wa.me/918875796652" },
+    highlights: ["Instagram","Facebook","LinkedIn","YouTube","X","Pinterest"],
+  },
+  services: {
+    heading:    "Social Media Services That Build Your Brand and Grow Your Business",
+    subheading: "From strategy to execution — creative content, community management and paid advertising.",
+    items: [
+      { number:"01", title:"Strategy & Audit",        description:"Analyse your current social presence, understand your audience and build a content strategy aligned with your business goals.",  icon:"Target",          tags:["Analysis","Planning"] },
+      { number:"02", title:"Content Creation",        description:"Reels, carousels, stories and static posts designed to reflect your brand, engage your audience and drive real interaction.",       icon:"PenTool",         tags:["Reels","Carousels","Stories"] },
+      { number:"03", title:"Account Management",      description:"Consistent publishing, scheduling and community engagement across all your active social media platforms.",                         icon:"Calendar",        tags:["Scheduling","Publishing"] },
+      { number:"04", title:"Paid Advertising",        description:"Strategically planned and managed Meta and Instagram ad campaigns to increase reach, generate leads and drive business enquiries.",  icon:"Megaphone",       tags:["Meta Ads","Instagram Ads"] },
+      { number:"05", title:"Community Management",    description:"Monitor comments, messages and mentions to maintain a responsive and positive brand presence across platforms.",                      icon:"Users",           tags:["Comments","Messages"] },
+      { number:"06", title:"Influencer Marketing",    description:"Identify and collaborate with relevant creators and influencers to extend your brand's reach to new, targeted audiences.",           icon:"Star",            tags:["Creators","Collaborations"] },
+      { number:"07", title:"LinkedIn Marketing",      description:"Build professional credibility, generate B2B leads and establish thought leadership through targeted LinkedIn content and campaigns.", icon:"Briefcase",       tags:["B2B","Lead Gen"] },
+      { number:"08", title:"Analytics & Reporting",   description:"Regular performance reports covering reach, engagement, follower growth and campaign results with clear insights and recommendations.", icon:"BarChart3",       tags:["Reports","Insights"] },
+    ],
+  },
+  why: {
+    heading:    "A Social Media Team That Thinks Beyond Likes",
+    items: [
+      { title:"Business-Focused Strategy",    description:"Content and campaigns designed to generate enquiries, not just engagement.",        icon:"Target"       },
+      { title:"Creative Content",             description:"Original visuals and copy that reflect your brand and resonate with your audience.", icon:"PenTool"      },
+      { title:"Local Market Knowledge",       description:"Understanding of Jaipur and Indian market audience behaviour and preferences.",     icon:"MapPin"       },
+      { title:"Creative + Technical",         description:"Social media combined with website, SEO and CRM for a complete digital strategy.",  icon:"Layers"       },
+      { title:"Transparent Reporting",        description:"Clear, regular updates on what is working and what is being improved.",             icon:"BarChart3"    },
+      { title:"Account Ownership",            description:"Your accounts and content always belong to you — no lock-in.",                      icon:"ShieldCheck"  },
+    ],
+  },
+  process: {
+    heading:    "A Clear Process from Planning to Performance",
+    steps: [
+      { number:"01", title:"Research & Audit",        description:"Review your current accounts, competitors and audience behaviour." },
+      { number:"02", title:"Strategy",                description:"Define content pillars, platform focus and campaign objectives." },
+      { number:"03", title:"Content Planning",        description:"Build a monthly content calendar with approved themes and formats." },
+      { number:"04", title:"Creation & Publishing",   description:"Produce and publish content consistently across your platforms." },
+      { number:"05", title:"Campaign Management",     description:"Run paid advertising campaigns with ongoing monitoring and optimisation." },
+      { number:"06", title:"Reporting",               description:"Share regular performance reports with actionable insights." },
+    ],
+  },
+  portfolio: {
+    heading:         "Creative Campaigns and Social Media Projects",
+    subheading:      "Content strategies and campaign work across different industries.",
+    categories:      ["Brand Content","Reels & Videos","Paid Campaigns","Community Building","Influencer Projects"],
+    comingSoonTitle: "Social Media Portfolio Coming Soon",
+    comingSoonDesc:  "We're documenting our campaigns. Contact us to discuss your social media requirements.",
+    cta: { text:"Get Your Free Social Media Review", href:"/contact" },
+  },
+  faqs: [
+    { question:"What social media services does LiftSky24 provide?",        answer:"We provide social media strategy, content creation, account management, paid advertising, community management, influencer marketing, LinkedIn marketing and analytics reporting." },
+    { question:"Which social media platform is best for my business?",      answer:"The right platform depends on your audience and business type. We analyse your target market and recommend the most suitable platforms based on your goals." },
+    { question:"Do you create social media content?",                       answer:"Yes. We create original graphics, reels, carousels, stories and copy in line with your brand identity and audience preferences." },
+    { question:"Can you create content in Hindi and Hinglish?",             answer:"Yes. We create bilingual content in Hindi, Hinglish and English depending on your target audience and communication style." },
+    { question:"Do you manage paid advertising campaigns?",                 answer:"Yes. We plan and manage Meta and Instagram ad campaigns focused on reach, engagement and lead generation based on your budget and objectives." },
+    { question:"Can social media be integrated with our CRM?",              answer:"Yes. We can connect your social media campaigns with landing pages, WhatsApp and CRM systems to track leads and automate follow-ups." },
+    { question:"Can you guarantee a specific number of followers?",         answer:"We focus on building genuine audience growth and business enquiries rather than chasing follower counts. We don't guarantee specific numbers." },
+    { question:"Do you serve businesses outside Jaipur?",                   answer:"Yes. We work with businesses throughout Rajasthan and across India through remote collaboration." },
+  ],
+  faqHeading: "Social Media Marketing Questions Answered",
+  finalCta: {
+    heading:         "Ready to Turn Your Social Media into Business Opportunities?",
+    accentWord:      "Business Opportunities?",
+    description:     "Let's review your current social media presence and build a strategy that generates real enquiries and grows your brand.",
+    primaryCta:   { text:"Get Your Free Social Media Review", href:"/contact" },
+    secondaryCta: { text:"Chat on WhatsApp",                  href:"https://wa.me/918875796652" },
+    supportingText: "Instagram | Facebook | LinkedIn | Meta Ads | Jaipur, Rajasthan",
+  },
+};
