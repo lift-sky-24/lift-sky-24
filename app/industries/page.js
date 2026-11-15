@@ -7,7 +7,6 @@ import { services } from "@/lib/data";
 import { meta } from "@/lib/seo";
 import { BRAND } from "@/data/site-config";
 import {
-  industriesPageHero,
   industriesIntro,
   INDUSTRY_CATEGORIES,
   whyIndustryFocused,
@@ -18,7 +17,8 @@ import {
   Briefcase, HeartPulse, GraduationCap, ShoppingBag, UtensilsCrossed,
   Cpu, Factory, Palette, Landmark, ArrowRight,
 } from "lucide-react";
-import PageHero from "@/components/PageHero";
+import FloatingHero from "@/components/FloatingHero";
+import { heroElements } from "@/data/hero-elements";
 
 export const metadata = meta(
   "Industries We Serve",
@@ -50,13 +50,18 @@ export default function Industries() {
 
   return (
     <>
-      <PageHero
-        title={industriesPageHero.title}
-        accent={industriesPageHero.accent}
-        eyebrow={industriesPageHero.eyebrow}
-        sub={industriesPageHero.sub}
-        image={industriesPageHero.image}
-        alt={industriesPageHero.alt}
+      <FloatingHero
+        eyebrow="ACROSS EVERY SECTOR"
+        title="Digital Solutions Built for Your Industry"
+        titleAccent="Your Industry"
+        description="From healthcare and education to retail, hospitality and finance — we build digital solutions shaped around how your specific industry works."
+        ctas={[
+          { text: "Start a Project", href: "/contact",  variant: "primary"   },
+          { text: "Our Services",    href: "/services", variant: "secondary" },
+        ]}
+        centerIcon={heroElements.industries.centerIcon}
+        centerLabel={heroElements.industries.centerLabel}
+        floatingElements={heroElements.industries.elements}
       />
 
       {/* ── Intro strip ─────────────────────────────────────────── */}

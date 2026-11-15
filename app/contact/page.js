@@ -1,11 +1,12 @@
 import { MapPin, Mail, Phone, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
-import PageHero from "@/components/PageHero";
 import { Section } from "@/components/Sections";
 import ContactForm from "@/components/ContactForm";
 import { Reveal } from "@/components/ui";
 import { meta } from "@/lib/seo";
 import { CONTACT } from "@/data/site-config";
-import { contactPageHero, contactInfoLabels, contactLocationSection } from "@/data/pages/contact";
+import { contactInfoLabels, contactLocationSection } from "@/data/pages/contact";
+import FloatingHero from "@/components/FloatingHero";
+import { heroElements } from "@/data/hero-elements";
 
 export const metadata = meta(
   "Contact Us",
@@ -36,12 +37,18 @@ const MAP_EMBED = CONTACT.address.mapEmbed;
 export default function Contact() {
   return (
     <>
-      <PageHero
-        title={contactPageHero.title}
-        accent={contactPageHero.accent}
-        sub={contactPageHero.sub}
-        image={contactPageHero.image}
-        alt={contactPageHero.alt}
+      <FloatingHero
+        eyebrow="GET IN TOUCH"
+        title="Let's Talk About Your Next Project"
+        titleAccent="Next Project"
+        description="Have an idea? We'd love to hear it. Get a free quote within 24 hours — no commitment, no jargon."
+        ctas={[
+          { text: "Send a Message", href: "#main",    variant: "primary"   },
+          { text: "WhatsApp Us",    href: CONTACT.whatsapp, variant: "secondary" },
+        ]}
+        centerIcon={heroElements.contact.centerIcon}
+        centerLabel={heroElements.contact.centerLabel}
+        floatingElements={heroElements.contact.elements}
       />
 
       <Section>

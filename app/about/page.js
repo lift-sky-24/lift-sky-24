@@ -1,10 +1,11 @@
-import PageHero  from "@/components/PageHero";
 import { Section, IconCards, MiniCards, CTABand } from "@/components/Sections";
 import { missionVision, values } from "@/lib/data";
 import { BRAND, STATS } from "@/data/site-config";
-import { aboutPageHero, aboutCTA } from "@/data/pages/about";
+import { aboutCTA } from "@/data/pages/about";
 import { meta } from "@/lib/seo";
 import AboutHero from "@/components/AboutHero";
+import FloatingHero from "@/components/FloatingHero";
+import { heroElements } from "@/data/hero-elements";
 
 export const metadata = meta(
   "About Us",
@@ -17,15 +18,24 @@ export default function About() {
     <>
       <AboutHero />
 
-      <PageHero
-        title={aboutPageHero.title}
-        accent={aboutPageHero.accent}
-        eyebrow={aboutPageHero.eyebrow}
-        sub={aboutPageHero.sub}
-        image={aboutPageHero.image}
-        alt={aboutPageHero.alt}
-        stats={STATS.map((s) => ({ n: s.value, s: s.suffix, l: s.label }))}
-        ctas={aboutPageHero.ctas}
+      <FloatingHero
+        eyebrow="OUR STORY"
+        title="We Don't Just Build Websites. We Build Digital Futures."
+        titleAccent="Digital Futures."
+        description="Founded in Jaipur with a mission to help businesses rise higher in the digital world. We combine creative design with smart development to deliver results that matter."
+        ctas={[
+          { text: "Start a Project",   href: "/contact",  variant: "primary"   },
+          { text: "Our Services",      href: "/services", variant: "secondary" },
+        ]}
+        centerIcon={heroElements.about.centerIcon}
+        centerLabel={heroElements.about.centerLabel}
+        floatingElements={heroElements.about.elements}
+        stats={[
+          { number: "5+",  label: "Years"     },
+          { number: "30+", label: "Projects"  },
+          { number: "7",   label: "Services"  },
+          { number: "24h", label: "Response"  },
+        ]}
       />
 
       <Section title="Our Mission &amp; Vision">
@@ -35,8 +45,6 @@ export default function About() {
       <Section title="Our Values" tone="soft">
         <MiniCards items={values} cols="md:grid-cols-4" />
       </Section>
-
-      {/* Meet the Team section removed per design decision */}
 
       <CTABand
         title={aboutCTA.title}

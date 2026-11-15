@@ -1,10 +1,11 @@
 import Link         from "next/link";
-import PageHero     from "@/components/PageHero";
 import { Section }  from "@/components/Sections";
 import { Stagger, StaggerItem, Reveal } from "@/components/ui";
 import { meta }     from "@/lib/seo";
 import { BRAND, BLOG_POSTS } from "@/data/site-config";
-import { blogPageHero, blogArticlesSection } from "@/data/pages/blog";
+import { blogArticlesSection } from "@/data/pages/blog";
+import FloatingHero from "@/components/FloatingHero";
+import { heroElements } from "@/data/hero-elements";
 
 export const metadata = meta(
   "Blog & Resources",
@@ -15,13 +16,18 @@ export const metadata = meta(
 export default function Blog() {
   return (
     <>
-      <PageHero
-        title={blogPageHero.title}
-        accent={blogPageHero.accent}
-        eyebrow={blogPageHero.eyebrow}
-        sub={blogPageHero.sub}
-        image={blogPageHero.image}
-        alt={blogPageHero.alt}
+      <FloatingHero
+        eyebrow="BLOG & RESOURCES"
+        title="Practical Guides to Help Your Business Grow Online"
+        titleAccent="Grow Online"
+        description="Straight-talking articles on web development, SEO, digital marketing and social media — written by the LiftSky24 team in Jaipur."
+        ctas={[
+          { text: "Start a Project", href: "/contact",  variant: "primary"   },
+          { text: "Our Services",    href: "/services", variant: "secondary" },
+        ]}
+        centerIcon={heroElements.blog.centerIcon}
+        centerLabel={heroElements.blog.centerLabel}
+        floatingElements={heroElements.blog.elements}
       />
 
       <Section title={blogArticlesSection.title}>

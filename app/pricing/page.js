@@ -1,10 +1,11 @@
-import PageHero     from "@/components/PageHero";
 import { Section, CTABand } from "@/components/Sections";
 import PricingTable  from "@/components/PricingTable";
 import FAQ           from "@/components/FAQ";
 import { meta }      from "@/lib/seo";
 import { BRAND }     from "@/data/site-config";
-import { pricingPageHero, pricingPlansSection, pricingFaqSection, pricingCTA } from "@/data/pages/pricing";
+import { pricingPlansSection, pricingFaqSection, pricingCTA } from "@/data/pages/pricing";
+import FloatingHero from "@/components/FloatingHero";
+import { heroElements } from "@/data/hero-elements";
 
 export const metadata = meta(
   "Pricing",
@@ -15,13 +16,18 @@ export const metadata = meta(
 export default function Pricing() {
   return (
     <>
-      <PageHero
-        title={pricingPageHero.title}
-        accent={pricingPageHero.accent}
-        eyebrow={pricingPageHero.eyebrow}
-        sub={pricingPageHero.sub}
-        image={pricingPageHero.image}
-        alt={pricingPageHero.alt}
+      <FloatingHero
+        eyebrow="TRANSPARENT PRICING"
+        title="Simple, Honest Pricing. No Surprises."
+        titleAccent="No Surprises."
+        description="Every project is scoped before work begins. Choose a starting plan or request a fully custom quote — either way, you'll know exactly what you're paying for."
+        ctas={[
+          { text: "Get a Custom Quote", href: "/contact",  variant: "primary"   },
+          { text: "Talk to Us",         href: "/contact",  variant: "secondary" },
+        ]}
+        centerIcon={heroElements.pricing.centerIcon}
+        centerLabel={heroElements.pricing.centerLabel}
+        floatingElements={heroElements.pricing.elements}
       />
       <Section title={pricingPlansSection.title} center={pricingPlansSection.center} sub={pricingPlansSection.sub}>
         <PricingTable />

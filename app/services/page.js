@@ -1,10 +1,11 @@
-import PageHero    from "@/components/PageHero";
 import { Section, IconCards, CTABand } from "@/components/Sections";
 import ProcessRoadmap from "@/components/ProcessRoadmap";
 import { services, processSteps } from "@/lib/data";
 import { meta } from "@/lib/seo";
 import { BRAND, LOCAL_SEO } from "@/data/site-config";
-import { servicesPageHero, servicesGridSection, servicesProcessSection, servicesCTA } from "@/data/pages/services";
+import { servicesGridSection, servicesProcessSection, servicesCTA } from "@/data/pages/services";
+import FloatingHero from "@/components/FloatingHero";
+import { heroElements } from "@/data/hero-elements";
 
 export const metadata = meta(
   "Our Services",
@@ -15,14 +16,18 @@ export const metadata = meta(
 export default function Services() {
   return (
     <>
-      <PageHero
-        title={servicesPageHero.title}
-        accent={servicesPageHero.accent}
-        eyebrow={servicesPageHero.eyebrow}
-        sub={servicesPageHero.sub}
-        image={servicesPageHero.image}
-        alt={servicesPageHero.alt}
-        ctas={servicesPageHero.ctas}
+      <FloatingHero
+        eyebrow="7 CORE SERVICES"
+        title="Everything Your Business Needs to Grow Online"
+        titleAccent="Grow Online"
+        description="From your first website to a full digital strategy — we offer web, app, software, SEO, social media, design and marketing under one roof."
+        ctas={[
+          { text: "Get a Free Quote", href: "/contact",  variant: "primary"   },
+          { text: "View Pricing",     href: "/pricing",  variant: "secondary" },
+        ]}
+        centerIcon={heroElements.services.centerIcon}
+        centerLabel={heroElements.services.centerLabel}
+        floatingElements={heroElements.services.elements}
       />
       <Section title={servicesGridSection.title} sub={servicesGridSection.sub}>
         <IconCards items={services} cols={servicesGridSection.cols} />
