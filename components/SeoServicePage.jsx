@@ -16,6 +16,7 @@ import {
   Check, Wrench,
 } from "lucide-react";
 import { seoData as data } from "@/data/service-details/seo";
+import ServicePricingSection from "@/components/ServicePricingSection";
 
 /* ─── Icon map ───────────────────────────────────────────────── */
 const ICON_MAP = {
@@ -601,6 +602,7 @@ export default function SeoServicePage({ breadcrumb = [] }) {
       <WhySection />
       <ProcessSection />
       <PortfolioSection />
+      <ServicePricingSection slug="seo" />
       <FaqSection />
       <FinalCtaSection />
     </main>

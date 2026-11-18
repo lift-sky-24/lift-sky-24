@@ -41,6 +41,7 @@ import {
   MousePointerClick, Mail, ArrowRightLeft,
   Monitor, Presentation,
 } from "lucide-react";
+import ServicePricingSection from "@/components/ServicePricingSection";
 
 /* ─── Icon resolver ──────────────────────────────────────────── */
 const ICON_MAP = {
@@ -536,6 +537,7 @@ export default function ServicePageTemplate({
   data,
   breadcrumb = [],
   extraSections = [],  // array of React elements inserted after ServicesSection
+  slug = "",           // service slug for pricing data lookup
 }) {
   return (
     <main>
@@ -545,6 +547,7 @@ export default function ServicePageTemplate({
       {data.why     && <WhySection     why={data.why}         />}
       {data.process && <ProcessSection process={data.process} />}
       {data.portfolio && <PortfolioSection portfolio={data.portfolio} />}
+      {slug && <ServicePricingSection slug={slug} />}
       {data.faqs?.length > 0 && <FaqSection faqs={data.faqs} heading={data.faqHeading} />}
       {data.finalCta && <FinalCtaSection finalCta={data.finalCta} />}
     </main>

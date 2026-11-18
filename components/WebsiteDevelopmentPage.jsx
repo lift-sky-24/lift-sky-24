@@ -17,6 +17,7 @@ import {
   ArrowRight, Check, Layout, Store,
 } from "lucide-react";
 import { websiteDevelopmentData as data } from "@/data/service-details/website-development";
+import ServicePricingSection from "@/components/ServicePricingSection";
 
 /* ─── Icon map ────────────────────────────────────────────────── */
 const ICON_MAP = {
@@ -852,6 +853,7 @@ export default function WebsiteDevelopmentPage({ breadcrumb = [] }) {
       <PortfolioSection />
       <WhoWeWorkWithSection />
       <LocalSeoSection />
+      <ServicePricingSection slug="website-development" />
       <FaqSection />
       <FinalCtaSection />
     </main>
