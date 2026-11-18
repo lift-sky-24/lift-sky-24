@@ -47,43 +47,39 @@ function PlanCard({ plan, index, reduced }) {
   const waUrl = `https://wa.me/${CONTACT.whatsapp?.replace(/\D/g,"") || "918875796652"}?text=${encodeURIComponent(commonPricingFooter.consultationBox.secondaryCta.whatsappText)}`;
 
   return (
-    /* Outer wrapper — extra top margin on popular cards to make room for the badge */
-    <div className={isPopular ? "mt-6" : ""}>
-      {/* Popular badge — sits ABOVE the card, not inside it */}
+    <motion.div
+      className="relative flex flex-col overflow-hidden rounded-2xl"
+      style={{
+        background:  isPopular ? "#101114" : "#fff",
+        border:      isPopular
+          ? "1.5px solid rgba(252,110,4,0.60)"
+          : "1.5px solid #EAE5DF",
+        boxShadow:   isPopular
+          ? "0 0 0 4px rgba(252,110,4,0.08), 0 20px 48px rgba(16,17,20,0.22)"
+          : "0 4px 24px rgba(16,17,20,0.06)",
+      }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: reduced ? 0 : 0.55, delay: reduced ? 0 : index * 0.09, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -6, transition: { duration: 0.25 } }}
+    >
+      {/* Popular badge — top-right corner, inside card */}
       {isPopular && (
-        <div className="flex justify-center">
-          <span
-            className="mb-2 inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.14em]"
-            style={{ background: "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)", color: "#101114" }}
-          >
-            ✦ {plan.badge || "Most Popular"}
-          </span>
-        </div>
+        <span
+          className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em]"
+          style={{ background: "linear-gradient(110deg,#FF8A1F,#FC6E04,#E04F00)", color: "#101114" }}
+        >
+          ✦ {plan.badge || "Most Popular"}
+        </span>
       )}
 
-      <motion.div
-        className="relative flex flex-col overflow-hidden rounded-2xl"
-        style={{
-          background:  isPopular ? "#101114" : "#fff",
-          border:      isPopular
-            ? "1.5px solid rgba(252,110,4,0.60)"
-            : "1.5px solid #EAE5DF",
-          boxShadow:   isPopular
-            ? "0 0 0 4px rgba(252,110,4,0.08), 0 20px 48px rgba(16,17,20,0.22)"
-            : "0 4px 24px rgba(16,17,20,0.06)",
-        }}
-        initial={{ opacity: 0, y: 28 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: reduced ? 0 : 0.55, delay: reduced ? 0 : index * 0.09, ease: [0.22, 1, 0.36, 1] }}
-        whileHover={{ y: -6, transition: { duration: 0.25 } }}
-      >
-        <div className="flex flex-1 flex-col p-6">
-          {/* Plan name */}
-          <p className="text-[11px] font-black uppercase tracking-[0.14em]"
-            style={{ color: isPopular ? "rgba(255,255,255,0.45)" : "#929292" }}>
-            {plan.name}
-          </p>
+      <div className="flex flex-1 flex-col p-6">
+        {/* Plan name */}
+        <p className="text-[11px] font-black uppercase tracking-[0.14em]"
+          style={{ color: isPopular ? "rgba(255,255,255,0.45)" : "#929292" }}>
+          {plan.name}
+        </p>
 
         {/* Price */}
         <div className="mt-3 flex items-baseline gap-1.5">
@@ -160,7 +156,6 @@ function PlanCard({ plan, index, reduced }) {
         </div>
       </div>
     </motion.div>
-    </div>
   );
 }
 
